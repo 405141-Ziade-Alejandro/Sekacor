@@ -14,13 +14,14 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = ConsumableEntity.TABLE_NAME)
-public class ConsumableEntity extends BaseEntity {
-    public static final String TABLE_NAME = "INSUMO";
+@Table(name = PrimaryConsumableEntity.TABLE_NAME)
+public class SecondaryConsumableEntity extends BaseEntity {
+
+    public static final String TABLE_NAME = "INSUMO_SECUNDARIO";
 
     @Column(name = "TIPO")
     @Enumerated(EnumType.STRING)
-    private Type type;
+    private String  type;
 
     @Column(name = "CANTIDAD",precision = 10,scale = 2)
     private BigDecimal quantity;
@@ -30,5 +31,6 @@ public class ConsumableEntity extends BaseEntity {
     private UnitMeasure unit;
 
     @Column(name = "SUB_TIPO")
-    private String subType;
+    private String  subType;
+
 }
