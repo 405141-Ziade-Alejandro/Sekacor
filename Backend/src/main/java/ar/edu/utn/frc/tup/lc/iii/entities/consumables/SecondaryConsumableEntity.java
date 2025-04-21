@@ -20,7 +20,6 @@ public class SecondaryConsumableEntity extends BaseEntity {
     public static final String TABLE_NAME = "INSUMO_SECUNDARIO";
 
     @Column(name = "TIPO")
-    @Enumerated(EnumType.STRING)
     private String  type;
 
     @Column(name = "CANTIDAD",precision = 10,scale = 2)

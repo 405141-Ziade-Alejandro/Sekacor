@@ -17,12 +17,12 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = TankEntity.TABLE_NAME)
-public class TankEntity extends BaseEntity {
+@Table(name = TankTypeEntity.TABLE_NAME)
+public class TankTypeEntity extends BaseEntity {
 
     public static final String TABLE_NAME = "TANQUE";
 
-    @Column(name = "TIPO")
+    @Column(name = "TIPO", nullable = false)
     private String type;
 
     @Column(name = "CAPA")
@@ -43,12 +43,7 @@ public class TankEntity extends BaseEntity {
     @Column(name = "TAPA_TIPO")
     private ConsumableSubType coverType;
 
-    @Column(name = "USUARIO")
-    //todo: luego hay que cambiar esto por una entidad usuario pero luego cuando tenga que hacer eso en el sprint
-    private String user;
 
-    @Column(name = "CALIDAD")
-    private Quality quality;
 
     @Column(name = "TORNILLO")
     private Integer screws;
@@ -67,4 +62,7 @@ public class TankEntity extends BaseEntity {
 
     @Column(name = "TAMANO_RAMAL")
     private ConsumableSubType Ramal;
+
+    @Column(name = "INVENTARIO")
+    private Long stock;
 }
