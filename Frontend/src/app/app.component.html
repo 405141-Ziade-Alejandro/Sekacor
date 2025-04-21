@@ -1,0 +1,20 @@
+<mat-toolbar class="nav">
+  <button mat-icon-button (click)="sidenav.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>Sekacor.</span>
+</mat-toolbar>
+
+<mat-sidenav-container>
+
+  <mat-sidenav mode="over" #sidenav>
+    <p><a href="#">Inicio</a></p>
+    <p><a href="#">Tanques</a></p>
+    <p><a href="#">Cámaras</a></p>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+

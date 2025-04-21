@@ -1,0 +1,7 @@
+.home-grid {
+  display: grid;
+  place-items: center;
+  height: 100vh;
+  font-size: 2.5rem;
+  font-weight: bold;
+}
