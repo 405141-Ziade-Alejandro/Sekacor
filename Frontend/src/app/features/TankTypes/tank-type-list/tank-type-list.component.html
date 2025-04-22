@@ -1,0 +1,15 @@
+<mat-toolbar>
+  <span>Tipos de Tanques</span>
+  <span class="example-spacer"></span>
+  <button mat-mini-fab class="example-icon" routerLink="/newtanktypes">
+    <mat-icon>add</mat-icon>
+  </button>
+</mat-toolbar>
+
+
+<table mat-table [dataSource]="tankTypes">
+  <mat-text-column name="name"></mat-text-column>
+
+  <tr mat-header-row *matHeaderRowDef="colums"></tr>
+  <tr mat-row *matRowDef="let myRow; columns: colums"></tr>
+</table>
