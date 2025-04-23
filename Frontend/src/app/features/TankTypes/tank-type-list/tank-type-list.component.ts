@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {
   MatCell,
   MatCellDef,
@@ -12,6 +12,9 @@ import {MatToolbar} from "@angular/material/toolbar";
 import {MatIcon} from "@angular/material/icon";
 import {MatMiniFabButton} from "@angular/material/button";
 import {RouterLink} from "@angular/router";
+import {TankType} from "../../../core/interfaces/tank-type";
+import {TankServiceService} from "../../../core/services/tank-service.service";
+import {MatCard} from "@angular/material/card";
 
 
 @Component({
@@ -21,23 +24,63 @@ import {RouterLink} from "@angular/router";
     MatTable,
     MatToolbar,
     MatIcon,
+    MatMiniFabButton,
+    RouterLink,
     MatColumnDef,
     MatHeaderCell,
     MatHeaderCellDef,
     MatCell,
     MatCellDef,
-    MatTextColumn,
     MatHeaderRow,
     MatHeaderRowDef,
     MatRow,
     MatRowDef,
-    MatMiniFabButton,
-    RouterLink
+    MatCard
   ],
   templateUrl: './tank-type-list.component.html',
   styleUrl: './tank-type-list.component.css'
 })
 export class TankTypeListComponent {
-  tankTypes = ["marco", "polo", "farco"]
-  colums=["name"]
+  //services
+  tankService = inject(TankServiceService)
+  //variables
+  tankTypesList: TankType[] = []
+
+  columsToDisplay: string[] = ['type','cover','quantity', 'cost', 'stock','actions']
+
+  //methods
+
+  ngOnInit(): void {
+    this.loadTanks()
+  }
+
+  private loadTanks() {
+    this.tankService.getAllTankTypes().subscribe({
+      next: data => {
+        this.tankTypesList = data
+        console.log(data)
+      }
+    })
+  }
+
+  delete(id:number) {
+    //todo, do this with a pop up or just more user friendly
+    if (confirm("Vas a BORRAR PERMANENTEMENTE este tipo de tanque con todos sus datos, continuar?")) {
+      this.tankService.deleteTankType(id).subscribe({
+        next: () => {
+          alert("Tanque borrado");
+          this.loadTanks()
+        },
+        error: err => {
+          console.log(err);
+          alert("error!");
+        }
+      })
+    }
+
+  }
+
+  edit(id:number) {
+
+  }
 }

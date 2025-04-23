@@ -43,8 +43,6 @@ public class TankTypeEntity extends BaseEntity {
     @Column(name = "TAPA_TIPO")
     private ConsumableSubType coverType;
 
-
-
     @Column(name = "TORNILLO")
     private Integer screws;
 
@@ -63,6 +61,11 @@ public class TankTypeEntity extends BaseEntity {
     @Column(name = "TAMANO_RAMAL")
     private ConsumableSubType Ramal;
 
-    @Column(name = "INVENTARIO")
-    private Long stock;
+    //todo: make two types of stocks (stock 1 and stock 2)
+    @Column(name = "INVENTARIO_PRIMERA")
+    private Long stock1;
+
+
+    @Column(name = "INVENTARIO_SEGUNDA")
+    private Long stock2;
 }

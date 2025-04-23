@@ -43,5 +43,8 @@ public class NewTankTypeDto {
 
     private ConsumableSubType Ramal;
 
-    private Long stock;
+    //to do: make two types of stocks (stock 1 and stock 2)
+    private Long stock1;
+
+    private Long stock2;
 }

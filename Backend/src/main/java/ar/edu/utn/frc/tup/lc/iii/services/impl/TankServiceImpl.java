@@ -40,11 +40,6 @@ public class TankServiceImpl implements TankService {
 
     @Override
     public TankTypeDto postTankType(NewTankTypeDto dto) {
-        Optional<TankTypeEntity> check = tankRepository.findByType(dto.getType());
-
-        if (check.isPresent()) {
-            throw new EntityExistsException("Tank type '" + dto.getType() + "' already exists in the database.");
-        }
 
         TankTypeEntity newTankType = modelMapper.map(dto, TankTypeEntity.class);
 
