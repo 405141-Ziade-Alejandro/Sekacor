@@ -1,11 +1,10 @@
-package ar.edu.utn.frc.tup.lc.iii.services.impl;
+package ar.edu.utn.frc.tup.lc.iii.services.impl.tanks;
 
 import ar.edu.utn.frc.tup.lc.iii.dtos.tanks.NewTankTypeDto;
 import ar.edu.utn.frc.tup.lc.iii.dtos.tanks.TankTypeDto;
 import ar.edu.utn.frc.tup.lc.iii.entities.tanks.TankTypeEntity;
-import ar.edu.utn.frc.tup.lc.iii.repositories.TankRepository;
+import ar.edu.utn.frc.tup.lc.iii.repositories.tanks.TankRepository;
 import ar.edu.utn.frc.tup.lc.iii.services.TankService;
-import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -57,7 +56,6 @@ public class TankServiceImpl implements TankService {
         }
 
         TankTypeEntity tankTypeEntity = check.get();
-        //tankTypeEntity = modelMapper.map(dto, TankTypeEntity);
         modelMapper.map(dto, tankTypeEntity);
 
         TankTypeEntity updatedEntity = tankRepository.save(tankTypeEntity);

@@ -10,11 +10,11 @@ import {
 } from "@angular/material/table";
 import {MatToolbar} from "@angular/material/toolbar";
 import {MatIcon} from "@angular/material/icon";
-import {MatMiniFabButton} from "@angular/material/button";
-import {RouterLink} from "@angular/router";
+import {MatButton, MatMiniFabButton} from "@angular/material/button";
+import {Router, RouterLink} from "@angular/router";
 import {TankType} from "../../../core/interfaces/tank-type";
 import {TankServiceService} from "../../../core/services/tank-service.service";
-import {MatCard} from "@angular/material/card";
+import {MatCard, MatCardContent} from "@angular/material/card";
 
 
 @Component({
@@ -35,7 +35,9 @@ import {MatCard} from "@angular/material/card";
     MatHeaderRowDef,
     MatRow,
     MatRowDef,
-    MatCard
+    MatCard,
+    MatCardContent,
+    MatButton
   ],
   templateUrl: './tank-type-list.component.html',
   styleUrl: './tank-type-list.component.css'
@@ -43,6 +45,7 @@ import {MatCard} from "@angular/material/card";
 export class TankTypeListComponent {
   //services
   tankService = inject(TankServiceService)
+  router = inject(Router)
   //variables
   tankTypesList: TankType[] = []
 
@@ -81,6 +84,7 @@ export class TankTypeListComponent {
   }
 
   edit(id:number) {
-
+    this.tankService.setUpdating(true);
+    this.router.navigate([`tanktypes/${id}`])
   }
 }

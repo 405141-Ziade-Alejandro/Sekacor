@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = PrimaryConsumableEntity.TABLE_NAME)
+@Table(name = SecondaryConsumableEntity.TABLE_NAME)
 public class SecondaryConsumableEntity extends BaseEntity {
 
     public static final String TABLE_NAME = "INSUMO_SECUNDARIO";

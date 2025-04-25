@@ -1,4 +1,4 @@
-package ar.edu.utn.frc.tup.lc.iii.controllers;
+package ar.edu.utn.frc.tup.lc.iii.controllers.tanks;
 
 import ar.edu.utn.frc.tup.lc.iii.dtos.tanks.NewTankTypeDto;
 import ar.edu.utn.frc.tup.lc.iii.dtos.tanks.TankTypeDto;

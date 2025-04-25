@@ -1,4 +1,4 @@
-package ar.edu.utn.frc.tup.lc.iii.repositories;
+package ar.edu.utn.frc.tup.lc.iii.repositories.tanks;
 
 import ar.edu.utn.frc.tup.lc.iii.entities.tanks.TankTypeEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

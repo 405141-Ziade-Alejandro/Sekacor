@@ -74,8 +74,10 @@
   <!--Extras-->
   <div>
 
+<!--  Todo: ver como deschequear las checkboxes cuando cargo uno nuevo  -->
+
     <!--ramal-->
-    <mat-checkbox class="example-margin" (change)="showRamal = !showRamal">Ramal</mat-checkbox>
+    <mat-checkbox class="example-margin"  (change)="showRamal = !showRamal">Ramal</mat-checkbox>
     @if (showRamal) {
       <mat-form-field appearance="outline">
         <mat-label>Tamaño</mat-label>
@@ -105,7 +107,7 @@
         <mat-label>Tipo de Tapa</mat-label>
         <mat-select formControlName="sticker">
           <mat-option value="TANQUE">Tanque</mat-option>
-          <mat-option value="CAMARA">Camara Septica</mat-option>
+          <mat-option value="CAMARA_SEPTICA">Camara Septica</mat-option>
         </mat-select>
       </mat-form-field>
     }

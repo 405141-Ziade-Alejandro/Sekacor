@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 @Table(name = PrimaryConsumableEntity.TABLE_NAME)
 public class PrimaryConsumableEntity extends BaseEntity {
 
-    public static final String TABLE_NAME = "INSUMO";
+    public static final String TABLE_NAME = "INSUMO_PRIMARIO";
 
     @Column(name = "TIPO")
     @Enumerated(EnumType.STRING)
@@ -31,5 +31,6 @@ public class PrimaryConsumableEntity extends BaseEntity {
     private UnitMeasure unit;
 
     @Column(name = "SUB_TIPO")
+    @Enumerated(EnumType.STRING)
     private ConsumableSubType subType;
 }
