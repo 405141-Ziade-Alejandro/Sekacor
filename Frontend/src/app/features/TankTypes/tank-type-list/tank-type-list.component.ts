@@ -15,6 +15,7 @@ import {Router, RouterLink} from "@angular/router";
 import {TankType} from "../../../core/interfaces/tank-type";
 import {TankServiceService} from "../../../core/services/tank-service.service";
 import {MatCard, MatCardContent} from "@angular/material/card";
+import {MatTooltip} from "@angular/material/tooltip";
 
 
 @Component({
@@ -37,7 +38,8 @@ import {MatCard, MatCardContent} from "@angular/material/card";
     MatRowDef,
     MatCard,
     MatCardContent,
-    MatButton
+    MatButton,
+    MatTooltip
   ],
   templateUrl: './tank-type-list.component.html',
   styleUrl: './tank-type-list.component.css'

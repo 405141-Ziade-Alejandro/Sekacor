@@ -13,7 +13,7 @@
       <ng-container matColumnDef="type">
         <th mat-header-cell *matHeaderCellDef>Nombre</th>
         <td mat-cell *matCellDef="let tank">
-          <button mat-button [routerLink]="'/tanktypes/'+tank.id">{{ tank.type }}</button>
+          <button mat-button matTooltip="Revisar el tanque completo" [routerLink]="'/tanktypes/'+tank.id">{{ tank.type }}</button>
         </td>
       </ng-container>
 
