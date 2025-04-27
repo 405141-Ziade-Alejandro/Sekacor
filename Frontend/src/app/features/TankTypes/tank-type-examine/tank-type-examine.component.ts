@@ -1,6 +1,6 @@
 import {Component, inject} from '@angular/core';
 import {TankServiceService} from "../../../core/services/tank-service.service";
-import {TankType} from "../../../core/interfaces/tank-type";
+import {TankType} from "../../../core/interfaces/tanks/tank-type";
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {MatList, MatListItem} from "@angular/material/list";
 import {MatCard, MatCardContent, MatCardHeader} from "@angular/material/card";
@@ -17,7 +17,7 @@ import {MatOption} from "@angular/material/core";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {MatSelect} from "@angular/material/select";
 import {ConfirmDialogComponent} from "../../../shared/confirm-dialog/confirm-dialog.component";
-import {NewTankType} from "../../../core/interfaces/new-tank-type";
+import {NewTankType} from "../../../core/interfaces/tanks/new-tank-type";
 
 @Component({
   selector: 'app-tank-type-examine',

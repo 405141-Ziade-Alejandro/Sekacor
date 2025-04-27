@@ -7,7 +7,7 @@ import {MatCheckbox} from "@angular/material/checkbox";
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButton} from "@angular/material/button";
 import {Router, RouterLink} from "@angular/router";
-import {TankType} from "../../../core/interfaces/tank-type";
+import {TankType} from "../../../core/interfaces/tanks/tank-type";
 import {TankServiceService} from "../../../core/services/tank-service.service";
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmDialogComponent} from "../../../shared/confirm-dialog/confirm-dialog.component";
