@@ -3,6 +3,11 @@ package ar.edu.utn.frc.tup.lc.iii.controllers.tanks;
 import ar.edu.utn.frc.tup.lc.iii.dtos.tanks.NewTankTypeDto;
 import ar.edu.utn.frc.tup.lc.iii.dtos.tanks.TankTypeDto;
 import ar.edu.utn.frc.tup.lc.iii.services.TankService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +22,7 @@ public class TankController {
 
     private final TankService tankService;
 
+
     @GetMapping("type/all")
     public ResponseEntity<List<TankTypeDto>> getAllTankTypes(){
         List<TankTypeDto> tankDtoList = tankService.getAllTankTypes();
@@ -30,6 +36,7 @@ public class TankController {
 
         return ResponseEntity.ok(tankService.postTankType(dto));
     }
+
 
     @PutMapping("type/{id}")
     public ResponseEntity<TankTypeDto> putTankType(@PathVariable Long id,@RequestBody NewTankTypeDto dto) {

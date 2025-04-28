@@ -34,15 +34,23 @@ public class PriceListServiceImpl implements PriceListService {
 
     @Override
     public PriceListDto getById(Long id) {
+        log.info("Getting price list by id: {}", id);
         Optional<PriceListEntity> check = priceListRepository.findById(id);
 
         if (check.isEmpty()) {
+            log.error("Price list with id {} not found", id);
             throw new EntityNotFoundException("this entity does not exist");
         }
 
         return modelMapper.map(check.get(), PriceListDto.class);
     }
 
+    /**
+     * this use the rest client of usdRestClient
+     * to save the value the dolar on the database
+     * this will be useful to when we have to calculate the
+     * prices of the tanks
+     */
     @Override
     public void saveUsdRateFromExternalApi() {
 
@@ -63,7 +71,9 @@ public class PriceListServiceImpl implements PriceListService {
 
         List<PriceListDto> priceListDtoList = new ArrayList<>(priceListEntitiesList.size());
 
+        log.info("Getting all price lists");
         for (PriceListEntity entity : priceListEntitiesList) {
+
             priceListDtoList.add(modelMapper.map(entity, PriceListDto.class));
         }
 

@@ -6,6 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
+/**
+ * this is a class to manage and send errors
+ * with messages, http status, path and time
+ */
 @Builder
 @Getter
 @AllArgsConstructor

@@ -61,11 +61,17 @@ public class TankTypeEntity extends BaseEntity {
     @Column(name = "TAMANO_RAMAL")
     private ConsumableSubType Ramal;
 
-    //todo: make two types of stocks (stock 1 and stock 2)
+    /**
+     * en la fabrica tienen dos tipos de stock
+     * primera son buena calidad y son para los clientes regulares
+     */
     @Column(name = "INVENTARIO_PRIMERA")
     private Long stock1;
 
-
+    /**
+     * en la fabrica tienen dos tipos de stock
+     * segunda tienen alguna imprefeccion y son mas baratos
+     */
     @Column(name = "INVENTARIO_SEGUNDA")
     private Long stock2;
 }

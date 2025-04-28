@@ -11,6 +11,7 @@ import ar.edu.utn.frc.tup.lc.iii.repositories.consumables.SecondaryConsumableRep
 import ar.edu.utn.frc.tup.lc.iii.services.ConsumableService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ConsumableServiceImpl implements ConsumableService {
 
     private final PrimaryConsumableRepository primaryConsumableRepository;
