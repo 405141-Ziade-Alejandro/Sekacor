@@ -1,8 +1,8 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {TankType} from "../interfaces/tank-type";
+import {TankType} from "../interfaces/tanks/tank-type";
 import {Observable} from "rxjs";
-import {NewTankType} from "../interfaces/new-tank-type";
+import {NewTankType} from "../interfaces/tanks/new-tank-type";
 
 @Injectable({
   providedIn: 'root'

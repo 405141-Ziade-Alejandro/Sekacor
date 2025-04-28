@@ -11,6 +11,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
+/**
+ * this base entity is here to provide to all entities
+ * an id
+ * a created date timestapm
+ * a last updated timestamp
+ */
 @Getter
 @Setter
 @AllArgsConstructor

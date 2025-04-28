@@ -3,9 +3,9 @@
 <mat-toolbar>
   <mat-form-field>
     <mat-label>Elija la lista aca</mat-label>
-    <mat-select>
-      @for (food of priceList; track $index) {
-        <mat-option [value]="$index">aca va la lista</mat-option>
+    <mat-select (selectionChange)="changeSelection($event.value)">
+      @for (price of priceList; track $index) {
+        <mat-option [value]="$index">{{ price.name }}</mat-option>
       }
     </mat-select>
 
@@ -34,7 +34,11 @@
 
       <ng-container matColumnDef="Precio">
         <th mat-header-cell *matHeaderCellDef>Precio</th>
-        <td mat-cell *matCellDef="let tank">precio va aca</td>
+        @if (priceListSeleceted!==null){
+          <td mat-cell *matCellDef="let tank"> {{tank.cost * priceListSeleceted.modifier}}</td>
+        } @else {
+          <td mat-cell *matCellDef="let tank">precio va aca</td>
+        }
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>

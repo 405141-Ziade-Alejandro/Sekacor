@@ -12,7 +12,7 @@ import {MatToolbar} from "@angular/material/toolbar";
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatMiniFabButton} from "@angular/material/button";
 import {Router, RouterLink} from "@angular/router";
-import {TankType} from "../../../core/interfaces/tank-type";
+import {TankType} from "../../../core/interfaces/tanks/tank-type";
 import {TankServiceService} from "../../../core/services/tank-service.service";
 import {MatCard, MatCardContent} from "@angular/material/card";
 import {MatTooltip} from "@angular/material/tooltip";
