@@ -1,0 +1,141 @@
+<h2> Nuevo Tipo de Tanque</h2>
+
+<form [formGroup]="tankTypeForm" (ngSubmit)="onSubmit()">
+  <mat-form-field appearance="outline">
+    <!--nombre-->
+    <mat-label>Nombre</mat-label>
+    <input matInput formControlName="type" minlength="3" maxlength="50">
+    <mat-hint>minimo 3 letras</mat-hint>
+  </mat-form-field>
+
+  <!--capas-->
+  <mat-form-field appearance="outline">
+    <mat-label>Capa</mat-label>
+    <mat-select formControlName="cover">
+      <mat-option value="UNICAPA">Unicapa</mat-option>
+      <mat-option value="BICAPA">Bicapa</mat-option>
+      <mat-option value="TRICAPA">Tricapa</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <!--cantidad-->
+  <mat-form-field appearance="outline">
+    <mat-label>Cantidad</mat-label>
+    <input matInput type="number" min="0" step="0.01" formControlName="quantity">
+    <span matTextSuffix>Lts</span>
+  </mat-form-field>
+  <!--plastico negro-->
+  <mat-form-field appearance="outline">
+    <mat-label>Plastico Negro</mat-label>
+    <input matInput type="number" min="0" step="0.01" formControlName="plasticBlack">
+    <span matTextSuffix>Kg</span>
+  </mat-form-field>
+  <!--plastico Color-->
+  <mat-form-field appearance="outline">
+    <mat-label>Plastico Color</mat-label>
+    <input matInput type="number" min="0" step="0.01" formControlName="plasticColor">
+    <span matTextSuffix>Kg</span>
+  </mat-form-field>
+  <!--tapa-->
+  <mat-form-field appearance="outline">
+    <mat-label>Tipo de Tapa</mat-label>
+    <mat-select formControlName="coverType">
+      <mat-option value="ROSCA">Rosca</mat-option>
+      <mat-option value="CALCE">Calce</mat-option>
+      <mat-option value="NONE">Ninguna</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <!--tornillos-->
+  @if (tankTypeForm.controls['coverType'].value !== "NONE") {
+    <mat-form-field appearance="outline">
+      <mat-label>Tornillos</mat-label>
+      <input matInput type="number" min="0" formControlName="screws">
+    </mat-form-field>
+  }
+  <!--costo-->
+  <mat-form-field appearance="outline">
+    <mat-label>Costo</mat-label>
+    <input matInput type="number" min="0" step="0.01" formControlName="cost">
+    <span matTextPrefix>$</span>
+  </mat-form-field>
+
+  <!--stock1-->
+  <mat-form-field appearance="outline">
+    <mat-label>Stock Primera</mat-label>
+    <input matInput type="number" min="0" formControlName="stock1">
+  </mat-form-field>
+  <!--stock2-->
+  <mat-form-field appearance="outline">
+    <mat-label>Stock Segunda</mat-label>
+    <input matInput type="number" min="0" formControlName="stock2">
+  </mat-form-field>
+
+  <!--tee-->
+  <mat-checkbox class="example-margin" formControlName="tee">Tee</mat-checkbox>
+  <!--Extras-->
+  <div>
+
+<!--  Todo: ver como deschequear las checkboxes cuando cargo uno nuevo  -->
+
+    <!--ramal-->
+    <mat-checkbox class="example-margin"  (change)="showRamal = !showRamal">Ramal</mat-checkbox>
+    @if (showRamal) {
+      <mat-form-field appearance="outline">
+        <mat-label>Tamaño</mat-label>
+        <mat-select formControlName="ramal">
+          <mat-option value="SMALL">50</mat-option>
+          <mat-option value="MEDIUM">63</mat-option>
+          <mat-option value="BIG">110</mat-option>
+        </mat-select>
+      </mat-form-field>
+    }
+    <!--  o-ring-->
+    <mat-checkbox class="example-margin" (change)="showORings = !showORings">O-Rings</mat-checkbox>
+    @if (showORings) {
+      <mat-form-field appearance="outline">
+        <mat-label>Tamaño</mat-label>
+        <mat-select formControlName="oRing">
+          <mat-option value="SMALL">50</mat-option>
+          <mat-option value="MEDIUM">63</mat-option>
+          <mat-option value="BIG">110</mat-option>
+        </mat-select>
+      </mat-form-field>
+    }
+    <!--sticker-->
+    <mat-checkbox class="example-margin" (change)="showSticker = !showSticker">Sticker</mat-checkbox>
+    @if (showSticker) {
+      <mat-form-field appearance="outline">
+        <mat-label>Tipo de Tapa</mat-label>
+        <mat-select formControlName="sticker">
+          <mat-option value="TANQUE">Tanque</mat-option>
+          <mat-option value="CAMARA_SEPTICA">Camara Septica</mat-option>
+        </mat-select>
+      </mat-form-field>
+    }
+    <!--tornillos grandes-->
+    <mat-checkbox class="example-margin" (change)="showBigScrews = !showBigScrews">Tornillos Grandes</mat-checkbox>
+    @if (showBigScrews) {
+      <mat-form-field appearance="outline">
+        <mat-label>Tornillos Grandes</mat-label>
+        <input matInput type="number" min="0" formControlName="bigScrews">
+      </mat-form-field>
+    }
+  </div>
+
+
+  <div>
+    <button mat-raised-button color="primary" type="submit" [disabled]="tankTypeForm.invalid ||isLoading">
+      @if (!isLoading) {
+        guardar
+      } @else {
+        <mat-spinner diameter="20"></mat-spinner>
+      }
+    </button>
+    <button mat-raised-button color="color" type="button" routerLink="/tanktypes">Cancelar</button>
+  </div>
+  @if (tankTypeForm.invalid) {
+    <p>
+      Los campos con * son obligatorios
+    </p>
+  }
+
+</form>
