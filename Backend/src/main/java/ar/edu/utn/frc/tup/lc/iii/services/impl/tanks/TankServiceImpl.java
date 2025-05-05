@@ -3,7 +3,7 @@ package ar.edu.utn.frc.tup.lc.iii.services.impl.tanks;
 import ar.edu.utn.frc.tup.lc.iii.dtos.tanks.NewTankTypeDto;
 import ar.edu.utn.frc.tup.lc.iii.dtos.tanks.TankTypeDto;
 import ar.edu.utn.frc.tup.lc.iii.entities.tanks.TankTypeEntity;
-import ar.edu.utn.frc.tup.lc.iii.repositories.tanks.TankRepository;
+import ar.edu.utn.frc.tup.lc.iii.repositories.tanks.TankTypeRepository;
 import ar.edu.utn.frc.tup.lc.iii.services.TankService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import java.util.Optional;
 @Slf4j
 public class TankServiceImpl implements TankService {
 
-    private final TankRepository tankRepository;
+    private final TankTypeRepository tankRepository;
 
     private final ModelMapper modelMapper;
 

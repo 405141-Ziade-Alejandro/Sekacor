@@ -95,7 +95,7 @@ export class NewTankTypeComponent {
           console.log('guardado exitosamente', response);
 
           this.dialogue.open(ConfirmDialogComponent, {
-            data: {
+            data:{
               title:'¡Guardado exitosamente!',
               message:'¿Deseás cargar otro tipo de tanque?',
             }

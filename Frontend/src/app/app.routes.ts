@@ -5,6 +5,10 @@ import {NewTankTypeComponent} from "./features/TankTypes/new-tank-type/new-tank-
 import {TankTypeExamineComponent} from "./features/TankTypes/tank-type-examine/tank-type-examine.component";
 import {PricesListComponent} from "./features/prices/prices-list/prices-list.component";
 import {ClientsComponent} from "./features/client/clients/clients.component";
+import {PrimaryConsumablesComponent} from "./features/consumables/primary-consumables/primary-consumables.component";
+import {SecundaryConsumablesComponent} from "./features/consumables/secundary-consumables/secundary-consumables.component";
+import {TankRegistryComponent} from "./features/TankTypes/tank-registry/tank-registry.component";
+import {UserListComponent} from "./features/users/user-list/user-list.component";
 
 export const routes: Routes = [
   {path: '', component: HomeComponentComponent},
@@ -12,5 +16,9 @@ export const routes: Routes = [
   {path:'newtanktypes',component: NewTankTypeComponent},
   {path:'tanktypes/:id',component: TankTypeExamineComponent},
   {path:'prices',component:PricesListComponent},
-  {path: 'clients',component:ClientsComponent}
+  {path: 'clients',component:ClientsComponent},
+  {path: 'consumables/primary', component:PrimaryConsumablesComponent},
+  {path: 'consumables/secondary', component:SecundaryConsumablesComponent},
+  {path:'production', component:TankRegistryComponent},
+  {path:'users/lists', component:UserListComponent},
 ];
