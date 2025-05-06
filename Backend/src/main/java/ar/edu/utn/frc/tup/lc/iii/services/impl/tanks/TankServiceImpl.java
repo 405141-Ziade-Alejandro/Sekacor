@@ -1,12 +1,11 @@
 package ar.edu.utn.frc.tup.lc.iii.services.impl.tanks;
 
-import ar.edu.utn.frc.tup.lc.iii.dtos.tanks.NewTankDto;
-import ar.edu.utn.frc.tup.lc.iii.dtos.tanks.NewTankTypeDto;
-import ar.edu.utn.frc.tup.lc.iii.dtos.tanks.TankDto;
-import ar.edu.utn.frc.tup.lc.iii.dtos.tanks.TankTypeDto;
+import ar.edu.utn.frc.tup.lc.iii.dtos.error.NotEnoughConsumablesException;
+import ar.edu.utn.frc.tup.lc.iii.dtos.tanks.*;
 import ar.edu.utn.frc.tup.lc.iii.entities.consumables.ConsumableSubType;
 import ar.edu.utn.frc.tup.lc.iii.entities.consumables.ConsumableType;
 import ar.edu.utn.frc.tup.lc.iii.entities.consumables.PrimaryConsumableEntity;
+import ar.edu.utn.frc.tup.lc.iii.entities.tanks.Cuality;
 import ar.edu.utn.frc.tup.lc.iii.entities.tanks.TankEntity;
 import ar.edu.utn.frc.tup.lc.iii.entities.tanks.TankTypeEntity;
 import ar.edu.utn.frc.tup.lc.iii.entities.users.UserEntity;
@@ -20,12 +19,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 
 @Service
 @RequiredArgsConstructor
@@ -112,7 +113,7 @@ public class TankServiceImpl implements TankService {
     }
 
     @Override
-    public TankDto postTank(NewTankDto dto) {
+    public TankDto postTank(NewTankDto dto, boolean force) {
         Optional<TankTypeEntity> checkType = tankTypeRepository.findById(dto.getTypeId());
         if (checkType.isEmpty()) {
             log.error("Tank type with id {} not found", dto.getTypeId());
@@ -125,16 +126,27 @@ public class TankServiceImpl implements TankService {
             throw new EntityNotFoundException("User with id '" + dto.getUserId() + "' does not exist");
         }
 
+        List<MissingConsumableDto> missing = validateAndReduceConsumables(checkType.get(), force);
+        if (!missing.isEmpty()) {
+            throw new NotEnoughConsumablesException(missing);
+        }
+
         TankEntity tankEntity = new TankEntity();
 
         tankEntity.setCuality(dto.getCuality());
         tankEntity.setUser(checkUser.get());
         tankEntity.setType(checkType.get());
 
-        boolean enoughConsumables = reduceConsumables(checkType.get());
-
 
         TankEntity savedEntity = tankRepository.save(tankEntity);
+
+        if (dto.getCuality()== Cuality.PRIMERA){
+            checkType.get().setStock1(checkType.get().getStock1()+1);
+            tankTypeRepository.save(checkType.get());
+        } else{
+            checkType.get().setStock2(checkType.get().getStock2()+1);
+            tankTypeRepository.save(checkType.get());
+        }
 
         TankDto newTankDto = modelMapper.map(savedEntity, TankDto.class);
 
@@ -142,44 +154,98 @@ public class TankServiceImpl implements TankService {
         newTankDto.setUserId(savedEntity.getUser().getId());
 
 
-        return null;
+        return newTankDto;
     }
 
-    private boolean reduceConsumables(TankTypeEntity tankTypeEntity) {
-//        plastic
-        Optional<PrimaryConsumableEntity> checkPlasticBlack = primaryConsumableRepository.findByTypeAndSubType(ConsumableType.PLASTICO, ConsumableSubType.NEGRO);
-        if (checkPlasticBlack.isEmpty()) {
-            throw new EntityNotFoundException("cannot find the primary consumable plastic black, something is wrong with the Data Base");
+    private List<MissingConsumableDto> validateAndReduceConsumables(TankTypeEntity tankTypeEntity, boolean force) {
+
+        List<MissingConsumableDto> missingList = new ArrayList<>();
+
+        checkAndReduce(ConsumableType.PLASTICO, ConsumableSubType.NEGRO, force, tankTypeEntity.getPlasticBlack(), missingList);
+        checkAndReduce(ConsumableType.PLASTICO, ConsumableSubType.COLOR, force, tankTypeEntity.getPlasticColor(), missingList);
+
+        if (tankTypeEntity.getCoverType() != ConsumableSubType.NONE) {
+            checkAndReduce(ConsumableType.TAPA, tankTypeEntity.getCoverType(), force, BigDecimal.ONE, missingList);
+            checkAndReduce(ConsumableType.TORNILLOS, ConsumableSubType.NONE, force, BigDecimal.valueOf(tankTypeEntity.getScrews()), missingList);
         }
-//        if (checkPlasticBlack.get().getQuantity() < tankTypeEntity.getPlasticBlack()) {
-//
-//        }
-        PrimaryConsumableEntity plasticBlack = checkPlasticBlack.get();
 
-        plasticBlack.setQuantity(plasticBlack.getQuantity()/* aca tengo que poener la resta de tankTypeEntity*/);
+        if (tankTypeEntity.getBigScrews() > 0) {
+            checkAndReduce(ConsumableType.TORNILLO_GRANDE, ConsumableSubType.NONE, force, BigDecimal.valueOf(tankTypeEntity.getBigScrews()), missingList);
+        }
 
-        primaryConsumableRepository.save(plasticBlack);
+        if (tankTypeEntity.isTee()) {
+            //tee siempre son dos las que se usan
+            checkAndReduce(ConsumableType.TEE, ConsumableSubType.NONE, force, BigDecimal.valueOf(2), missingList);
+        }
 
-//        plastic color
-//        tapa
-//        if tapa!=none > screws
-//        big screws
-//        tee
-//        oring
-//        sticker
-//        ramal
-        return true;
+        if (tankTypeEntity.getORing() != ConsumableSubType.NONE) {
+            checkAndReduce(ConsumableType.ARO_GOMA, tankTypeEntity.getORing(), force, BigDecimal.valueOf(2), missingList);
+        }
+
+        if (tankTypeEntity.getSticker() != ConsumableSubType.NONE) {
+            checkAndReduce(ConsumableType.STICKER, tankTypeEntity.getSticker(), force, BigDecimal.valueOf(1), missingList);
+        }
+
+        if (tankTypeEntity.getRamal() != ConsumableSubType.NONE) {
+            checkAndReduce(ConsumableType.RAMAL, tankTypeEntity.getRamal(), force, BigDecimal.valueOf(2), missingList);
+        }
+
+        return missingList;
     }
 
+    private void checkAndReduce(ConsumableType type, ConsumableSubType subType, boolean force, BigDecimal required, List<MissingConsumableDto> missingList) {
+        Optional<PrimaryConsumableEntity> opt = primaryConsumableRepository.findByTypeAndSubType(type, subType);
+
+        if (opt.isEmpty()) {
+            throw new EntityNotFoundException("Consumable not found: " + type + " - " + subType);
+        }
+
+        PrimaryConsumableEntity primaryConsumable = opt.get();
+        BigDecimal available = primaryConsumable.getQuantity();
+
+        if (available.compareTo(required) >= 0) {
+            primaryConsumable.setQuantity(available.subtract(required));
+            primaryConsumableRepository.save(primaryConsumable);
+        } else {
+            if (!force) {
+                missingList.add(new MissingConsumableDto(type, subType, required, available));
+            } else {
+                //registrar en negativo
+                primaryConsumable.setQuantity(available.subtract(required));
+                primaryConsumableRepository.save(primaryConsumable);
+            }
+        }
+
+    }
 
     @Override
     public void deleteTank(long id) {
+        Optional<TankEntity> opt = tankRepository.findById(id);
+        if (opt.isEmpty()) {
+            throw new EntityNotFoundException("Tank not found: " + id);
+        }
 
+        tankRepository.deleteById(id);
     }
 
     @Override
     public Page<TankDto> getAllTanks(Pageable pageable) {
-        return null;
+        //paso 1: consultamos la base paginada
+        Page<TankEntity> page = tankRepository.findAll(pageable);
+        // paso 2: obtenemos los datos de esta pagina
+        List<TankEntity> tankEntities = page.getContent();
+
+        //paso 3 convertir entidades a dtos
+        List<TankDto> tankDtos = new ArrayList<>();
+        for (TankEntity tankEntity : tankEntities) {
+            TankDto tankDto = modelMapper.map(tankEntity, TankDto.class);
+            tankDto.setTypeId(tankEntity.getType().getId());
+            tankDto.setUserId(tankEntity.getUser().getId());
+            tankDtos.add(tankDto);
+        }
+
+        //paso 4 devolvemos la pagina con todos los datos
+        return new PageImpl<>(tankDtos, pageable, page.getTotalElements());
     }
 
 }

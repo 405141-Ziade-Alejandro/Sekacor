@@ -1,5 +1,6 @@
 package ar.edu.utn.frc.tup.lc.iii.controllers.tanks;
 
+import ar.edu.utn.frc.tup.lc.iii.dtos.error.NotEnoughConsumablesException;
 import ar.edu.utn.frc.tup.lc.iii.dtos.tanks.NewTankDto;
 import ar.edu.utn.frc.tup.lc.iii.dtos.tanks.NewTankTypeDto;
 import ar.edu.utn.frc.tup.lc.iii.dtos.tanks.TankDto;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,8 +60,16 @@ public class TankController {
     }
 
     @PostMapping("")
-    public ResponseEntity<TankDto> postTank(@RequestBody NewTankDto dto) {
-        return ResponseEntity.ok(tankService.postTank(dto));
+    public ResponseEntity<?> postTank(
+            @RequestBody NewTankDto dto,
+            @RequestParam(defaultValue = "false") boolean force) {
+        try {
+            TankDto createdTank = tankService.postTank(dto,force);
+
+            return ResponseEntity.ok(createdTank);
+        } catch (NotEnoughConsumablesException e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMissingConsumables());
+        }
     }
 
     @DeleteMapping("/{id}")
@@ -73,7 +83,7 @@ public class TankController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "asc") String order) {
+            @RequestParam(defaultValue = "desc") String order) {
         Pageable pageable = PageRequest.of(
                 page,
                 size,

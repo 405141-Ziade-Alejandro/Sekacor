@@ -21,7 +21,7 @@ public interface TankService {
 
     void deleteType(Long id);
 
-    TankDto postTank(NewTankDto dto);
+    TankDto postTank(NewTankDto dto, boolean force);
 
     void deleteTank(long id);
 

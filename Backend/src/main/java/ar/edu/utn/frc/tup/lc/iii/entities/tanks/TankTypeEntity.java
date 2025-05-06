@@ -52,7 +52,7 @@ public class TankTypeEntity extends BaseEntity {
     @Column(name = "TEE")
     private boolean tee;
 
-    @Column(name = "O_RING")
+    @Column(name = "O_RING") //todo: el oso me informo que no todo tanque consume el mismo input, hay que sacar esto o cambiar la logica de esto
     private ConsumableSubType oRing;
 
     @Column(name = "TIPO_STICKER")
