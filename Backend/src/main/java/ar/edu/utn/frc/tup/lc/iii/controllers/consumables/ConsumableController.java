@@ -45,8 +45,8 @@ public class ConsumableController {
     }
 
 
-    @DeleteMapping("/Secondary/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    @DeleteMapping("/secondary/{id}")
+    public ResponseEntity<Void> delete(@PathVariable long id) {
 
         consumableService.deleteSecondary(id);
 

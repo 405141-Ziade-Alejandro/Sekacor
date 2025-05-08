@@ -1,0 +1,58 @@
+<h2>Insumos primarios</h2>
+
+<mat-card>
+  <mat-card-content>
+    <table mat-table [dataSource]="consumablesList">
+      <ng-container matColumnDef="nombre">
+        <th mat-header-cell *matHeaderCellDef>nombre</th>
+        <td mat-cell *matCellDef="let consumable">
+          {{ consumable.type }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="stock">
+        <th mat-header-cell *matHeaderCellDef>stock</th>
+        <td mat-cell *matCellDef="let consumable">
+          {{ consumable.quantity }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="subtype">
+        <th mat-header-cell *matHeaderCellDef>subtipo</th>
+        <td mat-cell *matCellDef="let consumable">
+
+          @if (consumable.subType === "BIG") {
+            110
+          } @else if (consumable.subType === "MEDIUM") {
+            63
+          } @else if (consumable.subType === "SMALL") {
+            50
+          } @else if (consumable.subType === "NONE") {
+            -
+          } @else {
+            {{ consumable.subType }}
+          }
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="agregar">
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td mat-cell *matCellDef="let consumable">
+          <mat-form-field appearance="outline">
+            <mat-label>Actualizar stock</mat-label>
+            <input matInput
+                   [value]="inputValues[consumable.id]||''"
+                   (input)="inputValues[consumable.id]=$any($event.target).valueAsNumber"
+                   type="number"
+                   step="0.01">
+          </mat-form-field>
+          <button mat-mini-fab (click)="add(consumable.id)">
+            <mat-icon>add</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+      <tr mat-row *matRowDef="let myRowData;columns:columnsToDisplay"></tr>
+    </table>
+  </mat-card-content>
+</mat-card>

@@ -8,25 +8,26 @@ import {Observable} from "rxjs";
 })
 export class ClientService {
 
-  constructor() { }
+  constructor() {
+  }
 
-  private httpClient =inject(HttpClient)
+  private httpClient = inject(HttpClient)
 
-  private clientUrl:string = "http://localhost:8080/Clients";
+  private clientUrl: string = "http://localhost:8080/Clients";
 
-  getClientList():Observable<Client[]> {
+  getClientList(): Observable<Client[]> {
     return this.httpClient.get<Client[]>(this.clientUrl);
   }
 
-  postClient(client:Client):Observable<Client> {
+  postClient(client: Client): Observable<Client> {
     return this.httpClient.post<Client>(this.clientUrl, client);
   }
 
-  deleteClient(id:number):Observable<void> {
-    return this.httpClient.delete<void>(this.clientUrl+"/"+id);
+  deleteClient(id: number): Observable<void> {
+    return this.httpClient.delete<void>(this.clientUrl + "/" + id);
   }
 
-  putClient(client:Client):Observable<Client> {
+  putClient(client: Client): Observable<Client> {
     return this.httpClient.put<Client>(this.clientUrl, client);
   }
 

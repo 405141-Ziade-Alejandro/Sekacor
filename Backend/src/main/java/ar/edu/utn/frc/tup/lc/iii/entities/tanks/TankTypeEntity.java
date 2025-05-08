@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 @Table(name = TankTypeEntity.TABLE_NAME)
 public class TankTypeEntity extends BaseEntity {
 
-    public static final String TABLE_NAME = "TANQUE";
+    public static final String TABLE_NAME = "TIPO_TANQUE";
 
     @Column(name = "TIPO", nullable = false)
     private String type;
@@ -52,7 +52,7 @@ public class TankTypeEntity extends BaseEntity {
     @Column(name = "TEE")
     private boolean tee;
 
-    @Column(name = "O_RING")
+    @Column(name = "O_RING") //todo: el oso me informo que no todo tanque consume el mismo input, hay que sacar esto o cambiar la logica de esto
     private ConsumableSubType oRing;
 
     @Column(name = "TIPO_STICKER")

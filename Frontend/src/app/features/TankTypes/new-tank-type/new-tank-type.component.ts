@@ -78,6 +78,7 @@ export class NewTankTypeComponent {
       }
 
       //this is necesary because the backend doesn't let you add empty strings as valid
+      // todo, make sure that they can't save if the flag is true but haven't selected anything
       if (!this.showORings) {
         tankType.oring="NONE"
       }
@@ -95,7 +96,7 @@ export class NewTankTypeComponent {
           console.log('guardado exitosamente', response);
 
           this.dialogue.open(ConfirmDialogComponent, {
-            data: {
+            data:{
               title:'¡Guardado exitosamente!',
               message:'¿Deseás cargar otro tipo de tanque?',
             }

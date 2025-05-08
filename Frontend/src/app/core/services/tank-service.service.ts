@@ -1,8 +1,14 @@
 import {inject, Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {TankType} from "../interfaces/tanks/tank-type";
 import {Observable} from "rxjs";
 import {NewTankType} from "../interfaces/tanks/new-tank-type";
+import {Tank} from "../interfaces/tanks/tank";
+import {PageResponse} from "../interfaces/page-response";
+import {MissingConsumable} from "../interfaces/tanks/missing-consumable";
+
+
+export type TankResponse = Tank | MissingConsumable[]
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +19,11 @@ export class TankServiceService {
   }
 
   private apiTankTypes: string = 'http://localhost:8080/tanks/type'
+  private apiTank: string = 'http://localhost:8080/tanks'
 
   private readonly httpClient = inject(HttpClient);
 
-  private updating:boolean = false;
+  private updating: boolean = false;
 
   postTankType(tankType: TankType): Observable<TankType> {
     return this.httpClient.post<TankType>(this.apiTankTypes, tankType);
@@ -30,19 +37,39 @@ export class TankServiceService {
     return this.httpClient.get<TankType>(this.apiTankTypes + '/' + id);
   }
 
-  putTankType(id:number,newTank:NewTankType): Observable<TankType> {
+  putTankType(id: number, newTank: NewTankType): Observable<TankType> {
     return this.httpClient.put<TankType>(this.apiTankTypes + '/' + id, newTank);
   }
 
-  deleteTankType(id:number): Observable<void> {
+  deleteTankType(id: number): Observable<void> {
     return this.httpClient.delete<void>(this.apiTankTypes + '/' + id)
   }
 
-  getUpdate():boolean {
+  getUpdate(): boolean {
     return this.updating
   }
 
-  setUpdating(updating:boolean) {
+  setUpdating(updating: boolean) {
     this.updating = updating;
+  }
+
+  deleteTank(id: number): Observable<void> {
+    return this.httpClient.delete<void>(this.apiTank + '/' + id)
+  }
+
+  getAllTanksPaginated(page: number,size:number,sortBy:string='id',order:string='desc'):Observable<PageResponse<Tank>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString())
+      .set('sortBy', sortBy)
+      .set('order',order)
+
+    return this.httpClient.get<PageResponse<Tank>>(this.apiTank+'/all',{params})
+  }
+
+  postTank(dto: Tank, force:boolean = false): Observable<TankResponse> {
+    const params = new HttpParams().set('force', force.toString())
+
+    return this.httpClient.post<TankResponse>(this.apiTank,dto,{params})
   }
 }
