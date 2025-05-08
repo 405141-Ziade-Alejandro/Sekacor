@@ -27,5 +27,5 @@ public class TankEntity extends BaseEntity {
     private UserEntity user;
 
     @Enumerated(EnumType.STRING)
-    private Cuality cuality;
+    private Quality quality;
 }

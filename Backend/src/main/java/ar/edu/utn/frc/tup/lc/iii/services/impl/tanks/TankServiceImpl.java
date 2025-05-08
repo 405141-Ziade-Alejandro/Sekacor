@@ -5,7 +5,7 @@ import ar.edu.utn.frc.tup.lc.iii.dtos.tanks.*;
 import ar.edu.utn.frc.tup.lc.iii.entities.consumables.ConsumableSubType;
 import ar.edu.utn.frc.tup.lc.iii.entities.consumables.ConsumableType;
 import ar.edu.utn.frc.tup.lc.iii.entities.consumables.PrimaryConsumableEntity;
-import ar.edu.utn.frc.tup.lc.iii.entities.tanks.Cuality;
+import ar.edu.utn.frc.tup.lc.iii.entities.tanks.Quality;
 import ar.edu.utn.frc.tup.lc.iii.entities.tanks.TankEntity;
 import ar.edu.utn.frc.tup.lc.iii.entities.tanks.TankTypeEntity;
 import ar.edu.utn.frc.tup.lc.iii.entities.users.UserEntity;
@@ -25,8 +25,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 
 @Service
 @RequiredArgsConstructor
@@ -133,14 +131,14 @@ public class TankServiceImpl implements TankService {
 
         TankEntity tankEntity = new TankEntity();
 
-        tankEntity.setCuality(dto.getCuality());
+        tankEntity.setQuality(dto.getQuality());
         tankEntity.setUser(checkUser.get());
         tankEntity.setType(checkType.get());
 
 
         TankEntity savedEntity = tankRepository.save(tankEntity);
 
-        if (dto.getCuality()== Cuality.PRIMERA){
+        if (dto.getQuality()== Quality.PRIMERA){
             checkType.get().setStock1(checkType.get().getStock1()+1);
             tankTypeRepository.save(checkType.get());
         } else{

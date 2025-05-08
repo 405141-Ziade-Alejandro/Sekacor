@@ -1,5 +1,5 @@
 package ar.edu.utn.frc.tup.lc.iii.entities.tanks;
 
-public enum Cuality {
+public enum Quality {
     PRIMERA,SEGUNDA
 }

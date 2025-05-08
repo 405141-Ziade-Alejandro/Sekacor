@@ -1,15 +1,11 @@
 package ar.edu.utn.frc.tup.lc.iii.dtos.tanks;
 
-import ar.edu.utn.frc.tup.lc.iii.entities.tanks.Cuality;
-import ar.edu.utn.frc.tup.lc.iii.entities.tanks.TankTypeEntity;
-import ar.edu.utn.frc.tup.lc.iii.entities.users.UserEntity;
+import ar.edu.utn.frc.tup.lc.iii.entities.tanks.Quality;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 @Getter
@@ -28,5 +24,5 @@ public class TankDto {
     private long userId;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private Cuality cuality;
+    private Quality quality;
 }

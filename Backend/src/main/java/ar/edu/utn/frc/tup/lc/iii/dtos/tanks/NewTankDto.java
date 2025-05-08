@@ -1,6 +1,6 @@
 package ar.edu.utn.frc.tup.lc.iii.dtos.tanks;
 
-import ar.edu.utn.frc.tup.lc.iii.entities.tanks.Cuality;
+import ar.edu.utn.frc.tup.lc.iii.entities.tanks.Quality;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,5 +18,5 @@ public class NewTankDto {
     private long userId;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private Cuality cuality;
+    private Quality quality;
 }

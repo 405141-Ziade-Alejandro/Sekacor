@@ -6,22 +6,22 @@
   <form [formGroup]="FormTankForm" (ngSubmit)="newTank()">
     <mat-card-header>
       <mat-label>select Tank</mat-label>
-      <mat-select formControlName="tankType">
+      <mat-select formControlName="typeId">
         @for (tank of tankTypeList; track $index) {
-          <mat-option [value]="$index">{{ tank.type }}</mat-option>
+          <mat-option [value]="tank.id">{{ tank.type }}</mat-option>
         }
       </mat-select>
     </mat-card-header>
     <mat-card-content>
-      <button mat-fab extended type="submit">
+      <button mat-fab extended type="submit" [disabled]="FormTankForm.invalid">
         <mat-icon></mat-icon>
         Tanque nuevo
       </button>
     </mat-card-content>
     <mat-card-footer>
       <mat-radio-group formControlName="quality">
-        <mat-radio-button value="1">Primera</mat-radio-button>
-        <mat-radio-button value="2">Segunda</mat-radio-button>
+        <mat-radio-button value="PRIMERA">Primera</mat-radio-button>
+        <mat-radio-button value="SEGUNDA">Segunda</mat-radio-button>
       </mat-radio-group>
     </mat-card-footer>
   </form>
