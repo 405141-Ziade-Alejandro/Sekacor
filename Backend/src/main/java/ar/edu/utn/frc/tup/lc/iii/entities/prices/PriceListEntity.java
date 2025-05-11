@@ -26,5 +26,4 @@ public class PriceListEntity extends BaseEntity {
 
     @Column(name = "MODIFICADOR")
     private BigDecimal modifier;
-
 }

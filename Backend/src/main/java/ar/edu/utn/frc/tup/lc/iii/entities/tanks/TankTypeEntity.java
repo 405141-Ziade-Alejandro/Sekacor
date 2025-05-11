@@ -2,9 +2,7 @@ package ar.edu.utn.frc.tup.lc.iii.entities.tanks;
 
 import ar.edu.utn.frc.tup.lc.iii.entities.BaseEntity;
 import ar.edu.utn.frc.tup.lc.iii.entities.consumables.ConsumableSubType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +24,7 @@ public class TankTypeEntity extends BaseEntity {
     private String type;
 
     @Column(name = "CAPA")
+    @Enumerated(EnumType.STRING)
     private Cover cover;
 
     @Column(name = "CANTIDAD")
@@ -41,6 +40,7 @@ public class TankTypeEntity extends BaseEntity {
     private BigDecimal cost;
 
     @Column(name = "TAPA_TIPO")
+    @Enumerated(EnumType.STRING)
     private ConsumableSubType coverType;
 
     @Column(name = "TORNILLO")
@@ -53,12 +53,15 @@ public class TankTypeEntity extends BaseEntity {
     private boolean tee;
 
     @Column(name = "O_RING") //todo: el oso me informo que no todo tanque consume el mismo input, hay que sacar esto o cambiar la logica de esto
+    @Enumerated(EnumType.STRING)
     private ConsumableSubType oRing;
 
     @Column(name = "TIPO_STICKER")
+    @Enumerated(EnumType.STRING)
     private ConsumableSubType sticker;
 
     @Column(name = "TAMANO_RAMAL")
+    @Enumerated(EnumType.STRING)
     private ConsumableSubType Ramal;
 
     /**
