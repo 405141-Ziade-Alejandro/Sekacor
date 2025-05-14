@@ -31,4 +31,7 @@ public class OrderDetailsEntity extends BaseEntity {
 
     private BigDecimal price;
 
+//    @ManyToOne
+//    @JoinColumn(name = "order_entity_id") // explícito
+//    private OrderEntity order;
 }

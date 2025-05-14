@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import {MatFormField, MatLabel} from "@angular/material/form-field";
+import {Component, inject} from '@angular/core';
+import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {MatList, MatListItem} from "@angular/material/list";
 import {
@@ -13,42 +13,162 @@ import {
 } from "@angular/material/table";
 import {MatCard, MatCardContent} from "@angular/material/card";
 import {OrderDetail} from "../../../core/interfaces/orders/order-detail";
-import {MatFabButton} from "@angular/material/button";
+import {MatButton, MatFabButton, MatMiniFabButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
+import {OrdersService} from "../../../core/services/orders.service";
+import {MatInput, MatInputModule} from "@angular/material/input";
+import {
+  MatDatepickerModule,
+} from "@angular/material/datepicker";
+import {MatNativeDateModule} from "@angular/material/core";
+import {Client} from "../../../core/interfaces/client/client";
+import {TankType} from "../../../core/interfaces/tanks/tank-type";
+import {TankServiceService} from "../../../core/services/tank-service.service";
+import {ClientService} from "../../../core/services/client.service";
+import {CurrencyPipe} from "@angular/common";
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {Order} from "../../../core/interfaces/orders/order";
 
 @Component({
   selector: 'app-new-order',
   standalone: true,
   imports: [
-    MatFormField,
-    MatLabel,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatNativeDateModule,
     MatSelect,
     MatOption,
     MatList,
     MatListItem,
-    MatTable,
     MatCard,
     MatCardContent,
+    MatTable,
+    MatColumnDef,
+    MatIcon,
+    MatFabButton,
+    MatRow,
+    MatHeaderRow,
+    MatRowDef,
+    MatHeaderRowDef,
     MatCell,
     MatHeaderCell,
-    MatHeaderCellDef,
-    MatColumnDef,
     MatCellDef,
-    MatHeaderRow,
-    MatHeaderRowDef,
-    MatRow,
-    MatRowDef,
-    MatFabButton,
-    MatIcon
+    MatHeaderCellDef,
+    MatButton,
+    MatMiniFabButton,
+    CurrencyPipe,
+    ReactiveFormsModule,
   ],
   templateUrl: './new-order.component.html',
   styleUrl: './new-order.component.css'
 })
 export class NewOrderComponent {
   //form
+  formOrder: FormGroup = new FormGroup({
+    clientId: new FormControl('', [Validators.required]),
+    orderDate: new FormControl(''),
+  })
   //services
+  orderService = inject(OrdersService)
+  tankService = inject(TankServiceService)
+  clientService = inject(ClientService)
   //variables
-  columnToDisplay:string[]=['product', 'quantity','action'];
-  detailList:OrderDetail[]=[]
+  columnToDisplay: string[] = ['product', 'quantity', 'price', 'action'];
+  clientList: Client[] = [];
+  typeTankList: TankType[] = [];
+  detailList: OrderDetail[] = []
+  currentDate = new Date();
+
   //methods
+  ngOnInit() {
+    this.loadClientsAndTanks()
+  }
+
+  private loadClientsAndTanks() {
+    this.clientService.getClientList().subscribe(data => {
+      this.clientList = data;
+    })
+    this.tankService.getAllTankTypes().subscribe(data => {
+      this.typeTankList = data;
+    })
+  }
+
+  addTank(index: number) {
+    let tankType: TankType = this.typeTankList[index];
+
+    let check = this.detailList.find(dtl => dtl.typeTankId === tankType.id)
+    if (check) {
+
+      check.quantity = check.quantity + 1;
+
+    } else {
+      const newDetail: OrderDetail = {
+        price: tankType.cost, quantity: 1, typeTankId: tankType.id
+      }
+
+      this.detailList = [...this.detailList, newDetail];
+    }
+  }
+
+  /**
+   * this reduces the tank by 1 if there many tanks in the list
+   * otherwise it removes the tanktype from the list completely
+   * @param detail
+   */
+  reduceTank(detail: OrderDetail) {
+    if (detail.quantity > 1) {
+      detail.quantity--;
+    } else {
+      let index = this.detailList.indexOf(detail);
+      this.detailList.splice(index, 1)
+      this.detailList = [...this.detailList];
+    }
+  }
+
+  get totalPrice(): number {
+
+    let total: number = 0
+
+    for (let detailListElement of this.detailList) {
+      total += detailListElement.price * detailListElement.quantity;
+    }
+
+    return total
+  }
+
+  sendOrder() {
+    if (this.formOrder.invalid || this.detailList.length < 1) {
+      //todo: make it sure that is for a detail list error before showing this alert
+      alert("debe por lo menos tener un tipo de tanque");
+    } else if (this.formOrder.valid) {
+      const newOrder: Order = {
+        ...this.formOrder.value,
+        orderDate: this.toLocalDateTimeString(this.formOrder.value.orderDate)
+      }
+      newOrder.orderDetails = this.detailList
+      newOrder.totalPrice = this.totalPrice
+
+      this.orderService.postOrder(newOrder).subscribe({
+        next: (responce) => {
+          console.log('order saved: ', responce);
+          this.formOrder.reset()
+          this.detailList = []
+        },
+        error: (error) => {
+          console.log(error);
+        }
+      })
+
+    }
+  }
+
+  /**
+   * this makes sure the date is send on the dto is accepted by the backend
+   * otherwise a parse error occurs
+   * @param date
+   */
+  toLocalDateTimeString(date: Date): string {
+    return date.toISOString().slice(0, 19);
+  }
 }

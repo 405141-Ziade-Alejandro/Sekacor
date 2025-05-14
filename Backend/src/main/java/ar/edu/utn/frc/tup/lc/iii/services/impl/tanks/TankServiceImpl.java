@@ -110,6 +110,15 @@ public class TankServiceImpl implements TankService {
         log.info("Tank type with id {} deleted", id);
     }
 
+    /**
+     * this method makes sure to post a new tank and reduce the consumables used
+     * or send you a list with what's missing on an
+     * @exception NotEnoughConsumablesException this exception has a missing list with the consumables missing
+     * @param dto
+     * @param force this boolean is set up so that the consumables do get reduce
+     *              even if that means that they will have negative stock
+     * @return
+     */
     @Override
     public TankDto postTank(NewTankDto dto, boolean force) {
         Optional<TankTypeEntity> checkType = tankTypeRepository.findById(dto.getTypeId());
@@ -124,6 +133,7 @@ public class TankServiceImpl implements TankService {
             throw new EntityNotFoundException("User with id '" + dto.getUserId() + "' does not exist");
         }
 
+        //this checks
         List<MissingConsumableDto> missing = validateAndReduceConsumables(checkType.get(), force);
         if (!missing.isEmpty()) {
             throw new NotEnoughConsumablesException(missing);
@@ -155,6 +165,13 @@ public class TankServiceImpl implements TankService {
         return newTankDto;
     }
 
+    /**
+     * this is the method that reduces the tanktypes consumables used in the production
+     * it returns a list, that contains what is missing
+     * @param tankTypeEntity
+     * @param force
+     * @return
+     */
     private List<MissingConsumableDto> validateAndReduceConsumables(TankTypeEntity tankTypeEntity, boolean force) {
 
         List<MissingConsumableDto> missingList = new ArrayList<>();
@@ -191,6 +208,7 @@ public class TankServiceImpl implements TankService {
         return missingList;
     }
 
+    //todo revizar si esto no reduce lo que si tenemos antes de mostrar lo que falta
     private void checkAndReduce(ConsumableType type, ConsumableSubType subType, boolean force, BigDecimal required, List<MissingConsumableDto> missingList) {
         Optional<PrimaryConsumableEntity> opt = primaryConsumableRepository.findByTypeAndSubType(type, subType);
 
@@ -225,6 +243,7 @@ public class TankServiceImpl implements TankService {
 
         tankRepository.deleteById(id);
     }
+
 
     @Override
     public Page<TankDto> getAllTanks(Pageable pageable) {
