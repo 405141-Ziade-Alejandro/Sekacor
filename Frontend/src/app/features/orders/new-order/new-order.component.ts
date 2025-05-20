@@ -28,6 +28,7 @@ import {ClientService} from "../../../core/services/client.service";
 import {CurrencyPipe} from "@angular/common";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Order} from "../../../core/interfaces/orders/order";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-new-order',
@@ -73,13 +74,13 @@ export class NewOrderComponent {
   orderService = inject(OrdersService)
   tankService = inject(TankServiceService)
   clientService = inject(ClientService)
+  router = inject(Router);
   //variables
   columnToDisplay: string[] = ['product', 'quantity', 'price', 'action'];
   clientList: Client[] = [];
   typeTankList: TankType[] = [];
   detailList: OrderDetail[] = []
   currentDate = new Date();
-
   //methods
   ngOnInit() {
     this.loadClientsAndTanks()
@@ -159,7 +160,6 @@ export class NewOrderComponent {
           console.log(error);
         }
       })
-
     }
   }
 
@@ -170,5 +170,9 @@ export class NewOrderComponent {
    */
   toLocalDateTimeString(date: Date): string {
     return date.toISOString().slice(0, 19);
+  }
+
+  leave() {
+    this.router.navigate(['/']);
   }
 }

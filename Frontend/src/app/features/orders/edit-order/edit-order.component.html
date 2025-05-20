@@ -1,6 +1,4 @@
-<h2>nueva order</h2>
-
-<form [formGroup]="formOrder" (ngSubmit)="sendOrder()">
+<form [formGroup]="formEditOrder" (ngSubmit)="editOrder()">
   <h3>Clientes y fecha estimada</h3>
   <mat-form-field appearance="outline">
     <mat-label>cliente</mat-label>
@@ -64,8 +62,8 @@
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="columnToDisplay"></tr>
-        <tr mat-row *matRowDef="let row; columns: columnToDisplay"></tr>
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnsToDisplay"></tr>
       </table>
     </mat-card-content>
   </mat-card>
@@ -75,7 +73,7 @@
     <mat-icon>favorite</mat-icon>
     Cancelar
   </button>
-  <button mat-fab extended type="submit" [disabled]="formOrder.invalid">
+  <button mat-fab extended type="submit" [disabled]="formEditOrder.invalid">
     <mat-icon>favorite</mat-icon>
     Aceptar
   </button>
