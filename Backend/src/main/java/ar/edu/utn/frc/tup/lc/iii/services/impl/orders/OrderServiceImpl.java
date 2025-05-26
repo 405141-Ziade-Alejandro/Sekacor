@@ -13,6 +13,7 @@ import ar.edu.utn.frc.tup.lc.iii.repositories.orders.OrderRepository;
 import ar.edu.utn.frc.tup.lc.iii.repositories.tanks.TankTypeRepository;
 import ar.edu.utn.frc.tup.lc.iii.services.OrderService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +45,7 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
+    @Transactional
     public OrderDto postOrder(NewOrderDto dto) {
         Optional<ClientEntity> optionalClientEntity = clientsRepository.findById(dto.getClientId());
         if (optionalClientEntity.isEmpty()) {
@@ -60,9 +63,12 @@ public class OrderServiceImpl implements OrderService {
         for (OrderDetailDto detailDto : dto.getOrderDetails()) {
             OrderDetailsEntity detail = new OrderDetailsEntity();
 
-
+            /*todo: see if this can be better,
+            *  for now it just search the DB for each detail*/
             detail.setTankType(tankTypeRepository.findById(detailDto.getTypeTankId())
                     .orElseThrow(() -> new EntityNotFoundException("Tank type not found")));
+
+
             detail.setQuantity(detailDto.getQuantity());
             detail.setPrice(detailDto.getPrice());
             detailsEntityList.add(detail);
@@ -76,13 +82,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * todo falta implementar el front
      * sigue la misma logica del post
      *
      * @param dto
      * @return
      */
     @Override
+    @Transactional
     public OrderDto updateOrder(OrderDto dto) {
         Optional<ClientEntity> optionalClientEntity = clientsRepository.findById(dto.getClientId());
         if (optionalClientEntity.isEmpty()) {
@@ -99,9 +105,19 @@ public class OrderServiceImpl implements OrderService {
         orderEntity.setTotalPrice(dto.getTotalPrice());
         orderEntity.setOrderDate(dto.getOrderDate());
 
-        List<OrderDetailsEntity> detailsEntityList = orderEntity.getDetails();
+        List<OrderDetailsEntity> detailsEntityList = new ArrayList<>(dto.getOrderDetails().size());
 
-        //todo figure out how to do this update in the list
+        for (OrderDetailDto detailDto : dto.getOrderDetails()) {
+            OrderDetailsEntity detail = new OrderDetailsEntity();
+            detail.setQuantity(detailDto.getQuantity());
+            detail.setPrice(detailDto.getPrice());
+
+            detail.setTankType(tankTypeRepository.findById(detailDto.getTypeTankId())
+                    .orElseThrow(() -> new EntityNotFoundException("Tank type not found")));
+
+            detailsEntityList.add(detail);
+        }
+        orderEntity.setDetails(detailsEntityList);
 
 
         OrderEntity orderEntityUpdated = orderRepository.save(orderEntity);
@@ -117,6 +133,7 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
+    @Transactional
     public OrderDto cancelarOrder(long id) {
         Optional<OrderEntity> optionalOrderEntity = orderRepository.findById(id);
         if (optionalOrderEntity.isEmpty()) {
@@ -156,7 +173,20 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto finalizeOrder(long id, boolean currentOrderDate) {
-        return null;
+    @Transactional
+    public OrderDto completeOrder(long id) {
+        Optional<OrderEntity> checkOrderEntity = orderRepository.findById(id);
+        if (checkOrderEntity.isEmpty()) {
+            throw new EntityNotFoundException("Order not found");
+        }
+        if (checkOrderEntity.get().getState() != OrderState.PREPARANDO) {
+            throw new InvalidOrderStateException("Invalid order state for completion");
+        }
+        checkOrderEntity.get().setState(OrderState.FINALIZADO);
+        checkOrderEntity.get().setOrderDate(LocalDateTime.now());
+
+        OrderEntity savedOrderEntity = orderRepository.save(checkOrderEntity.get());
+
+        return modelMapper.map(savedOrderEntity, OrderDto.class);
     }
 }

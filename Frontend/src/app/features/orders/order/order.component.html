@@ -39,7 +39,12 @@
   </mat-card-content>
 
   <mat-card-actions align="end">
-    <button mat-stroked-button color="warn" (click)="cancelOrder()">Cancelar Pedido</button>
-    <button mat-raised-button color="primary" (click)="edit()">Editar</button>
+    @if (order.state==="PREPARANDO"){
+      <button mat-stroked-button color="warn" (click)="cancelOrder()">Cancelar Pedido</button>
+      <button mat-raised-button color="primary" (click)="edit()">Editar</button>
+      <button mat-raised-button color="primary" (click)="complete()">Finalizar</button>
+    } @else if (order.state==="CANCELADO"||order.state==="FINALIZADO"){
+      <button mat-raised-button color="primary" (click)="back()">Volver A todas las Ordenes</button>
+    }
   </mat-card-actions>
 </mat-card>

@@ -1,6 +1,7 @@
 package ar.edu.utn.frc.tup.lc.iii.dtos.prices;
 
-import jakarta.persistence.Column;
+import ar.edu.utn.frc.tup.lc.iii.entities.prices.VolKm;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,5 +20,12 @@ public class PriceListDto {
     private String name;
 
 
-    private BigDecimal modifier;
+    private BigDecimal profit;
+
+    private BigDecimal commission;
+
+    private BigDecimal corralon;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private VolKm volKm;
 }

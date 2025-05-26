@@ -140,8 +140,12 @@ export class NewOrderComponent {
 
   sendOrder() {
     if (this.formOrder.invalid || this.detailList.length < 1) {
-      //todo: make it sure that is for a detail list error before showing this alert
-      alert("debe por lo menos tener un tipo de tanque");
+      if (this.detailList.length < 1) {
+        alert("debe por lo menos tener un tipo de tanque");
+      } else {
+        alert('this formulary is invalid')
+      }
+
     } else if (this.formOrder.valid) {
       const newOrder: Order = {
         ...this.formOrder.value,

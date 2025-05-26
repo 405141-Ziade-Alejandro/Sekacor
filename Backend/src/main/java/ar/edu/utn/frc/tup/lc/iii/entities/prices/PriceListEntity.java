@@ -1,9 +1,7 @@
 package ar.edu.utn.frc.tup.lc.iii.entities.prices;
 
 import ar.edu.utn.frc.tup.lc.iii.entities.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +22,15 @@ public class PriceListEntity extends BaseEntity {
     @Column(name = "NOMBRE")
     private String name;
 
-    @Column(name = "MODIFICADOR")
-    private BigDecimal modifier;
+    @Column(name = "GANANCIA")
+    private BigDecimal profit;
+
+    @Column(name = "COMISION")
+    private BigDecimal commission;
+
+    @Column(name = "CORRALON")
+    private BigDecimal corralon;
+
+    @Enumerated(EnumType.STRING)
+    private VolKm volKm;
 }

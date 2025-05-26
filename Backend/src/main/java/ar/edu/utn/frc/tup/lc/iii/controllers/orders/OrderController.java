@@ -33,10 +33,9 @@ public class OrderController {
         return ResponseEntity.ok(orderService.cancelarOrder(id));
     }
 
-    @PutMapping("/{id}/end")
-    public ResponseEntity<OrderDto> endOrder(@RequestParam(required = false) boolean currentOrderDate,
-                                             @PathVariable long id) {
-        return ResponseEntity.ok(orderService.finalizeOrder(id, currentOrderDate));
+    @PutMapping("/{id}/complete")
+    public ResponseEntity<OrderDto> completeOrder(@PathVariable long id) {
+        return ResponseEntity.ok(orderService.completeOrder(id));
     }
 
     @GetMapping("")

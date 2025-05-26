@@ -39,6 +39,12 @@ public class TankTypeEntity extends BaseEntity {
     @Column(precision = 10,scale = 2, name = "COSTO")
     private BigDecimal cost;
 
+    @Column(precision = 10,scale = 2, name = "VOLUMEN_100_KM")
+    private BigDecimal vol100;
+
+    @Column(precision = 10,scale = 2, name = "VOLUMENT_200_KM")
+    private BigDecimal vol200;
+
     @Column(name = "TAPA_TIPO")
     @Enumerated(EnumType.STRING)
     private ConsumableSubType coverType;
@@ -52,17 +58,9 @@ public class TankTypeEntity extends BaseEntity {
     @Column(name = "TEE")
     private boolean tee;
 
-    @Column(name = "O_RING") //todo: el oso me informo que no todo tanque consume el mismo input, hay que sacar esto o cambiar la logica de esto
-    @Enumerated(EnumType.STRING)
-    private ConsumableSubType oRing;
-
     @Column(name = "TIPO_STICKER")
     @Enumerated(EnumType.STRING)
     private ConsumableSubType sticker;
-
-    @Column(name = "TAMANO_RAMAL")
-    @Enumerated(EnumType.STRING)
-    private ConsumableSubType Ramal;
 
     /**
      * en la fabrica tienen dos tipos de stock

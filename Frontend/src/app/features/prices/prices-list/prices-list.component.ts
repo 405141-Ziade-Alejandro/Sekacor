@@ -17,7 +17,7 @@ import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {MatIcon} from "@angular/material/icon";
 import {MatDialog} from "@angular/material/dialog";
-import {CreatePriceDialogComponent} from "../../../shared/create-price-dialog/create-price-dialog.component";
+import {CreatePriceDialogComponent} from "../create-price-dialog/create-price-dialog.component";
 import {PricesService} from "../../../core/services/prices.service";
 import {PriceList} from "../../../core/interfaces/prices/price-list";
 
@@ -61,7 +61,16 @@ export class PricesListComponent {
 
   columnsToDisplay:string[]=['Tipo de Tanque','Costo','Precio'];
 
-  priceListSeleceted:PriceList|null=null;
+  priceListSelected:PriceList = {
+    id: 0,
+    name: '',
+    profit: 0,
+    commission: 0,
+    corralon: 0,
+    volKm: ''
+  }
+
+  somethingSelected:boolean=false
 
   //methods
 
@@ -71,7 +80,7 @@ export class PricesListComponent {
         this.tankList=data;
       },
       error: err => {
-        console.log('error fetching tank type list',err);
+        console.error('error fetching tank type list',err);
       }
     })
 
@@ -84,7 +93,7 @@ export class PricesListComponent {
         this.priceList = data
       },
       error: err => {
-        console.log('error fetching prices list',err);
+        console.error('error fetching prices list',err);
       }
     })
   }
@@ -92,14 +101,39 @@ export class PricesListComponent {
   openCreateDialog(){
     this.dialog.open(CreatePriceDialogComponent, {
       width: '90vw',
-      maxWidth: '600px',
+      maxWidth: '900px',
       autoFocus: false,
     })
   }
 
   changeSelection(index:number){
-    this.priceListSeleceted = this.priceList[index];
-    console.log('now the list selected is ', this.priceListSeleceted)
+    this.priceListSelected = this.priceList[index];
+    this.somethingSelected = true
   }
 
+  delete() {
+    if (this.priceListSelected){
+      if (confirm("Are you sure you want to delete?")) {
+        this.pricesService.delete(this.priceListSelected.id).subscribe({
+          next: data => {
+            console.log('list deleted')
+            this.loadPrices()
+          },
+          error: err => {
+            console.error('error when deleting');
+          }
+        })
+      }
+    }
+  }
+
+  calculatePrice(tank:TankType) {
+    let price = ((tank.cost + this.priceListSelected.profit) * this.priceListSelected.commission)+(this.priceListSelected.corralon*this.priceListSelected.profit);
+    if (this.priceListSelected.volKm==="CIEN"){
+      price = price * tank.vol100
+    } else if (this.priceListSelected.volKm==="DOSCIENTOS"){
+      price = price * tank.vol200
+    }
+    return price;
+  }
 }

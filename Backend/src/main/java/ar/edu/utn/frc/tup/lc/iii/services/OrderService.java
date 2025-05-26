@@ -16,5 +16,5 @@ public interface OrderService {
 
     OrderDto getById(long id);
 
-    OrderDto finalizeOrder(long id, boolean currentOrderDate);
+    OrderDto completeOrder(long id);
 }

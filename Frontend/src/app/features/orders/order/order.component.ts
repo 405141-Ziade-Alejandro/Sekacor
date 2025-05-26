@@ -62,7 +62,7 @@ export class OrderComponent {
   private tankService = inject(TankServiceService)
   private router = inject(Router)
   //variables
-  order:Order= {
+  order: Order = {
     id: 0,
     createdDate: '',
     lastUpdatedAt: '',
@@ -73,12 +73,12 @@ export class OrderComponent {
     state: ''
   }
   private id: number = 0;
-  private clientList:Client[] = []
-  private tankTypeList:TankType[]=[]
+  private clientList: Client[] = []
+  private tankTypeList: TankType[] = []
 
   //method
   get clientName(): string | undefined {
-    return this.clientList.find(cl=>cl.id ===this.order.clientId)?.name
+    return this.clientList.find(cl => cl.id === this.order.clientId)?.name
   }
 
   ngOnInit(): void {
@@ -139,11 +139,29 @@ export class OrderComponent {
     }
   }
 
-  getTankTypeName(id:number):string|undefined{
-    return this.tankTypeList.find(tt=>tt.id===id)?.type
+  getTankTypeName(id: number): string | undefined {
+    return this.tankTypeList.find(tt => tt.id === id)?.type
   }
 
   edit() {
-    this.router.navigate(['/orders/'+this.id+'/edit'])
+    this.router.navigate(['/orders/' + this.id + '/edit'])
+  }
+
+  back() {
+    this.router.navigate(['/orders/all'])
+  }
+
+  complete() {
+    if (confirm("Completar la orden?")) {
+      this.orderService.completeORder(this.id).subscribe({
+        next: response => {
+          console.log('order completed ', response);
+          this.order = response
+        },
+        error: error => {
+          console.error(error)
+        }
+      })
+    }
   }
 }

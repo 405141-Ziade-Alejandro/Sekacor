@@ -25,8 +25,8 @@ export class OrdersService {
     return this.httpClient.put<Order>(this.ordersUrl, order);
   }
 
-  cancelOrder(id:number): Observable<Order> {
-    return this.httpClient.put<Order>(this.ordersUrl+"/"+id+"/cancel", null);
+  cancelOrder(id: number): Observable<Order> {
+    return this.httpClient.put<Order>(this.ordersUrl + "/" + id + "/cancel", null);
   }
 
   getAllOrders(page: number, size: number, sortBy: string = 'orderDate', order: string = 'desc'): Observable<PageResponse<Order>> {
@@ -43,4 +43,7 @@ export class OrdersService {
     return this.httpClient.get<Order>(`${this.ordersUrl}/${id}`)
   }
 
+  completeORder(id: number): Observable<Order> {
+    return this.httpClient.put<Order>(`${this.ordersUrl}/${id}/complete`, null);
+  }
 }

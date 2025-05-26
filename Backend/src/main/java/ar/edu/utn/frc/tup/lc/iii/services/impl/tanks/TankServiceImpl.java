@@ -15,6 +15,7 @@ import ar.edu.utn.frc.tup.lc.iii.repositories.tanks.TankTypeRepository;
 import ar.edu.utn.frc.tup.lc.iii.repositories.users.UserRepository;
 import ar.edu.utn.frc.tup.lc.iii.services.TankService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -58,6 +59,7 @@ public class TankServiceImpl implements TankService {
     }
 
     @Override
+    @Transactional
     public TankTypeDto postTankType(NewTankTypeDto dto) {
 
         TankTypeEntity newTankType = modelMapper.map(dto, TankTypeEntity.class);
@@ -69,6 +71,7 @@ public class TankServiceImpl implements TankService {
     }
 
     @Override
+    @Transactional
     public TankTypeDto putTankType(Long id, NewTankTypeDto dto) {
 
         Optional<TankTypeEntity> check = tankTypeRepository.findById(id);
@@ -100,6 +103,7 @@ public class TankServiceImpl implements TankService {
     }
 
     @Override
+    @Transactional
     public void deleteType(Long id) {
         Optional<TankTypeEntity> check = tankTypeRepository.findById(id);
         if (check.isEmpty()) {
@@ -120,6 +124,7 @@ public class TankServiceImpl implements TankService {
      * @return
      */
     @Override
+    @Transactional
     public TankDto postTank(NewTankDto dto, boolean force) {
         Optional<TankTypeEntity> checkType = tankTypeRepository.findById(dto.getTypeId());
         if (checkType.isEmpty()) {
@@ -133,11 +138,18 @@ public class TankServiceImpl implements TankService {
             throw new EntityNotFoundException("User with id '" + dto.getUserId() + "' does not exist");
         }
 
-        //this checks
-        List<MissingConsumableDto> missing = validateAndReduceConsumables(checkType.get(), force);
-        if (!missing.isEmpty()) {
-            throw new NotEnoughConsumablesException(missing);
+        //if force is true, then it bypass the check of consumables
+        //and reduces the consumables anyway
+        if (!force){
+            List<MissingConsumableDto> missing = validateConsumables(checkType.get());
+            if (!missing.isEmpty()) {
+                throw new NotEnoughConsumablesException(missing);
+            }
         }
+        //this is the method that reduce the amount of cconsumables according to the type of tank
+        reducePrimaryConsumables(checkType.get());
+
+
 
         TankEntity tankEntity = new TankEntity();
 
@@ -150,11 +162,10 @@ public class TankServiceImpl implements TankService {
 
         if (dto.getQuality()== Quality.PRIMERA){
             checkType.get().setStock1(checkType.get().getStock1()+1);
-            tankTypeRepository.save(checkType.get());
         } else{
             checkType.get().setStock2(checkType.get().getStock2()+1);
-            tankTypeRepository.save(checkType.get());
         }
+        tankTypeRepository.save(checkType.get());
 
         TankDto newTankDto = modelMapper.map(savedEntity, TankDto.class);
 
@@ -166,75 +177,110 @@ public class TankServiceImpl implements TankService {
     }
 
     /**
-     * this is the method that reduces the tanktypes consumables used in the production
-     * it returns a list, that contains what is missing
-     * @param tankTypeEntity
-     * @param force
-     * @return
+     * this method goes one by one on each required consumable for the type tank and reduce it
+     * @param tankTypeEntity it is necesary to check what and the amount that needs reducing
      */
-    private List<MissingConsumableDto> validateAndReduceConsumables(TankTypeEntity tankTypeEntity, boolean force) {
+    private void reducePrimaryConsumables(TankTypeEntity tankTypeEntity) {
+        reduceConsumable(ConsumableType.PLASTICO,ConsumableSubType.NEGRO,tankTypeEntity.getPlasticBlack());
+        reduceConsumable(ConsumableType.PLASTICO,ConsumableSubType.COLOR,tankTypeEntity.getPlasticColor());
 
-        List<MissingConsumableDto> missingList = new ArrayList<>();
-
-        checkAndReduce(ConsumableType.PLASTICO, ConsumableSubType.NEGRO, force, tankTypeEntity.getPlasticBlack(), missingList);
-        checkAndReduce(ConsumableType.PLASTICO, ConsumableSubType.COLOR, force, tankTypeEntity.getPlasticColor(), missingList);
-
-        if (tankTypeEntity.getCoverType() != ConsumableSubType.NONE) {
-            checkAndReduce(ConsumableType.TAPA, tankTypeEntity.getCoverType(), force, BigDecimal.ONE, missingList);
-            checkAndReduce(ConsumableType.TORNILLOS, ConsumableSubType.NONE, force, BigDecimal.valueOf(tankTypeEntity.getScrews()), missingList);
+        if (tankTypeEntity.getCoverType() != ConsumableSubType.NONE){
+            reduceConsumable(ConsumableType.TAPA,tankTypeEntity.getCoverType(),BigDecimal.ONE);
+            reduceConsumable(ConsumableType.TORNILLOS,ConsumableSubType.NONE, BigDecimal.valueOf(tankTypeEntity.getScrews()));
         }
 
-        if (tankTypeEntity.getBigScrews() > 0) {
-            checkAndReduce(ConsumableType.TORNILLO_GRANDE, ConsumableSubType.NONE, force, BigDecimal.valueOf(tankTypeEntity.getBigScrews()), missingList);
+        if (tankTypeEntity.getBigScrews()>0){
+            reduceConsumable(ConsumableType.TORNILLO_GRANDE,ConsumableSubType.NONE,BigDecimal.valueOf(tankTypeEntity.getBigScrews()));
         }
 
         if (tankTypeEntity.isTee()) {
-            //tee siempre son dos las que se usan
-            checkAndReduce(ConsumableType.TEE, ConsumableSubType.NONE, force, BigDecimal.valueOf(2), missingList);
+            reduceConsumable(ConsumableType.TEE,ConsumableSubType.NONE,BigDecimal.valueOf(2));
         }
 
-        if (tankTypeEntity.getORing() != ConsumableSubType.NONE) {
-            checkAndReduce(ConsumableType.ARO_GOMA, tankTypeEntity.getORing(), force, BigDecimal.valueOf(2), missingList);
+        if (tankTypeEntity.getSticker()!= ConsumableSubType.NONE){
+            reduceConsumable(ConsumableType.STICKER, tankTypeEntity.getSticker(),BigDecimal.ONE);
+        }
+    }
+
+    /**
+     * this does only reduces the primary consumable by the amount required
+     * @param consumableType this is required to find the consumable
+     * @param consumableSubType this is required to find the consumable
+     * @param amountRequired amount that will be reduced
+     */
+    private void reduceConsumable(ConsumableType consumableType, ConsumableSubType consumableSubType, BigDecimal amountRequired) {
+
+        Optional<PrimaryConsumableEntity> optional = primaryConsumableRepository.findByTypeAndSubType(consumableType, consumableSubType);
+        if (optional.isEmpty()) {
+            throw new EntityNotFoundException("Primary consumable with type '" + consumableType + "' and subType of '"+consumableSubType+"' does not exist");
         }
 
-        if (tankTypeEntity.getSticker() != ConsumableSubType.NONE) {
-            checkAndReduce(ConsumableType.STICKER, tankTypeEntity.getSticker(), force, BigDecimal.valueOf(1), missingList);
+        PrimaryConsumableEntity primaryConsumable = optional.get();
+        BigDecimal availableConsumable = primaryConsumable.getQuantity();
+
+        primaryConsumable.setQuantity(availableConsumable.subtract(amountRequired));
+        primaryConsumableRepository.save(primaryConsumable);
+    }
+
+    /**
+     * this method goes one by one for the Primary consumables required to make the tank
+     * it returns a list, if the list is empty, it means there were enough consumables to make the tank
+     * if the list isn't empty it means that there were consumables missing
+     * @param tankTypeEntity this is required to know the amounts of consumables for production
+     * @return a list of consumables with the amount missing to complete the production
+     */
+    private List<MissingConsumableDto> validateConsumables(TankTypeEntity tankTypeEntity) {
+
+        List<MissingConsumableDto> missingList = new ArrayList<>();
+
+        checkConsumable(ConsumableType.PLASTICO, ConsumableSubType.NEGRO,tankTypeEntity.getPlasticBlack(),missingList);
+        checkConsumable(ConsumableType.PLASTICO,ConsumableSubType.COLOR,tankTypeEntity.getPlasticColor(),missingList);
+
+
+        if (tankTypeEntity.getCoverType() != ConsumableSubType.NONE){
+            checkConsumable(ConsumableType.TAPA,tankTypeEntity.getCoverType(),BigDecimal.ONE,missingList);
+            checkConsumable(ConsumableType.TORNILLOS,ConsumableSubType.NONE,BigDecimal.valueOf(tankTypeEntity.getScrews()),missingList);
         }
 
-        if (tankTypeEntity.getRamal() != ConsumableSubType.NONE) {
-            checkAndReduce(ConsumableType.RAMAL, tankTypeEntity.getRamal(), force, BigDecimal.valueOf(2), missingList);
+        if (tankTypeEntity.getBigScrews()>0){
+            checkConsumable(ConsumableType.TORNILLO_GRANDE,ConsumableSubType.NONE,BigDecimal.valueOf(tankTypeEntity.getBigScrews()),missingList);
         }
 
+        if (tankTypeEntity.isTee()) {
+            checkConsumable(ConsumableType.TEE,ConsumableSubType.NONE,BigDecimal.valueOf(2),missingList);
+        }
+
+        if (tankTypeEntity.getSticker()!= ConsumableSubType.NONE){
+            checkConsumable(ConsumableType.STICKER,tankTypeEntity.getSticker(),BigDecimal.ONE,missingList);
+        }
         return missingList;
     }
 
-    //todo revizar si esto no reduce lo que si tenemos antes de mostrar lo que falta
-    private void checkAndReduce(ConsumableType type, ConsumableSubType subType, boolean force, BigDecimal required, List<MissingConsumableDto> missingList) {
-        Optional<PrimaryConsumableEntity> opt = primaryConsumableRepository.findByTypeAndSubType(type, subType);
-
-        if (opt.isEmpty()) {
-            throw new EntityNotFoundException("Consumable not found: " + type + " - " + subType);
+    /**
+     * this method checks if there is enough consumable for the production of the tank
+     * if there is, nothing happen,
+     * if there isn't then it adds it to the list
+     * @param consumableType to locate the primary consumable
+     * @param consumableSubType to locate the primary consumable
+     * @param consumableRequiredByTheTank the amount of the consumable for the production
+     * @param missingList list of consumables and the amount missing
+     */
+    private void checkConsumable(ConsumableType consumableType, ConsumableSubType consumableSubType, BigDecimal consumableRequiredByTheTank, List<MissingConsumableDto> missingList) {
+        Optional<PrimaryConsumableEntity> optional = primaryConsumableRepository.findByTypeAndSubType(consumableType, consumableSubType);
+        if (optional.isEmpty()) {
+            throw new EntityNotFoundException("Primary consumable with type '" + consumableType + "' and subType of '"+consumableSubType+"' does not exist");
         }
 
-        PrimaryConsumableEntity primaryConsumable = opt.get();
-        BigDecimal available = primaryConsumable.getQuantity();
+        PrimaryConsumableEntity primaryConsumable = optional.get();
+        BigDecimal availableConsumable = primaryConsumable.getQuantity();
 
-        if (available.compareTo(required) >= 0) {
-            primaryConsumable.setQuantity(available.subtract(required));
-            primaryConsumableRepository.save(primaryConsumable);
-        } else {
-            if (!force) {
-                missingList.add(new MissingConsumableDto(type, subType, required, available));
-            } else {
-                //registrar en negativo
-                primaryConsumable.setQuantity(available.subtract(required));
-                primaryConsumableRepository.save(primaryConsumable);
-            }
+        if (availableConsumable.compareTo(consumableRequiredByTheTank) < 0) {
+            missingList.add(new MissingConsumableDto(consumableType, consumableSubType, consumableRequiredByTheTank, availableConsumable));
         }
-
     }
 
     @Override
+    @Transactional
     public void deleteTank(long id) {
         Optional<TankEntity> opt = tankRepository.findById(id);
         if (opt.isEmpty()) {
@@ -266,3 +312,4 @@ public class TankServiceImpl implements TankService {
     }
 
 }
+//todo: make sure to add @transactional to all post, put delete in the sistem
