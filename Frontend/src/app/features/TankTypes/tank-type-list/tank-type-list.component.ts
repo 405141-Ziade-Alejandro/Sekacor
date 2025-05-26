@@ -64,6 +64,9 @@ export class TankTypeListComponent {
       next: data => {
         this.tankTypesList = data
         console.log(data)
+      },
+      error: err => {
+        console.log(err)
       }
     })
   }

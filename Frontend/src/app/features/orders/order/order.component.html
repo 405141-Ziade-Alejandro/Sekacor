@@ -1,0 +1,50 @@
+<mat-card class="order-card">
+  <mat-card-header>
+    <mat-card-title>Pedido #{{ order.id }}</mat-card-title>
+    <mat-card-subtitle>Cliente : {{ clientName }}</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <p><strong>Fecha de creación:</strong> {{ order.createdDate | date:'short' }}</p>
+    <p><strong>Última actualización:</strong> {{ order.lastUpdatedAt | date:'short' }}</p>
+    <p><strong>Fecha de entrega estimada:</strong> {{ order.orderDate | date:'shortDate' }}</p>
+    <p><strong>Estado:</strong> {{ order.state | titlecase }}</p>
+
+    <h3>Detalle del pedido:</h3>
+    <table mat-table [dataSource]="order.orderDetails" class="mat-elevation-z2">
+
+      <!-- Producto (typeTankId) -->
+      <ng-container matColumnDef="product">
+        <th mat-header-cell *matHeaderCellDef>Producto (ID)</th>
+        <td mat-cell *matCellDef="let detail">{{ getTankTypeName(detail.typeTankId) }}</td>
+      </ng-container>
+
+      <!-- Cantidad -->
+      <ng-container matColumnDef="quantity">
+        <th mat-header-cell *matHeaderCellDef>Cantidad</th>
+        <td mat-cell *matCellDef="let detail">{{ detail.quantity }}</td>
+      </ng-container>
+
+      <!-- Precio -->
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef>Precio</th>
+        <td mat-cell *matCellDef="let detail">{{ detail.price | currency:'ARS' }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="['product', 'quantity', 'price']"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['product', 'quantity', 'price']"></tr>
+    </table>
+
+    <h3>Total: {{ order.totalPrice | currency:'ARS' }}</h3>
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    @if (order.state==="PREPARANDO"){
+      <button mat-stroked-button color="warn" (click)="cancelOrder()">Cancelar Pedido</button>
+      <button mat-raised-button color="primary" (click)="edit()">Editar</button>
+      <button mat-raised-button color="primary" (click)="complete()">Finalizar</button>
+    } @else if (order.state==="CANCELADO"||order.state==="FINALIZADO"){
+      <button mat-raised-button color="primary" (click)="back()">Volver A todas las Ordenes</button>
+    }
+  </mat-card-actions>
+</mat-card>

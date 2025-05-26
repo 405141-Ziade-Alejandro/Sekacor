@@ -1,3 +1,4 @@
+<!--Todo: make the examine part a dialog and leave this as editing only-->
 @if (updating && tankType !== undefined) {
 
   <mat-card>
@@ -69,6 +70,19 @@
         <span matTextPrefix>$</span>
       </mat-form-field>
 
+      <!--vol100-->
+      <mat-form-field appearance="outline">
+        <mat-label>Volumen 100 Km</mat-label>
+        <input matInput type="number" min="0" step="0.01" [(ngModel)]="tankType.vol100">
+        <span matTextSuffix>%</span>
+      </mat-form-field>
+      <!--vol200-->
+      <mat-form-field appearance="outline">
+        <mat-label>Volumen 200 Km</mat-label>
+        <input matInput type="number" min="0" step="0.01" [(ngModel)]="tankType.vol200">
+        <span matTextSuffix>%</span>
+      </mat-form-field>
+
       <!--stock1-->
       <mat-form-field appearance="outline">
         <mat-label>Stock Primera</mat-label>
@@ -85,32 +99,8 @@
       <!--Extras-->
       <div>
 
-        <!--ramal-->
-        <mat-checkbox class="example-margin" [(ngModel)]="showRamal" >Ramal</mat-checkbox>
-        @if (showRamal) {
-          <mat-form-field appearance="outline">
-            <mat-label>Tamaño</mat-label>
-            <mat-select [(ngModel)]="tankType.ramal">
-              <mat-option value="SMALL">50</mat-option>
-              <mat-option value="MEDIUM">63</mat-option>
-              <mat-option value="BIG">110</mat-option>
-            </mat-select>
-          </mat-form-field>
-        }
-        <!--  o-ring-->
-        <mat-checkbox class="example-margin" [(ngModel)]="showORings" >O-Rings</mat-checkbox>
-        @if (showORings) {
-          <mat-form-field appearance="outline">
-            <mat-label>Tamaño</mat-label>
-            <mat-select [(ngModel)]="tankType.oring">
-              <mat-option value="SMALL">50</mat-option>
-              <mat-option value="MEDIUM">63</mat-option>
-              <mat-option value="BIG">110</mat-option>
-            </mat-select>
-          </mat-form-field>
-        }
         <!--sticker-->
-        <mat-checkbox class="example-margin" [(ngModel)]="showSticker" >Sticker</mat-checkbox>
+        <mat-checkbox class="example-margin" [(ngModel)]="showSticker">Sticker</mat-checkbox>
         @if (showSticker) {
           <mat-form-field appearance="outline">
             <mat-label>Tipo de Tapa</mat-label>
@@ -121,7 +111,7 @@
           </mat-form-field>
         }
         <!--tornillos grandes-->
-        <mat-checkbox class="example-margin"  [(ngModel)]="showBigScrews" >Tornillos Grandes</mat-checkbox>
+        <mat-checkbox class="example-margin" [(ngModel)]="showBigScrews">Tornillos Grandes</mat-checkbox>
         @if (showBigScrews) {
           <mat-form-field appearance="outline">
             <mat-label>Tornillos Grandes</mat-label>
@@ -171,6 +161,8 @@
         <div class="detail-item"><strong>Stock Primera:</strong> {{ tankType?.stock1 }}</div>
         <div class="detail-item"><strong>Stock Segunda:</strong> {{ tankType?.stock2 }}</div>
         <div class="detail-item"><strong>Costo:</strong> ${{ tankType?.cost }}</div>
+        <div class="detail-item"><strong>Volumen 100 Km:</strong> ${{ tankType?.vol100 }}</div>
+        <div class="detail-item"><strong>Volumen 200 Km:</strong> ${{ tankType?.vol200 }}</div>
         <div class="detail-item"><strong>Plástico Negro:</strong> {{ tankType?.plasticBlack }} Kg</div>
         <div class="detail-item"><strong>Plástico Color:</strong> {{ tankType?.plasticColor }} Kg</div>
         <div class="detail-item"><strong>Tipo de Tapa:</strong> {{ tankType?.coverType }}</div>
@@ -186,13 +178,6 @@
 
         @if (tankType?.sticker !== "NONE") {
           <div class="detail-item"><strong>Sticker:</strong> {{ tankType?.sticker }}</div>
-        }
-<!--   todo: hacer un if, para estos dos y que muestre el numero     -->
-        @if (tankType?.oring !== "NONE") {
-          <div class="detail-item"><strong>O-Ring:</strong> {{ tankType?.oring }}</div>
-        }
-        @if (tankType?.ramal !== "NONE") {
-          <div class="detail-item"><strong>Ramal:</strong> {{ tankType?.ramal }}</div>
         }
       </div>
     </mat-card-content>

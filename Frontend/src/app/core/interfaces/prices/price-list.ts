@@ -1,5 +1,9 @@
 export interface PriceList {
   id:number;
   name: string;
-  modifier: number;
+  profit: number;
+  commission:number
+  corralon:number
+
+  volKm:string
 }

@@ -57,7 +57,18 @@
     <input matInput type="number" min="0" step="0.01" formControlName="cost">
     <span matTextPrefix>$</span>
   </mat-form-field>
-
+  <!--vol100-->
+  <mat-form-field appearance="outline">
+    <mat-label>Volumen 100 Km</mat-label>
+    <input matInput type="number" min="0" step="0.01" formControlName="vol100">
+    <span matTextSuffix>%</span>
+  </mat-form-field>
+  <!--vol200-->
+  <mat-form-field appearance="outline">
+    <mat-label>Volumen 200 Km</mat-label>
+    <input matInput type="number" min="0" step="0.01" formControlName="vol200">
+    <span matTextSuffix>%</span>
+  </mat-form-field>
   <!--stock1-->
   <mat-form-field appearance="outline">
     <mat-label>Stock Primera</mat-label>
@@ -74,49 +85,24 @@
   <!--Extras-->
   <div>
 
-<!--  Todo: ver como deschequear las checkboxes cuando cargo uno nuevo  -->
 
-    <!--ramal-->
-    <mat-checkbox class="example-margin"  (change)="showRamal = !showRamal">Ramal</mat-checkbox>
-    @if (showRamal) {
-      <mat-form-field appearance="outline">
-        <mat-label>Tamaño</mat-label>
-        <mat-select formControlName="ramal">
-          <mat-option value="SMALL">50</mat-option>
-          <mat-option value="MEDIUM">63</mat-option>
-          <mat-option value="BIG">110</mat-option>
-        </mat-select>
-      </mat-form-field>
-    }
-    <!--  o-ring-->
-    <mat-checkbox class="example-margin" (change)="showORings = !showORings">O-Rings</mat-checkbox>
-    @if (showORings) {
-      <mat-form-field appearance="outline">
-        <mat-label>Tamaño</mat-label>
-        <mat-select formControlName="oRing">
-          <mat-option value="SMALL">50</mat-option>
-          <mat-option value="MEDIUM">63</mat-option>
-          <mat-option value="BIG">110</mat-option>
-        </mat-select>
-      </mat-form-field>
-    }
     <!--sticker-->
-    <mat-checkbox class="example-margin" (change)="showSticker = !showSticker">Sticker</mat-checkbox>
-    @if (showSticker) {
+    <mat-checkbox class="example-margin" formControlName="showSticker">Sticker</mat-checkbox>
+    @if (tankTypeForm.controls['showSticker'].value) {
       <mat-form-field appearance="outline">
         <mat-label>Tipo de Tapa</mat-label>
-        <mat-select formControlName="sticker">
+        <mat-select formControlName="sticker" required>
           <mat-option value="TANQUE">Tanque</mat-option>
           <mat-option value="CAMARA_SEPTICA">Camara Septica</mat-option>
         </mat-select>
       </mat-form-field>
     }
     <!--tornillos grandes-->
-    <mat-checkbox class="example-margin" (change)="showBigScrews = !showBigScrews">Tornillos Grandes</mat-checkbox>
-    @if (showBigScrews) {
+    <mat-checkbox class="example-margin" formControlName="showBigScrews">Tornillos Grandes</mat-checkbox>
+    @if (tankTypeForm.controls['showBigScrews'].value) {
       <mat-form-field appearance="outline">
         <mat-label>Tornillos Grandes</mat-label>
-        <input matInput type="number" min="0" formControlName="bigScrews">
+        <input matInput type="number" min="0" formControlName="bigScrews" required>
       </mat-form-field>
     }
   </div>

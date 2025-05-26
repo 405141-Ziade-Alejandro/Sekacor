@@ -39,56 +39,59 @@ export class NewTankTypeComponent {
   //form
   tankTypeForm: FormGroup = new FormGroup({
     type: new FormControl("", [Validators.required]),
-    cover:new FormControl("", [Validators.required]),
+    cover: new FormControl("", [Validators.required]),
     quantity: new FormControl("", [Validators.required, Validators.min(0)]),
-    plasticBlack: new FormControl('', [Validators.required,Validators.min(0)]),
-    plasticColor: new FormControl('', [Validators.required,Validators.min(0)]),
-    cost: new FormControl('', [Validators.required,Validators.min(0)]),
+    plasticBlack: new FormControl('', [Validators.required, Validators.min(0)]),
+    plasticColor: new FormControl('', [Validators.required, Validators.min(0)]),
+    cost: new FormControl('', [Validators.required, Validators.min(0)]),
     screws: new FormControl(0, [Validators.min(0)]),
     coverType: new FormControl("NONE", [Validators.required]),
-    stock1: new FormControl('',[Validators.min(0),Validators.required]),
-    stock2: new FormControl('',[Validators.min(0),Validators.required]),
-    bigScrews:new FormControl(0),
+    stock1: new FormControl('', [Validators.min(0), Validators.required]),
+    stock2: new FormControl('', [Validators.min(0), Validators.required]),
+    bigScrews: new FormControl(0),
     tee: new FormControl(false),
-    sticker: new FormControl(""),
-    ramal: new FormControl(''),
-    oring: new FormControl('')
+    sticker: new FormControl("NONE"),
+    vol100: new FormControl('', [Validators.required]),
+    vol200: new FormControl('', [Validators.required]),
+
+    showSticker: new FormControl(false),
+    showBigScrews: new FormControl(false),
   })
+
   //service
-  tankService= inject(TankServiceService)
-  router =inject(Router);
+  tankService = inject(TankServiceService)
+  router = inject(Router);
   dialogue = inject(MatDialog)
+
   //variables
-  showRamal:boolean=false;
-  showORings:boolean=false;
-  showSticker:boolean=false;
-  showBigScrews:boolean=false;
+  // showSticker: boolean = false;
+  // showBigScrews: boolean = false;
   isLoading = false
+
   //methods
   onSubmit() {
     if (this.tankTypeForm.valid) {
       // console.log('datos del form: ',this.tankTypeForm.value);
 
-      this.isLoading =true
+      this.isLoading = true
 
       const formTankType = this.tankTypeForm.value
 
-      const tankType:TankType= {
+      const tankType: TankType = {
         ...formTankType,
+        sticker: formTankType.showSticker ? formTankType.sticker : "NONE",
+        bigScrews: formTankType.showBigScrews ? formTankType.bigScrews : 0,
       }
+
+      delete (tankType as any).showSticker
+      delete (tankType as any).showBigScrews
 
       //this is necesary because the backend doesn't let you add empty strings as valid
-      if (!this.showORings) {
-        tankType.oring="NONE"
-      }
-      if (!this.showSticker) {
-        tankType.sticker="NONE"
-      }
-      if (!this.showRamal) {
-        tankType.ramal="NONE"
-      }
+      // if (!this.showSticker) {
+      //   tankType.sticker = "NONE"
+      // }
 
-      console.log('enviando datos al backend',tankType);
+      console.log('enviando datos al backend', tankType);
 
       this.tankService.postTankType(tankType).subscribe({
         next: (response) => {
@@ -96,18 +99,18 @@ export class NewTankTypeComponent {
 
           this.dialogue.open(ConfirmDialogComponent, {
             data: {
-              title:'¡Guardado exitosamente!',
-              message:'¿Deseás cargar otro tipo de tanque?',
+              title: '¡Guardado exitosamente!',
+              message: '¿Deseás cargar otro tipo de tanque?',
             }
-          }).afterClosed().subscribe((confirm:boolean) => {
+          }).afterClosed().subscribe((confirm: boolean) => {
             if (confirm) {
               this.tankTypeForm.reset();
               this.tankTypeForm.patchValue({
-                tee:false,
-                coverType:"NONE"
+                tee: false,
+                coverType: "NONE"
               })
 
-              this.resetExtraFlags()
+              // this.resetExtraFlags()
 
               this.tankTypeForm.untouched
 
@@ -121,6 +124,7 @@ export class NewTankTypeComponent {
         error: (error) => {
           console.error('error al guardar ', error);
           alert('error al guardar en el backend')
+          this.isLoading = false;
         }
       })
     } else {
@@ -130,10 +134,8 @@ export class NewTankTypeComponent {
     }
   }
 
-  resetExtraFlags() {
-    this.showBigScrews = false;
-    this.showSticker = false;
-    this.showORings = false;
-    this.showRamal = false;
-  }
+  // resetExtraFlags() {
+  //   this.showBigScrews = false;
+  //   this.showSticker = false;
+  // }
 }

@@ -93,9 +93,6 @@ export class TankTypeExamineComponent {
 // update
   dialogue = inject(MatDialog)
 
-
-  showRamal:boolean=false;
-  showORings:boolean=false;
   showSticker:boolean=false;
   showBigScrews:boolean=false;
   isLoading = false
@@ -109,33 +106,19 @@ export class TankTypeExamineComponent {
       if (this.tankType.sticker!=="NONE"){
         this.showSticker = true;
       }
-      if (this.tankType.oring!=="NONE"){
-        this.showORings = true;
-      }
-      if (this.tankType.ramal!=="NONE"){
-        this.showRamal = true;
-      }
     }
   }
 
   resetExtraFlags() {
     this.showBigScrews = false;
     this.showSticker = false;
-    this.showORings = false;
-    this.showRamal = false;
   }
 
   save() {
     //this is necesary because the backend doesn't let you add empty strings as valid
     if (this.tankType){
-      if (!this.showORings) {
-        this.tankType.oring="NONE"
-      }
       if (!this.showSticker) {
         this.tankType.sticker="NONE"
-      }
-      if (!this.showRamal) {
-        this.tankType.ramal="NONE"
       }
       if (!this.showBigScrews){
         this.tankType.bigScrews=0
