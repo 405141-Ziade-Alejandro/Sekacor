@@ -27,6 +27,4 @@ public class ClientEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "LISTA_PRECIO_ID")
     private PriceListEntity priceList;
-
-
 }

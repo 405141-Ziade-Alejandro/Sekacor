@@ -1,6 +1,7 @@
 package ar.edu.utn.frc.tup.lc.iii.advice;
 
 import ar.edu.utn.frc.tup.lc.iii.dtos.error.ApiError;
+import ar.edu.utn.frc.tup.lc.iii.dtos.error.InvalidOrderStateException;
 import ar.edu.utn.frc.tup.lc.iii.dtos.error.NotEnoughConsumablesException;
 import ar.edu.utn.frc.tup.lc.iii.dtos.tanks.MissingConsumableDto;
 import jakarta.persistence.EntityExistsException;
@@ -37,5 +38,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(exception.getMissingConsumables());
+    }
+
+    @ExceptionHandler(InvalidOrderStateException.class)
+    public ResponseEntity<ApiError> handleInvalidOrderState(InvalidOrderStateException exception,
+                                                            HttpServletRequest request) {
+        ApiError error = ApiError.of(HttpStatus.BAD_REQUEST, exception.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 }

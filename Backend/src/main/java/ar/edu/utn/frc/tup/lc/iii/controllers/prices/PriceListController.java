@@ -24,4 +24,15 @@ public class PriceListController {
     public ResponseEntity<PriceListDto> getById(@PathVariable Long id) {
         return ResponseEntity.ok(priceListService.getById(id));
     }
+
+    @PostMapping("")
+    public ResponseEntity<PriceListDto> post(@RequestBody PriceListDto dto) {
+        return ResponseEntity.ok(priceListService.postList(dto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable long id) {
+        priceListService.deleteList(id);
+        return ResponseEntity.noContent().build();
+    }
 }

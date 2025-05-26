@@ -1,0 +1,61 @@
+<h2 mat-dialog-title>Nueva Lista de Precios</h2>
+<mat-dialog-content>
+  <!-- Acá irá el formulario -->
+  <form [formGroup]="formPriceList">
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre:</mat-label>
+        <input matInput formControlName="name">
+      </mat-form-field>
+    </div>
+    <div>
+      <span>[(</span>
+      <mat-form-field appearance="outline">
+        <mat-label>Costo Tanque</mat-label>
+        <input matInput disabled>
+      </mat-form-field>
+      <span> + </span>
+      <mat-form-field appearance="outline">
+        <mat-label>Ganancia</mat-label>
+        <input matInput type="number" min="0" formControlName="profit">
+      </mat-form-field>
+      <span>) X </span>
+      <mat-form-field appearance="outline">
+        <mat-label>Commission</mat-label>
+        <input matInput type="number" step="0.01" min="0" formControlName="commission">
+        <mat-hint>porcentaje</mat-hint>
+      </mat-form-field>
+      <span> + (</span>
+      <mat-form-field appearance="outline">
+        <mat-label>Recargo Correlon</mat-label>
+        <input matInput type="number" step="0.01" min="0" formControlName="corralon">
+        <mat-hint>porcentaje</mat-hint>
+      </mat-form-field>
+      <span> X </span>
+      <mat-form-field appearance="outline">
+        <mat-label>Ganancia</mat-label>
+        <input matInput disabled [value]="formPriceList.get('profit')?.value">
+      </mat-form-field>
+      <span>)]</span>
+      @if (Km) {
+        <span> x </span>
+        <mat-form-field appearance="outline">
+          <mat-label>Vol</mat-label>
+          <input matInput disabled>
+        </mat-form-field>
+
+      }
+    </div>
+    <div>
+      <mat-radio-group aria-label="Select an option" formControlName="volKm">
+        <mat-radio-button value="ZERO">0Km</mat-radio-button>
+        <mat-radio-button value="CIEN">Vol 100Km</mat-radio-button>
+        <mat-radio-button value="DOSCIENTOS">Vol 200Kg</mat-radio-button>
+      </mat-radio-group>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Cancelar</button>
+  <button mat-button (click)="submit()" [disabled]="formPriceList.invalid">Guardar</button>
+</mat-dialog-actions>

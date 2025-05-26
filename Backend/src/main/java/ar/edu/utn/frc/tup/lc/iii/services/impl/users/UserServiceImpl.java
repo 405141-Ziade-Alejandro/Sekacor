@@ -6,6 +6,7 @@ import ar.edu.utn.frc.tup.lc.iii.entities.users.UserEntity;
 import ar.edu.utn.frc.tup.lc.iii.repositories.users.UserRepository;
 import ar.edu.utn.frc.tup.lc.iii.services.UserService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDto postUser(UserNewDto dto) {
         UserEntity user = modelMapper.map(dto, UserEntity.class);
 
@@ -46,6 +48,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDto putUser(UserDto dto) {
         Optional<UserEntity> check = userRepository.findById(dto.getId());
 
@@ -61,6 +64,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void deleteUser(long id) {
         Optional<UserEntity> check = userRepository.findById(id);
         if(check.isEmpty()) {

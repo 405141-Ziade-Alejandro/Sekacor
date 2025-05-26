@@ -21,6 +21,7 @@
         <th mat-header-cell *matHeaderCellDef>subtipo</th>
         <td mat-cell *matCellDef="let consumable">
 
+<!--this is done so that the user can see the number that the enum represents-->
           @if (consumable.subType === "BIG") {
             110
           } @else if (consumable.subType === "MEDIUM") {

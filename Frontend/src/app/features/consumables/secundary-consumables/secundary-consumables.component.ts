@@ -107,10 +107,12 @@ export class SecundaryConsumablesComponent {
           console.error('something went wrong sending the data to the backend', err)
         }
       })
-
     }
   }
 
+  /**
+   * mirar el add de primary consumables, es casi igual y esta mas detallado ahi
+   */
   add(id:number) {
 
     const addedValue = this.inputValues[id]

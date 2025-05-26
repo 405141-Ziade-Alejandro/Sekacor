@@ -13,6 +13,6 @@ export interface NewTankType {
   //to do: make two types of stocks (stock 1 and stock 2)
   stock1: number;
   stock2: number;
-  ramal: string;
-  oring: string;
+  vol100:number;
+  vol200:number;
 }

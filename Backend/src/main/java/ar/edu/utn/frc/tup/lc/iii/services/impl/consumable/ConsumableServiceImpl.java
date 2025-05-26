@@ -10,6 +10,7 @@ import ar.edu.utn.frc.tup.lc.iii.repositories.consumables.PrimaryConsumableRepos
 import ar.edu.utn.frc.tup.lc.iii.repositories.consumables.SecondaryConsumableRepository;
 import ar.edu.utn.frc.tup.lc.iii.services.ConsumableService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -31,6 +32,7 @@ public class ConsumableServiceImpl implements ConsumableService {
     private final ModelMapper modelMapper;
 
     @Override
+    @Transactional
     public PrimaryConsumableDto putPrimary(UpdateConsumableDto dto) {
         Optional<PrimaryConsumableEntity> check = primaryConsumableRepository.findById(dto.getConsumableId());
 
@@ -75,6 +77,7 @@ public class ConsumableServiceImpl implements ConsumableService {
     }
 
     @Override
+    @Transactional
     public SecondaryConsumableDto putSecondaty(UpdateConsumableDto dto) {
 
         Optional<SecondaryConsumableEntity> check = secondaryConsumableRepository.findById(dto.getConsumableId());
@@ -93,6 +96,7 @@ public class ConsumableServiceImpl implements ConsumableService {
     }
 
     @Override
+    @Transactional
     public SecondaryConsumableDto pushSecondary(NewSecondaryConsumableDto dto) {
         SecondaryConsumableEntity newEntity = modelMapper.map(dto,SecondaryConsumableEntity.class);
 
@@ -102,6 +106,7 @@ public class ConsumableServiceImpl implements ConsumableService {
     }
 
     @Override
+    @Transactional
     public void deleteSecondary(Long id) {
         Optional<SecondaryConsumableEntity> check = secondaryConsumableRepository.findById(id);
 

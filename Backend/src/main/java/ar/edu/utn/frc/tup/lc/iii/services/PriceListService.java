@@ -12,4 +12,8 @@ public interface PriceListService {
     void saveUsdRateFromExternalApi();
 
     List<PriceListDto> getAllLists();
+
+    PriceListDto postList(PriceListDto dto);
+
+    void deleteList(long id);
 }

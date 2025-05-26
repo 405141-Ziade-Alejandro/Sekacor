@@ -8,6 +8,7 @@ import ar.edu.utn.frc.tup.lc.iii.repositories.clients.ClientsRepository;
 import ar.edu.utn.frc.tup.lc.iii.repositories.prices.PriceListRepository;
 import ar.edu.utn.frc.tup.lc.iii.services.ClientService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -29,6 +30,7 @@ public class ClientServiceImpl implements ClientService {
     private final ModelMapper modelMapper;
 
     @Override
+    @Transactional
     public ClientDto postNewClient(NewClientDto dto) {
         Optional<PriceListEntity> check = priceListRepository.findById(dto.getPriceListId());
 
@@ -47,6 +49,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    @Transactional
     public ClientDto putClient(ClientDto dto) {
         Optional<ClientEntity> checkEntity = clientsRepository.findById(dto.getId());
         if (checkEntity.isEmpty()) {
@@ -86,6 +89,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    @Transactional
     public void deleteClient(long id) {
         Optional<ClientEntity> checkEntity = clientsRepository.findById(id);
         if (checkEntity.isEmpty()) {

@@ -42,6 +42,10 @@ public class TankTypeDto {
 
     private BigDecimal cost;
 
+    private BigDecimal vol100;
+
+    private BigDecimal vol200;
+
     private ConsumableSubType coverType;
 
     private Integer screws;
@@ -50,11 +54,7 @@ public class TankTypeDto {
 
     private boolean tee;
 
-    private ConsumableSubType oRing;
-
     private ConsumableSubType sticker;
-
-    private ConsumableSubType Ramal;
 
     private Long stock1;
 

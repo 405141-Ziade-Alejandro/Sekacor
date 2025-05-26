@@ -49,6 +49,7 @@ export class PrimaryConsumablesComponent {
   consumablesList:PrimaryConsumable[] =[]
   columnsToDisplay:string[] = ['nombre','subtype','stock','agregar']
 
+  //this is for the value neeeded to increse or decrese the stock of the primary consumables
   inputValues:{[id:number]:number} = {}
 
   //methods
@@ -69,19 +70,21 @@ export class PrimaryConsumablesComponent {
 
 
   add(id:number) {
+    //se extrae el valor del campo en la fila de la tabla
     const addValue = this.inputValues[id]
-    if (isNaN(addValue)) {
+    if (isNaN(addValue)) {//si el valor resulta no ser un numero salta error
       console.warn(addValue + " is not a number")
       this.inputValues[id] = 0
       return;
     }
+    //se encuentra el insumo a modificar
     const consumableToUpdatee = this.consumablesList.find(consumable => consumable.id === id)
 
     if (!consumableToUpdatee) {
       return;
     }
 
-    let update:UpdateConsumable = {
+    let update:UpdateConsumable = {//se genera el dto para madandar al backend
       consumableId: consumableToUpdatee.id,
       quantity: consumableToUpdatee.quantity + addValue
 

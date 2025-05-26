@@ -2,9 +2,7 @@ package ar.edu.utn.frc.tup.lc.iii.entities.tanks;
 
 import ar.edu.utn.frc.tup.lc.iii.entities.BaseEntity;
 import ar.edu.utn.frc.tup.lc.iii.entities.consumables.ConsumableSubType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +24,7 @@ public class TankTypeEntity extends BaseEntity {
     private String type;
 
     @Column(name = "CAPA")
+    @Enumerated(EnumType.STRING)
     private Cover cover;
 
     @Column(name = "CANTIDAD")
@@ -40,7 +39,14 @@ public class TankTypeEntity extends BaseEntity {
     @Column(precision = 10,scale = 2, name = "COSTO")
     private BigDecimal cost;
 
+    @Column(precision = 10,scale = 2, name = "VOLUMEN_100_KM")
+    private BigDecimal vol100;
+
+    @Column(precision = 10,scale = 2, name = "VOLUMENT_200_KM")
+    private BigDecimal vol200;
+
     @Column(name = "TAPA_TIPO")
+    @Enumerated(EnumType.STRING)
     private ConsumableSubType coverType;
 
     @Column(name = "TORNILLO")
@@ -52,14 +58,9 @@ public class TankTypeEntity extends BaseEntity {
     @Column(name = "TEE")
     private boolean tee;
 
-    @Column(name = "O_RING") //todo: el oso me informo que no todo tanque consume el mismo input, hay que sacar esto o cambiar la logica de esto
-    private ConsumableSubType oRing;
-
     @Column(name = "TIPO_STICKER")
+    @Enumerated(EnumType.STRING)
     private ConsumableSubType sticker;
-
-    @Column(name = "TAMANO_RAMAL")
-    private ConsumableSubType Ramal;
 
     /**
      * en la fabrica tienen dos tipos de stock

@@ -8,11 +8,13 @@ import ar.edu.utn.frc.tup.lc.iii.repositories.prices.ExchangeRateRepository;
 import ar.edu.utn.frc.tup.lc.iii.repositories.prices.PriceListRepository;
 import ar.edu.utn.frc.tup.lc.iii.services.PriceListService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +54,7 @@ public class PriceListServiceImpl implements PriceListService {
      * prices of the tanks
      */
     @Override
+    @Transactional
     public void saveUsdRateFromExternalApi() {
 
         BigDecimal usdValue = usdRestClient.getCurrentUsdSalePrice();
@@ -78,5 +81,25 @@ public class PriceListServiceImpl implements PriceListService {
         }
 
         return priceListDtoList;
+    }
+
+    @Override
+    @Transactional
+    public PriceListDto postList(PriceListDto dto) {
+        PriceListEntity priceListEntity = modelMapper.map(dto, PriceListEntity.class);
+        PriceListEntity saved = priceListRepository.save(priceListEntity);
+
+        return modelMapper.map(saved, PriceListDto.class);
+    }
+
+    @Override
+    @Transactional
+    public void deleteList(long id) {
+        Optional<PriceListEntity> check = priceListRepository.findById(id);
+        if (check.isEmpty()) {
+            log.error("Price list with id {} not found", id);
+            throw new EntityNotFoundException("there were no price list with id " + id);
+        }
+        priceListRepository.deleteById(id);
     }
 }

@@ -53,7 +53,6 @@ export class TankRegistryComponent {
     this.tankService.getAllTankTypes().subscribe({
       next: data => {
         this.tankTypeList = data
-        // console.log(data)
       },
       error: err => {
         console.log(err)

@@ -12,6 +12,10 @@ import {
 import {TankRegistryComponent} from "./features/TankTypes/tank-registry/tank-registry.component";
 import {UserListComponent} from "./features/users/user-list/user-list.component";
 import {ProductionHistoryComponent} from "./features/TankTypes/production-history/production-history.component";
+import {NewOrderComponent} from "./features/orders/new-order/new-order.component";
+import {OrderListComponent} from "./features/orders/order-list/order-list.component";
+import {OrderComponent} from "./features/orders/order/order.component";
+import {EditOrderComponent} from "./features/orders/edit-order/edit-order.component";
 
 export const routes: Routes = [
   {path: '', component: HomeComponentComponent},
@@ -25,4 +29,8 @@ export const routes: Routes = [
   {path: 'production', component: TankRegistryComponent},
   {path: 'production/history', component: ProductionHistoryComponent},
   {path: 'users/lists', component: UserListComponent},
+  {path: 'orders/new',component:NewOrderComponent},
+  {path: 'orders/all', component: OrderListComponent},
+  {path: 'orders/:id', component: OrderComponent},
+  {path: 'orders/:id/edit', component: EditOrderComponent},
 ];
