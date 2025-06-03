@@ -16,11 +16,14 @@ import {NewOrderComponent} from "./features/orders/new-order/new-order.component
 import {OrderListComponent} from "./features/orders/order-list/order-list.component";
 import {OrderComponent} from "./features/orders/order/order.component";
 import {EditOrderComponent} from "./features/orders/edit-order/edit-order.component";
+import {ReportTanksMadeComponent} from "./features/reports/report-tanks-made/report-tanks-made.component";
+import {LoginComponent} from "./features/login/login.component";
+import {authGuard} from "./core/guards/auth-guard";
 
 export const routes: Routes = [
   {path: '', component: HomeComponentComponent},
   {path: 'tanktypes', component: TankTypeListComponent},
-  {path: 'newtanktypes', component: NewTankTypeComponent},
+  {path: 'newtanktypes', component: NewTankTypeComponent, canActivate:[authGuard]},
   {path: 'tanktypes/:id', component: TankTypeExamineComponent},
   {path: 'prices', component: PricesListComponent},
   {path: 'clients', component: ClientsComponent},
@@ -29,8 +32,10 @@ export const routes: Routes = [
   {path: 'production', component: TankRegistryComponent},
   {path: 'production/history', component: ProductionHistoryComponent},
   {path: 'users/lists', component: UserListComponent},
-  {path: 'orders/new',component:NewOrderComponent},
+  {path: 'orders/new', component: NewOrderComponent},
   {path: 'orders/all', component: OrderListComponent},
   {path: 'orders/:id', component: OrderComponent},
   {path: 'orders/:id/edit', component: EditOrderComponent},
+  {path: 'report/tanks', component: ReportTanksMadeComponent},
+  {path:'login', component: LoginComponent},
 ];

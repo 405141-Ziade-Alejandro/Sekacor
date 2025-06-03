@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface ExchangeRateRepository extends JpaRepository<ExchangeRateEntity,Long> {
     Optional<ExchangeRateEntity> findByYearMonth(YearMonth month);
+    Optional<ExchangeRateEntity> findTopByOrderByIdDesc();
 }

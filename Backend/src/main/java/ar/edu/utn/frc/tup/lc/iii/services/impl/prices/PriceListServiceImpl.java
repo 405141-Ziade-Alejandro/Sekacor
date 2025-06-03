@@ -1,6 +1,7 @@
 package ar.edu.utn.frc.tup.lc.iii.services.impl.prices;
 
 import ar.edu.utn.frc.tup.lc.iii.client.UsdRestClient;
+import ar.edu.utn.frc.tup.lc.iii.dtos.prices.ExchangeRateDto;
 import ar.edu.utn.frc.tup.lc.iii.dtos.prices.PriceListDto;
 import ar.edu.utn.frc.tup.lc.iii.entities.prices.ExchangeRateEntity;
 import ar.edu.utn.frc.tup.lc.iii.entities.prices.PriceListEntity;
@@ -101,5 +102,15 @@ public class PriceListServiceImpl implements PriceListService {
             throw new EntityNotFoundException("there were no price list with id " + id);
         }
         priceListRepository.deleteById(id);
+    }
+
+    @Override
+    public ExchangeRateDto getExchangeRateLatest() {
+        Optional<ExchangeRateEntity> check = exchangeRateRepository.findTopByOrderByIdDesc();
+        if (check.isEmpty()) {
+            throw new EntityNotFoundException("there were no exchange rate latest");
+        }
+
+        return modelMapper.map(check.get(), ExchangeRateDto.class);
     }
 }

@@ -3,4 +3,5 @@ export interface Client {
   name: string
   telephone: string
   priceListId: number
+  direction:string
 }

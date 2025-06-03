@@ -59,7 +59,7 @@ export class PricesListComponent {
 
   tankList:TankType[]=[]
 
-  columnsToDisplay:string[]=['Tipo de Tanque','Costo','Precio'];
+  columnsToDisplay:string[]=['Tipo de Tanque','Costo','Precio', 'recargo'];
 
   priceListSelected:PriceList = {
     id: 0,
@@ -135,5 +135,10 @@ export class PricesListComponent {
       price = price * tank.vol200
     }
     return price;
+  }
+
+  calculateCommision() {
+    const commision = this.priceListSelected.corralon*this.priceListSelected.profit
+    return commision;
   }
 }

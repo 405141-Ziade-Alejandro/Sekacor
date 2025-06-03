@@ -100,3 +100,8 @@ export class TankRegistryComponent {
     }
   }
 }
+
+/*
+ * todo:
+ *  informes, vendido por tipo,  tanques hechos por empleados, ranking por cliente
+ */

@@ -51,7 +51,7 @@ export class TankTypeListComponent {
   //variables
   tankTypesList: TankType[] = []
 
-  columsToDisplay: string[] = ['type','cover','quantity', 'cost', 'stock','actions']
+  columsToDisplay: string[] = ['type','cover','quantity', 'cost', 'stock1','stock2','actions']
 
   //methods
 

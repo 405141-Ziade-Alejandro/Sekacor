@@ -7,6 +7,7 @@ import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {PricesService} from "../../../core/services/prices.service";
 import {PriceList} from "../../../core/interfaces/prices/price-list";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-create-price-dialog',
@@ -39,6 +40,7 @@ export class CreatePriceDialogComponent {
   })
   //services
   priceListService=inject(PricesService)
+  router = inject(Router)
   //variables
   //methods
   close() {
@@ -66,6 +68,7 @@ export class CreatePriceDialogComponent {
       this.priceListService.postList(newPriceList).subscribe({
         next: list=> {
           console.log('success');
+          this.router.navigate(['/prices']);
           this.close();
         },
         error: err => {

@@ -72,4 +72,12 @@ export class TankServiceService {
 
     return this.httpClient.post<TankResponse>(this.apiTank,dto,{params})
   }
+
+  getTanksReport(start:Date,end:Date):Observable<Tank[]>{
+    const params = new HttpParams()
+      .set('start', start.toISOString())
+      .set('end', end.toISOString())
+
+    return this.httpClient.get<Tank[]>(this.apiTank+"/reports/tank-made",{params})
+  }
 }

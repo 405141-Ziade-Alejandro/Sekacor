@@ -1,5 +1,6 @@
 package ar.edu.utn.frc.tup.lc.iii.services.impl.users;
 
+import ar.edu.utn.frc.tup.lc.iii.dtos.users.LoginDto;
 import ar.edu.utn.frc.tup.lc.iii.dtos.users.UserDto;
 import ar.edu.utn.frc.tup.lc.iii.dtos.users.UserNewDto;
 import ar.edu.utn.frc.tup.lc.iii.entities.users.UserEntity;
@@ -71,5 +72,15 @@ public class UserServiceImpl implements UserService {
             throw new EntityNotFoundException("this user does not exist");
         }
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public UserDto logIn(LoginDto dto) {
+        Optional<UserEntity> check = userRepository.findByNameAndPassword(dto.getUserName(), dto.getPassword());
+        if(check.isEmpty()) {
+            throw new EntityNotFoundException("this user does not exist");
+        }
+
+        return modelMapper.map(check.get(), UserDto.class);
     }
 }

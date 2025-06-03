@@ -25,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -311,5 +312,15 @@ public class TankServiceImpl implements TankService {
         return new PageImpl<>(tankDtos, pageable, page.getTotalElements());
     }
 
+    @Override
+    public List<TankDto> getTankReport(LocalDateTime start, LocalDateTime end) {
+        List<TankEntity> tankEntities = tankRepository.findAllByCreatedDateBetween(start, end);
+        List<TankDto> tankDtos = new ArrayList<>(tankEntities.size());
+
+        for (TankEntity tankEntity : tankEntities) {
+            tankDtos.add(modelMapper.map(tankEntity, TankDto.class));
+        }
+        return tankDtos;
+    }
+
 }
-//todo: make sure to add @transactional to all post, put delete in the sistem

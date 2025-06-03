@@ -55,9 +55,8 @@
         <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef>borrar</th>
           <td mat-cell *matCellDef="let detail">
-            <!--todo: change the icon for a - or something-->
             <button mat-mini-fab type="button" (click)="reduceTank(detail)">
-              <mat-icon>delete</mat-icon>
+              <mat-icon>remove</mat-icon>
             </button>
           </td>
         </ng-container>
@@ -68,13 +67,12 @@
     </mat-card-content>
   </mat-card>
   <h3>total: {{ totalPrice |currency }} </h3>
-  <!--todo cambiar los iconos por algo mas adecuado-->
   <button mat-fab extended type="button" (click)="leave()">
-    <mat-icon>favorite</mat-icon>
+    <mat-icon>clear</mat-icon>
     Cancelar
   </button>
   <button mat-fab extended type="submit" [disabled]="formEditOrder.invalid">
-    <mat-icon>favorite</mat-icon>
+    <mat-icon>done</mat-icon>
     Aceptar
   </button>
 </form>

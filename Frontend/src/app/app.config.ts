@@ -6,6 +6,7 @@ import {provideHttpClient} from "@angular/common/http";
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
 import {MAT_DATE_FORMATS, provideNativeDateAdapter} from "@angular/material/core";
 
+
 const MY_DATE_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY',
@@ -25,4 +26,5 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideNativeDateAdapter(),
     {provide: MAT_DATE_FORMATS,useValue: MY_DATE_FORMATS},],
+
 };

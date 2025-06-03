@@ -57,6 +57,7 @@ export class ClientsComponent {
     name: new FormControl("", Validators.required),
     telephone: new FormControl("", Validators.required),
     priceListId: new FormControl("", Validators.required),
+    direction: new FormControl("", Validators.required),
   })
   //service
   private priceListService = inject(PricesService)
@@ -64,7 +65,7 @@ export class ClientsComponent {
   //variables
   priceList: PriceList[] = []
   clientList: Client[] = []
-  columnsToDisplay: string[] = ['Nombre', 'Telefono', 'Lista de Precio', 'Accion']
+  columnsToDisplay: string[] = ['Nombre', 'Telefono', 'direction', 'Lista de Precio', 'Accion']
   isUpdating: boolean = false;
   currentEditingId: number = 0;
 

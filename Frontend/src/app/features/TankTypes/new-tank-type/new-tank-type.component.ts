@@ -64,14 +64,11 @@ export class NewTankTypeComponent {
   dialogue = inject(MatDialog)
 
   //variables
-  // showSticker: boolean = false;
-  // showBigScrews: boolean = false;
   isLoading = false
 
   //methods
   onSubmit() {
     if (this.tankTypeForm.valid) {
-      // console.log('datos del form: ',this.tankTypeForm.value);
 
       this.isLoading = true
 
@@ -85,11 +82,6 @@ export class NewTankTypeComponent {
 
       delete (tankType as any).showSticker
       delete (tankType as any).showBigScrews
-
-      //this is necesary because the backend doesn't let you add empty strings as valid
-      // if (!this.showSticker) {
-      //   tankType.sticker = "NONE"
-      // }
 
       console.log('enviando datos al backend', tankType);
 
@@ -133,9 +125,4 @@ export class NewTankTypeComponent {
       this.tankTypeForm.markAsTouched()
     }
   }
-
-  // resetExtraFlags() {
-  //   this.showBigScrews = false;
-  //   this.showSticker = false;
-  // }
 }
