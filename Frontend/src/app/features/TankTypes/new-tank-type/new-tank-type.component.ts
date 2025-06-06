@@ -12,6 +12,8 @@ import {TankServiceService} from "../../../core/services/tank-service.service";
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmDialogComponent} from "../../../shared/confirm-dialog/confirm-dialog.component";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {DialogService} from "../../../core/services/dialog.service";
+import {routes} from "../../../app.routes";
 
 @Component({
   selector: 'app-new-tank-type',
@@ -60,8 +62,8 @@ export class NewTankTypeComponent {
 
   //service
   tankService = inject(TankServiceService)
+  dialogService = inject(DialogService)
   router = inject(Router);
-  dialogue = inject(MatDialog)
 
   //variables
   isLoading = false
@@ -89,27 +91,22 @@ export class NewTankTypeComponent {
         next: (response) => {
           console.log('guardado exitosamente', response);
 
-          this.dialogue.open(ConfirmDialogComponent, {
-            data: {
-              title: '¡Guardado exitosamente!',
-              message: '¿Deseás cargar otro tipo de tanque?',
+          this.dialogService.confirm('¡Guardado exitosamente!','¿Deseás cargar otro tipo de tanque?').subscribe(
+            ok=>{
+              if (ok) {
+                this.tankTypeForm.reset();
+                this.tankTypeForm.patchValue({
+                  tee:false,
+                  coverType:"NONE",
+                  sticker:"NONE",
+                  bigScrews:0
+                })
+                this.tankTypeForm.untouched
+              } else {
+                this.router.navigate(['/tanktypes'])
+              }
             }
-          }).afterClosed().subscribe((confirm: boolean) => {
-            if (confirm) {
-              this.tankTypeForm.reset();
-              this.tankTypeForm.patchValue({
-                tee: false,
-                coverType: "NONE"
-              })
-
-              // this.resetExtraFlags()
-
-              this.tankTypeForm.untouched
-
-            } else {
-              this.router.navigate(['/tanktypes']);
-            }
-          })
+          )
 
           this.isLoading = false;
         },

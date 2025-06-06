@@ -20,6 +20,7 @@ import {
   MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef,
   MatTable
 } from "@angular/material/table";
+import {DialogService} from "../../../core/services/dialog.service";
 
 @Component({
   selector: 'app-clients',
@@ -62,6 +63,7 @@ export class ClientsComponent {
   //service
   private priceListService = inject(PricesService)
   private clientService = inject(ClientService)
+  private dialogService = inject(DialogService)
   //variables
   priceList: PriceList[] = []
   clientList: Client[] = []
@@ -95,20 +97,17 @@ export class ClientsComponent {
 
 
   save() {
-    console.log(this.clientForm)
     if (this.clientForm.invalid) {
-      console.error(' this form is invalid')
+      alert(' this form is invalid')
     } else {
+      console.log('is updating status before submitting ', this.isUpdating)
 
-      if (this.isUpdating){
+      if (this.isUpdating) {
 
         const client: Client = {
           id: this.currentEditingId,
           ...this.clientForm.value
         }
-
-        console.log('enviando datos al backendt', client)
-
         this.clientService.putClient(client).subscribe({
           next: data => {
             console.log('update client')
@@ -120,19 +119,16 @@ export class ClientsComponent {
             this.clientForm.markAsUntouched()
           },
           error: err => {
-            console.log('hubo un error actualizando ',err)
+            console.log('hubo un error actualizando ', err)
           }
         })
-      }else {
+      } else {
         const client: Client = {
           ...this.clientForm.value,
         }
-        console.log('enviando datos al backendt', client)
 
         this.clientService.postClient(client).subscribe({
           next: data => {
-            console.log('guardado exitosamente')
-
             this.loadClientList()
 
             this.clientForm.reset()
@@ -140,7 +136,7 @@ export class ClientsComponent {
             this.clientForm.markAsUntouched()
           },
           error: err => {
-            console.log('hubo un error creando la entidad ',err)
+            console.log('hubo un error creando la entidad ', err)
           }
         })
       }
@@ -148,15 +144,21 @@ export class ClientsComponent {
   }
 
   delete(id: number) {
-    this.clientService.deleteClient(id).subscribe({
-      next: data => {
-        console.log('Borrado exitosamente')
-        this.loadClientList()
-      },
-      error: err => {
-        console.log(err)
-      }
-    })
+    this.dialogService.confirm('Borrar Cliente', 'esta seguro que desea borrar el cliente permanentemente?')
+      .subscribe(ok => {
+        if (ok) {
+          this.clientService.deleteClient(id).subscribe({
+            next: data => {
+              this.dialogService.alert('Exito', 'Cliente borrado exitosamente').subscribe()
+              this.loadClientList()
+            },
+            error: err => {
+              console.log(err)
+            }
+          })
+        }
+      })
+
   }
 
   edit(id: number) {
@@ -168,8 +170,9 @@ export class ClientsComponent {
         name: clientFilter.name,
         telephone: clientFilter.telephone,
         priceListId: clientFilter.priceListId,
+        direction: clientFilter.direction,
       })
-      this.currentEditingId= id
+      this.currentEditingId = id
     }
 
   }
@@ -180,8 +183,8 @@ export class ClientsComponent {
   }
 
 
-  getPriceListName(priceListId: number):string {
-    const priceList = this.priceList.find(pl=>pl.id===priceListId)
+  getPriceListName(priceListId: number): string {
+    const priceList = this.priceList.find(pl => pl.id === priceListId)
     if (priceList) {
       return priceList.name
     } else {

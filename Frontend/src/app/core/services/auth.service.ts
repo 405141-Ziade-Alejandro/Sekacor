@@ -2,28 +2,31 @@ import {inject, Injectable, signal} from '@angular/core';
 import {BehaviorSubject, Observable, tap} from "rxjs";
 import {User} from "../interfaces/users/user";
 import {HttpClient} from "@angular/common/http";
+import {routes} from "../../app.routes";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor() { }
-  private userSignal = signal<User|null>(this.loadUser())
-  private httpClient =  inject(HttpClient)
+  constructor() {
+  }
 
-  private logInApiUrl:string = "http://localhost:8080/users/login"
+  private userSignal = signal<User | null>(this.loadUser())
+  private httpClient = inject(HttpClient)
 
-  logIn(userName:string,password:string):Observable<User>{
-    return this.httpClient.post<User>(this.logInApiUrl,{userName,password}).pipe(
-      tap(res =>{
+  private logInApiUrl: string = "http://localhost:8080/users/login"
+
+  logIn(userName: string, password: string): Observable<User> {
+    return this.httpClient.post<User>(this.logInApiUrl, {userName, password}).pipe(
+      tap(res => {
         localStorage.setItem("user", JSON.stringify(res));
         this.userSignal.set(res)
       })
     )
   }
 
-  private loadUser():User|null {
+  private loadUser(): User | null {
     const json = localStorage.getItem('user');
     return json ? JSON.parse(json) : null;
   }
@@ -37,7 +40,12 @@ export class AuthService {
     return this.userSignal.asReadonly()
   }
 
-  isLoggedIn() {
+  isLoggedIn(): boolean {
     return !!this.userSignal()
+  }
+
+  hasRole(...roles: string[]): boolean {
+    const user = this.userSignal();
+    return user ? roles.includes(user.role) : false;
   }
 }

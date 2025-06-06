@@ -18,6 +18,7 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {MatSelect} from "@angular/material/select";
 import {ConfirmDialogComponent} from "../../../shared/confirm-dialog/confirm-dialog.component";
 import {NewTankType} from "../../../core/interfaces/tanks/new-tank-type";
+import {DialogService} from "../../../core/services/dialog.service";
 
 @Component({
   selector: 'app-tank-type-examine',
@@ -47,9 +48,10 @@ import {NewTankType} from "../../../core/interfaces/tanks/new-tank-type";
 })
 export class TankTypeExamineComponent {
   //services
-  tankService = inject(TankServiceService)
+  private tankService = inject(TankServiceService)
   private router: Router = inject(Router)
   private activatedRoute = inject(ActivatedRoute)
+  private dialogService = inject(DialogService)
   //variables
   tankType: TankType | undefined
   updating: boolean = false;
@@ -69,7 +71,7 @@ export class TankTypeExamineComponent {
     this.tankService.getTankType(id).subscribe({
       next: (response) => {
         this.tankType = response;
-        console.log('datos del tanque: ', this.tankType);
+
         this.checkFlags()
       },
       error: (error) => {
@@ -91,7 +93,6 @@ export class TankTypeExamineComponent {
 
 
 // update
-  dialogue = inject(MatDialog)
 
   showSticker:boolean=false;
   showBigScrews:boolean=false;
@@ -126,35 +127,25 @@ export class TankTypeExamineComponent {
 
       const newTank:NewTankType = this.toNewTankType(this.tankType)
 
-      this.dialogue.open(ConfirmDialogComponent, {
-        data: {
-          title:'Guardar Tanque?',
-          message:'esta accion es permanente, los datos anteriores se perederan'
-        }
-      }).afterClosed().subscribe((confirm:boolean) => {
-        if (confirm) {
-          //save
-          if (this.tankType){
-            this.tankService.putTankType(this.tankType.id,newTank).subscribe({
-              next: (response) => {
-                alert('tank saved!')
-                console.log(response)
-                this.tankService.setUpdating(false);
-                this.router.navigate(['/tanktypes']);
-              },
-              error: (error) => {
-                console.log('tank', newTank)
-                console.log('error: ', error);
-              }
-            })
+      this.dialogService.confirm('Guardar Tanque','Esta accion es Permanente, los datos anteriores se perderan')
+        .subscribe(ok=>{
+          if (ok){
+            if (this.tankType){
+              this.tankService.putTankType(this.tankType.id,newTank).subscribe({
+                next: (response) => {
+                  this.dialogService.alert('Exito','El tanque se actualizo correctamente')
+                  this.tankService.setUpdating(false)
+                  this.router.navigate(['/tanktypes']);
+                },
+                error: (error) => {
+                  console.log(error);
+                }
+              })
+            }
           }
+        })
 
-        } else {
-          this.resetExtraFlags()
-          this.getTank(this.id)
-        }
 
-      })
 
       console.log(this.tankType);
     }

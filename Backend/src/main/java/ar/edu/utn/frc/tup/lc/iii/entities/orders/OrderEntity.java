@@ -21,7 +21,7 @@ import java.util.List;
 public class OrderEntity extends BaseEntity {
     public static final String TABLE_NAME = "PEDIDO";
 
-    @ManyToOne
+    @ManyToOne(optional = true)
     @JoinColumn(name = "CLIENTE_ID")
     private ClientEntity client;
 

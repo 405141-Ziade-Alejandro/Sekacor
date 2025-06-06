@@ -8,6 +8,8 @@ import {MatLabel, MatOption, MatSelect} from "@angular/material/select";
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MissingConsumable} from "../../../core/interfaces/tanks/missing-consumable";
+import {DialogService} from "../../../core/services/dialog.service";
+import {AuthService} from "../../../core/services/auth.service";
 
 @Component({
   selector: 'app-tank-registry',
@@ -38,15 +40,21 @@ export class TankRegistryComponent {
 
   //service
   private tankService = inject(TankServiceService)
+  private dialogService = inject(DialogService)
+  private authService = inject(AuthService)
 
   //variables
   tankTypeList: TankType[] = []
-  userId: number = 1 //todo: remplazar esto con la forma correcta de recivir el id del usuario
+  userId: number = 0
 
 
   //methods
   ngOnInit() {
     this.loadTankTypes()
+    let authId = this.authService.currentUser()()?.id
+    if (authId) {
+      this.userId = authId
+    }
   }
 
   private loadTankTypes() {
@@ -70,25 +78,33 @@ export class TankRegistryComponent {
       this.tankService.postTank(newTank, false).subscribe({
         next: data => {
 
+          this.dialogService.alert('Exito','Tanque Registrado!').subscribe()
+
           // Si llegó aquí, es un Tank creado con éxito
           console.log('tankque creado con exito')
         },
         error: err => {
           if (err.status === 409 && Array.isArray(err.error)) {
             const missing: MissingConsumable[] = err.error;
+            //todo: make a dialog specific about this table of missing consumables 4 colums
             alert('faltan insumos: ')
             console.table(missing)
 
-            if (confirm('¿Deseas forzar la creación del tanque de todas formas?')) {
-              this.tankService.postTank(newTank, true).subscribe({
-                next: data => {
-                  alert('tanque creado a la fuerza')
-                  console.warn('revisar inventario manualmente')
+            this.dialogService.confirm('Registrar igual','¿Deseas forzar el registro del tanque de todas formas?')
+              .subscribe(ok=>{
+                if (ok){
+                  this.tankService.postTank(newTank, true).subscribe({
+                    next: ()=>{
+                      this.dialogService.alert('Tanque registrado Forzosamente','Avisar al Administrador del estado del inventario').subscribe()
+                    },
+                    error: err => {
+                      console.error(err)
+                    }
+                  })
+                } else {
+                  this.FormTankForm.reset();
                 }
               })
-            } else {
-              this.FormTankForm.reset()
-            }
           } else {
             console.error('error inesperado', err)
           }
@@ -103,5 +119,5 @@ export class TankRegistryComponent {
 
 /*
  * todo:
- *  informes, vendido por tipo,  tanques hechos por empleados, ranking por cliente
+ *  informes, vendido por tipo, ranking por cliente
  */

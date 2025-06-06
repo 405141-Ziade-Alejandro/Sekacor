@@ -98,7 +98,7 @@ export class OrderListComponent {
       return client.name
     }
 
-    return "-"
+    return "Cliente Borrado"
   }
 
   examine(id:number) {

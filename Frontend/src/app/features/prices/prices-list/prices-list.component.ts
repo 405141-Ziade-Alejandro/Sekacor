@@ -20,6 +20,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {CreatePriceDialogComponent} from "../create-price-dialog/create-price-dialog.component";
 import {PricesService} from "../../../core/services/prices.service";
 import {PriceList} from "../../../core/interfaces/prices/price-list";
+import {DialogService} from "../../../core/services/dialog.service";
 
 @Component({
   selector: 'app-prices-list',
@@ -51,17 +52,18 @@ import {PriceList} from "../../../core/interfaces/prices/price-list";
 })
 export class PricesListComponent {
   //services
-  TankTypeService = inject(TankServiceService)
+  private TankTypeService = inject(TankServiceService)
   private pricesService = inject(PricesService)
   private dialog = inject(MatDialog);
+  private dialogService = inject(DialogService)
   //variables
-  priceList:PriceList[]=[]
+  priceList: PriceList[] = []
 
-  tankList:TankType[]=[]
+  tankList: TankType[] = []
 
-  columnsToDisplay:string[]=['Tipo de Tanque','Costo','Precio', 'recargo'];
+  columnsToDisplay: string[] = ['Tipo de Tanque', 'Costo', 'Precio', 'recargo'];
 
-  priceListSelected:PriceList = {
+  priceListSelected: PriceList = {
     id: 0,
     name: '',
     profit: 0,
@@ -70,17 +72,17 @@ export class PricesListComponent {
     volKm: ''
   }
 
-  somethingSelected:boolean=false
+  somethingSelected: boolean = false
 
   //methods
 
   ngOnInit() {
     this.TankTypeService.getAllTankTypes().subscribe({
       next: data => {
-        this.tankList=data;
+        this.tankList = data;
       },
       error: err => {
-        console.error('error fetching tank type list',err);
+        console.error('error fetching tank type list', err);
       }
     })
 
@@ -93,52 +95,55 @@ export class PricesListComponent {
         this.priceList = data
       },
       error: err => {
-        console.error('error fetching prices list',err);
+        console.error('error fetching prices list', err);
       }
     })
   }
 
-  openCreateDialog(){
+  openCreateDialog() {
     this.dialog.open(CreatePriceDialogComponent, {
       width: '90vw',
       maxWidth: '900px',
       autoFocus: false,
-    })
+    })//todo ver el afterClosed y recargar la lista
   }
 
-  changeSelection(index:number){
+  changeSelection(index: number) {
     this.priceListSelected = this.priceList[index];
     this.somethingSelected = true
   }
 
   delete() {
-    if (this.priceListSelected){
-      if (confirm("Are you sure you want to delete?")) {
-        this.pricesService.delete(this.priceListSelected.id).subscribe({
-          next: data => {
-            console.log('list deleted')
-            this.loadPrices()
-          },
-          error: err => {
-            console.error('error when deleting');
+    if (this.priceListSelected) {
+      this.dialogService.confirm('Borrar Lista', 'Esta accion borrara la lista seleccionada, esta seguro que quiere hacerlo?')
+        .subscribe(ok => {
+          if (ok) {
+            this.pricesService.delete(this.priceListSelected.id).subscribe({
+              next: () => {
+                this.dialogService.alert('Lista Borrada', 'La Lista fue borrada con excito')
+                this.loadPrices()
+              },
+              error: err => {
+                console.error('error  borrar lista', err);
+              }
+            })
           }
         })
-      }
     }
   }
 
-  calculatePrice(tank:TankType) {
-    let price = ((tank.cost + this.priceListSelected.profit) * this.priceListSelected.commission)+(this.priceListSelected.corralon*this.priceListSelected.profit);
-    if (this.priceListSelected.volKm==="CIEN"){
+  calculatePrice(tank: TankType) {
+    let price = ((tank.cost + this.priceListSelected.profit) * this.priceListSelected.commission) + (this.priceListSelected.corralon * this.priceListSelected.profit);
+    if (this.priceListSelected.volKm === "CIEN") {
       price = price * tank.vol100
-    } else if (this.priceListSelected.volKm==="DOSCIENTOS"){
+    } else if (this.priceListSelected.volKm === "DOSCIENTOS") {
       price = price * tank.vol200
     }
     return price;
   }
 
   calculateCommision() {
-    const commision = this.priceListSelected.corralon*this.priceListSelected.profit
+    const commision = this.priceListSelected.corralon * this.priceListSelected.profit
     return commision;
   }
 }

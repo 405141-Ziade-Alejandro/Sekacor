@@ -30,8 +30,4 @@ public class OrderDetailsEntity extends BaseEntity {
     private int quantity;
 
     private BigDecimal price;
-
-//    @ManyToOne
-//    @JoinColumn(name = "order_entity_id") // explícito
-//    private OrderEntity order;
 }

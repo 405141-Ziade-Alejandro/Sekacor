@@ -29,6 +29,7 @@ import {CurrencyPipe} from "@angular/common";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Order} from "../../../core/interfaces/orders/order";
 import {Router} from "@angular/router";
+import {DialogService} from "../../../core/services/dialog.service";
 
 @Component({
   selector: 'app-new-order',
@@ -75,6 +76,7 @@ export class NewOrderComponent {
   tankService = inject(TankServiceService)
   clientService = inject(ClientService)
   router = inject(Router);
+  dialogService = inject(DialogService)
   //variables
   columnToDisplay: string[] = ['product', 'quantity', 'price', 'action'];
   clientList: Client[] = [];
@@ -141,7 +143,7 @@ export class NewOrderComponent {
   sendOrder() {
     if (this.formOrder.invalid || this.detailList.length < 1) {
       if (this.detailList.length < 1) {
-        alert("debe por lo menos tener un tipo de tanque");
+        this.dialogService.alert('Error','Debe por lo menos tener un tipo de tanque en la orden').subscribe()
       } else {
         alert('this formulary is invalid')
       }
@@ -156,7 +158,8 @@ export class NewOrderComponent {
 
       this.orderService.postOrder(newOrder).subscribe({
         next: (responce) => {
-          console.log('order saved: ', responce);
+          // console.log('order saved: ', responce);
+          this.dialogService.alert('Exito','La orden se creo exitosamente').subscribe()
           this.formOrder.reset()
           this.detailList = []
         },

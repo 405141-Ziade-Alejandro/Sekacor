@@ -8,7 +8,7 @@
         <th mat-header-cell *matHeaderCellDef>N#</th>
         <td mat-cell *matCellDef="let order">
         <button mat-button type="button"  (click)="examine(order.id)" >
-          {{getClientName(order.id)}}
+          {{order.id}}
         </button>
         </td>
       </ng-container>

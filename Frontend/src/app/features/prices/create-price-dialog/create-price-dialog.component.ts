@@ -68,7 +68,6 @@ export class CreatePriceDialogComponent {
       this.priceListService.postList(newPriceList).subscribe({
         next: list=> {
           console.log('success');
-          this.router.navigate(['/prices']);
           this.close();
         },
         error: err => {

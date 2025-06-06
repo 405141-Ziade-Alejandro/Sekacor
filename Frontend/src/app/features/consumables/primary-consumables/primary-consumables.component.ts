@@ -15,6 +15,7 @@ import {MatMiniFabButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {MatFormField, MatInput, MatLabel} from "@angular/material/input";
 import {UpdateConsumable} from "../../../core/interfaces/consumable/update-consumable";
+import {DialogService} from "../../../core/services/dialog.service";
 
 @Component({
   selector: 'app-primary-consumables',
@@ -45,6 +46,7 @@ export class PrimaryConsumablesComponent {
 
   //service
   private consumableService = inject(ConsumablesService)
+  private dialogService = inject(DialogService);
   //variables
   consumablesList:PrimaryConsumable[] =[]
   columnsToDisplay:string[] = ['nombre','subtype','stock','agregar']
@@ -73,7 +75,8 @@ export class PrimaryConsumablesComponent {
     //se extrae el valor del campo en la fila de la tabla
     const addValue = this.inputValues[id]
     if (isNaN(addValue)) {//si el valor resulta no ser un numero salta error
-      console.warn(addValue + " is not a number")
+      this.dialogService.alert('Error','El valor ingresado no es un numero').subscribe()
+
       this.inputValues[id] = 0
       return;
     }

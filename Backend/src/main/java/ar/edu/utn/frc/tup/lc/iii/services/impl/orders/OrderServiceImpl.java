@@ -8,6 +8,7 @@ import ar.edu.utn.frc.tup.lc.iii.entities.clients.ClientEntity;
 import ar.edu.utn.frc.tup.lc.iii.entities.orders.OrderDetailsEntity;
 import ar.edu.utn.frc.tup.lc.iii.entities.orders.OrderEntity;
 import ar.edu.utn.frc.tup.lc.iii.entities.orders.OrderState;
+import ar.edu.utn.frc.tup.lc.iii.entities.tanks.TankTypeEntity;
 import ar.edu.utn.frc.tup.lc.iii.repositories.clients.ClientsRepository;
 import ar.edu.utn.frc.tup.lc.iii.repositories.orders.OrderRepository;
 import ar.edu.utn.frc.tup.lc.iii.repositories.tanks.TankTypeRepository;
@@ -182,11 +183,29 @@ public class OrderServiceImpl implements OrderService {
         if (checkOrderEntity.get().getState() != OrderState.PREPARANDO) {
             throw new InvalidOrderStateException("Invalid order state for completion");
         }
+
+        reduceTanksInStock(checkOrderEntity.get().getDetails());
+
         checkOrderEntity.get().setState(OrderState.FINALIZADO);
         checkOrderEntity.get().setOrderDate(LocalDateTime.now());
 
         OrderEntity savedOrderEntity = orderRepository.save(checkOrderEntity.get());
 
         return modelMapper.map(savedOrderEntity, OrderDto.class);
+    }
+
+    /**
+     * what this does is reduce from stock all the tanks that were sold
+     * only stock 1 because those are the ones that are sold this way
+     * @param details contains all the tanktypes and the amount sold of them
+     */
+    private void reduceTanksInStock(List<OrderDetailsEntity> details) {
+        List<TankTypeEntity> tankTypeEntityList = new ArrayList<>();
+
+        for (OrderDetailsEntity detail : details) {
+          detail.getTankType().setStock1(detail.getTankType().getStock1() - detail.getQuantity());
+          tankTypeEntityList.add(detail.getTankType());
+        }
+        tankTypeRepository.saveAll(tankTypeEntityList);
     }
 }

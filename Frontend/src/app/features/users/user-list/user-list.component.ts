@@ -17,6 +17,7 @@ import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {DialogService} from "../../../core/services/dialog.service";
 
 @Component({
   selector: 'app-user-list',
@@ -48,13 +49,14 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 })
 export class UserListComponent {
   //form
-  formUser:FormGroup = new FormGroup({
+  formUser: FormGroup = new FormGroup({
     name: new FormControl('', Validators.required),
     role: new FormControl('', Validators.required)
   });
 
   //services
   private userService = inject(UserService)
+  dialogService = inject(DialogService)
   //variables
   displayedColumns: string[] = ['Nombre', 'Rol', 'actions'];
   userList: User[] = [];
@@ -76,17 +78,20 @@ export class UserListComponent {
   }
 
   delete(id: number) {
-    if (confirm("Are you sure you want to delete this user?")) {
-      this.userService.deleteUser(id).subscribe({
-        next: data => {
-          console.log('deleted user', data)
-          this.loadUsers()
-        },
-        error: error => {
-          console.error(error)
+    this.dialogService.confirm('Borrar Usuario', 'Esta accion Borrara al usuario, esta seguro?')
+      .subscribe(ok => {
+        if (ok) {
+          this.userService.deleteUser(id).subscribe({
+            next: () => {
+              this.dialogService.alert('Exito', 'El usuario fue borrado permanentemente').subscribe()
+              this.loadUsers()
+            },
+            error: error => {
+              console.log(error)
+            }
+          })
         }
       })
-    }
   }
 
   submit() {
@@ -100,6 +105,7 @@ export class UserListComponent {
       this.userService.postUser(newUser).subscribe({
         next: data => {
           console.log('post user', data)
+          this.dialogService.alert('Exito','Usuario'+newUser.name+' Creado').subscribe()
 
           this.formUser.reset()
 

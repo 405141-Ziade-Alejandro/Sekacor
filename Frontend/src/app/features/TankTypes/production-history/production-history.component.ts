@@ -18,6 +18,7 @@ import {User} from "../../../core/interfaces/users/user";
 import {TankType} from "../../../core/interfaces/tanks/tank-type";
 import {UserService} from "../../../core/services/user.service";
 import {DatePipe} from "@angular/common";
+import {DialogService} from "../../../core/services/dialog.service";
 
 @Component({
   selector: 'app-production-history',
@@ -48,6 +49,7 @@ export class ProductionHistoryComponent {
   //services
   tankService = inject(TankServiceService)
   userService = inject(UserService)
+  dialogService = inject(DialogService)
 
 
   //variables
@@ -89,7 +91,6 @@ export class ProductionHistoryComponent {
   private loadHistory() {
     this.tankService.getAllTanksPaginated(this.currentPage, this.pageSize).subscribe({
       next: response => {
-        console.log('we recive this: ', response)
 
         this.tankHistory = response.content
         this.totalTanks = response.totalElements
@@ -101,17 +102,20 @@ export class ProductionHistoryComponent {
   }
 
   deleteTank(id:number) {
-    if (confirm("esto borrara el tanque en el registro pero no devolvera los insumos consumidos a la base de datos. es algo que debera hacer manualmente")){
-      this.tankService.deleteTank(id).subscribe({
-        next: result => {
-          console.log('the tank was deleted')
-          this.loadHistory()
-        },
-        error: err => {
-          console.log(err);
+    this.dialogService.confirm('Borrar Registro','Esto Borrara el tanque en el registro \n pero no devolvera los insumos consumidos a la base de tados \n eso es algo que se debera hacer manualmente')
+      .subscribe(ok=>{
+        if (ok){
+          this.tankService.deleteTank(id).subscribe({
+            next: data => {
+              this.dialogService.alert('Borrado Existoso','El registro del tanque fue borrado exitosamente, acuerdece de los insumos').subscribe()
+              this.loadHistory()
+            },
+            error: err => {
+              console.log(err)
+            }
+          })
         }
       })
-    }
   }
 
   changePAge(event: PageEvent) {

@@ -16,6 +16,7 @@ import {TankType} from "../../../core/interfaces/tanks/tank-type";
 import {TankServiceService} from "../../../core/services/tank-service.service";
 import {MatCard, MatCardContent} from "@angular/material/card";
 import {MatTooltip} from "@angular/material/tooltip";
+import {DialogService} from "../../../core/services/dialog.service";
 
 
 @Component({
@@ -48,6 +49,7 @@ export class TankTypeListComponent {
   //services
   tankService = inject(TankServiceService)
   router = inject(Router)
+  dialogService = inject(DialogService)
   //variables
   tankTypesList: TankType[] = []
 
@@ -72,19 +74,20 @@ export class TankTypeListComponent {
   }
 
   delete(id:number) {
-    //todo, do this with a pop up or just more user friendly
-    if (confirm("Vas a BORRAR PERMANENTEMENTE este tipo de tanque con todos sus datos, continuar?")) {
-      this.tankService.deleteTankType(id).subscribe({
-        next: () => {
-          alert("Tanque borrado");
-          this.loadTanks()
-        },
-        error: err => {
-          console.log(err);
-          alert("error!");
+    this.dialogService.confirm('BORRAR TANQUE','la siguiente accion BORRARA PERMANENTEMENTE este tipo de tanque, ¿esta seguro que desea continuar?')
+      .subscribe( ok=> {
+        if (ok) {
+          this.tankService.deleteTankType(id).subscribe({
+            next: ()=>{
+              this.dialogService.alert('Exito', "El Tanque fue borrado exitosamente").subscribe()
+              this.loadTanks()
+            },
+            error: err => {
+              console.log(err)
+            }
+          })
         }
       })
-    }
 
   }
 

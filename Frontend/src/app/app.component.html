@@ -3,6 +3,11 @@
     <mat-icon>menu</mat-icon>
   </button>
   <span>Sekacor.</span>
+  @if (authService.isLoggedIn()){
+    <button mat-icon-button (click)="logOut()">
+      <mat-icon>delete</mat-icon>
+    </button>
+  }
 </mat-toolbar>
 
 <mat-sidenav-container>

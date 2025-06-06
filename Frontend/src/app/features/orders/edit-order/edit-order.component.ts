@@ -27,6 +27,7 @@ import {TankServiceService} from "../../../core/services/tank-service.service";
 import {ClientService} from "../../../core/services/client.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Order} from "../../../core/interfaces/orders/order";
+import {DialogService} from "../../../core/services/dialog.service";
 
 @Component({
   selector: 'app-edit-order',
@@ -82,6 +83,7 @@ export class EditOrderComponent {
   tankService = inject(TankServiceService)
   clientService = inject(ClientService)
   router = inject(Router);
+  dialogService= inject(DialogService)
   private activatedRoute = inject(ActivatedRoute)
   //variables
   columnsToDisplay: string[] = ['product', 'quantity', 'price', 'action']
@@ -122,7 +124,9 @@ export class EditOrderComponent {
 
   editOrder() {
     if (this.formEditOrder.invalid || this.detailList.length < 1) {
-      alert("el formulario es invalido o no tiene tanques cargados")
+      if (this.detailList.length < 1) {
+        this.dialogService.alert('Error','Debe  tener por lo menos un tanque en la  orden').subscribe()
+      }else alert("el formulario es invalido")
     } else{
       this.currentOrder.clientId = this.formEditOrder.value.clientId;
       this.currentOrder.orderDate = this.formEditOrder.value.orderDate
@@ -131,10 +135,9 @@ export class EditOrderComponent {
 
       this.orderService.putOrder(this.currentOrder).subscribe({
         next: data => {
-          console.log('success', data);
+          this.dialogService.alert('Exito','La orden fue actualizada correctamente')
           this.router.navigate(['/orders/all']);
         },
-
         error: error => {
           console.error(error);
         }

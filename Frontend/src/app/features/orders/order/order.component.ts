@@ -25,6 +25,7 @@ import {Client} from "../../../core/interfaces/client/client";
 import {ClientService} from "../../../core/services/client.service";
 import {TankType} from "../../../core/interfaces/tanks/tank-type";
 import {TankServiceService} from "../../../core/services/tank-service.service";
+import {DialogService} from "../../../core/services/dialog.service";
 
 @Component({
   selector: 'app-order',
@@ -61,6 +62,7 @@ export class OrderComponent {
   private clientService = inject(ClientService)
   private tankService = inject(TankServiceService)
   private router = inject(Router)
+  private dialogService = inject(DialogService)
   //variables
   order: Order = {
     id: 0,
@@ -126,17 +128,20 @@ export class OrderComponent {
   }
 
   cancelOrder() {
-    if (confirm("Are you sure you want to cancel the order?")) {
-      this.orderService.cancelOrder(this.id).subscribe({
-        next: response => {
-          console.log('order cancelled ', response);
-          this.loadOrder()
-        },
-        error: error => {
-          console.error(error)
+    this.dialogService.confirm('cancelar order','esta por cancelar la orden, seguro?')
+      .subscribe(ok=> {
+        if (ok){
+          this.orderService.cancelOrder(this.id).subscribe({
+            next: data => {
+              this.dialogService.alert('Exito','la orden N#'+data.id+' fue cancelada correctamente').subscribe()
+              this.loadOrder()
+            },
+            error: err => {
+              console.error(err)
+            }
+          })
         }
       })
-    }
   }
 
   getTankTypeName(id: number): string | undefined {
@@ -152,16 +157,19 @@ export class OrderComponent {
   }
 
   complete() {
-    if (confirm("Completar la orden?")) {
-      this.orderService.completeORder(this.id).subscribe({
-        next: response => {
-          console.log('order completed ', response);
-          this.order = response
-        },
-        error: error => {
-          console.error(error)
+    this.dialogService.confirm('Finalizar pedido','desea marcar esta orden como completada?')
+      .subscribe(ok=>{
+        if (ok){
+          this.orderService.completeORder(this.id).subscribe({
+            next: data => {
+              this.dialogService.alert('Exito','Esta orden fue completada exitosamente').subscribe()
+              this.order = data
+            },
+            error: err => {
+              console.error(err)
+            }
+          })
         }
       })
-    }
   }
 }

@@ -19,6 +19,7 @@ import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {UpdateConsumable} from "../../../core/interfaces/consumable/update-consumable";
+import {DialogService} from "../../../core/services/dialog.service";
 
 @Component({
   selector: 'app-secundary-consumables',
@@ -60,13 +61,14 @@ export class SecundaryConsumablesComponent {
   })
 
   //services
-  consumableService=inject(ConsumablesService)
+  consumableService = inject(ConsumablesService)
+  dialogService = inject(DialogService)
 
   //variables
-  consumablesList: SecondaryConsumable[]=[];
-  columnsToDisplay: string[]=['name','subtype','stock','add']
+  consumablesList: SecondaryConsumable[] = [];
+  columnsToDisplay: string[] = ['name', 'subtype', 'stock', 'add']
 
-  inputValues: {[id:number]:number} = {}
+  inputValues: { [id: number]: number } = {}
 
   //methods
   ngOnInit(): void {
@@ -91,13 +93,11 @@ export class SecundaryConsumablesComponent {
       const consumable: SecondaryConsumable = {
         ...this.ConsumableForm.value,
       }
-      if (consumable.subType==="") {
+      if (consumable.subType === "") {
         consumable.subType = "-";
       }
       this.consumableService.postSecondaryConsumable(consumable).subscribe({
         next: data => {
-          console.log('consumable saved', data);
-
           this.ConsumableForm.reset();
           this.ConsumableForm.markAsPristine()
 
@@ -113,11 +113,10 @@ export class SecundaryConsumablesComponent {
   /**
    * mirar el add de primary consumables, es casi igual y esta mas detallado ahi
    */
-  add(id:number) {
+  add(id: number) {
 
     const addedValue = this.inputValues[id]
-    if (typeof addedValue!=='number'|| isNaN(addedValue)) {
-      console.warn('invalid value');
+    if (typeof addedValue !== 'number' || isNaN(addedValue)) {
       this.inputValues[id] = 0;
       return;
     }
@@ -132,7 +131,6 @@ export class SecundaryConsumablesComponent {
 
     this.consumableService.putSecondaryConsumable(update).subscribe({
       next: data => {
-        console.log('consumable updated', data);
         this.inputValues[id] = 0
         this.loadConsumables()
       },
@@ -143,16 +141,19 @@ export class SecundaryConsumablesComponent {
 
   }
 
-  delete(id:number) {
-
-    this.consumableService.deleteSecondaryConsumable(id).subscribe({
-      next: data => {
-        console.log('consumable deleted');
-        this.loadConsumables()
-      },
-      error: err => {
-        console.error('something went wrong sending the data to the backend', err)
-      }
-    })
+  delete(id: number) {
+    this.dialogService.confirm('Confirmar Borrado','Esta Accion borrara el insumo, desea continuar?')
+      .subscribe(ok=> {
+        if (ok){
+          this.consumableService.deleteSecondaryConsumable(id).subscribe({
+            next: data => {
+              this.loadConsumables()
+            },
+            error: err => {
+              console.error('something went wrong sending the data to the backend', err)
+            }
+          })
+        }
+      })
   }
 }
