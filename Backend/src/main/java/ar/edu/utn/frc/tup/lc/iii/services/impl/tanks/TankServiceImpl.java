@@ -276,7 +276,7 @@ public class TankServiceImpl implements TankService {
         BigDecimal availableConsumable = primaryConsumable.getQuantity();
 
         if (availableConsumable.compareTo(consumableRequiredByTheTank) < 0) {
-            missingList.add(new MissingConsumableDto(consumableType, consumableSubType, consumableRequiredByTheTank, availableConsumable));
+            missingList.add(new MissingConsumableDto(consumableType, consumableSubType, consumableRequiredByTheTank, availableConsumable,primaryConsumable.getUnit()));
         }
     }
 

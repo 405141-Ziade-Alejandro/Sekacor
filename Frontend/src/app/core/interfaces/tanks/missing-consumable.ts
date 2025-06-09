@@ -3,4 +3,5 @@ export interface MissingConsumable {
   subType:string,
   required:number,
   available:number,
+  unit:string
 }

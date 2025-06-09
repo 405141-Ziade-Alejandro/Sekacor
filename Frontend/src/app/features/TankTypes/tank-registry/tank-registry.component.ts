@@ -4,12 +4,15 @@ import {TankType} from "../../../core/interfaces/tanks/tank-type";
 import {MatCard, MatCardContent, MatCardFooter, MatCardHeader} from "@angular/material/card";
 import {MatFabButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
-import {MatLabel, MatOption, MatSelect} from "@angular/material/select";
+import {MatFormField, MatLabel, MatOption, MatSelect} from "@angular/material/select";
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MissingConsumable} from "../../../core/interfaces/tanks/missing-consumable";
 import {DialogService} from "../../../core/services/dialog.service";
 import {AuthService} from "../../../core/services/auth.service";
+import {MatDialog} from "@angular/material/dialog";
+import {MissingConsumablesDialogComponent} from "../missing-consumables-dialog/missing-consumables-dialog.component";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-tank-registry',
@@ -26,7 +29,8 @@ import {AuthService} from "../../../core/services/auth.service";
     MatRadioGroup,
     MatRadioButton,
     MatLabel,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatFormField
   ],
   templateUrl: './tank-registry.component.html',
   styleUrl: './tank-registry.component.css'
@@ -42,6 +46,8 @@ export class TankRegistryComponent {
   private tankService = inject(TankServiceService)
   private dialogService = inject(DialogService)
   private authService = inject(AuthService)
+  private dialog = inject(MatDialog)
+  private router = inject(Router)
 
   //variables
   tankTypeList: TankType[] = []
@@ -78,7 +84,7 @@ export class TankRegistryComponent {
       this.tankService.postTank(newTank, false).subscribe({
         next: data => {
 
-          this.dialogService.alert('Exito','Tanque Registrado!').subscribe()
+          this.dialogService.alert('Exito', 'Tanque Registrado!').subscribe()
 
           // Si llegó aquí, es un Tank creado con éxito
           console.log('tankque creado con exito')
@@ -86,24 +92,25 @@ export class TankRegistryComponent {
         error: err => {
           if (err.status === 409 && Array.isArray(err.error)) {
             const missing: MissingConsumable[] = err.error;
-            //todo: make a dialog specific about this table of missing consumables 4 colums
-            alert('faltan insumos: ')
-            console.table(missing)
-
-            this.dialogService.confirm('Registrar igual','¿Deseas forzar el registro del tanque de todas formas?')
-              .subscribe(ok=>{
-                if (ok){
-                  this.tankService.postTank(newTank, true).subscribe({
-                    next: ()=>{
-                      this.dialogService.alert('Tanque registrado Forzosamente','Avisar al Administrador del estado del inventario').subscribe()
-                    },
-                    error: err => {
-                      console.error(err)
+            this.dialog.open(MissingConsumablesDialogComponent, {
+              data: missing
+            }).afterClosed().subscribe(
+              () => {
+                this.dialogService.confirm('Registrar igual', '¿Deseas forzar el registro del tanque de todas formas?')
+                  .subscribe(ok => {
+                    if (ok) {
+                      this.tankService.postTank(newTank, true).subscribe({
+                        next: () => {
+                          this.dialogService.alert('Tanque registrado Forzosamente', 'Avisar al Administrador del estado del inventario').subscribe()
+                        },
+                        error: err => {
+                          console.error(err)
+                        }
+                      })
+                    } else {
+                      this.FormTankForm.reset();
                     }
                   })
-                } else {
-                  this.FormTankForm.reset();
-                }
               })
           } else {
             console.error('error inesperado', err)
@@ -114,6 +121,10 @@ export class TankRegistryComponent {
     } else {
       console.error('Form not valid')
     }
+  }
+
+  toOrders() {
+    this.router.navigate(['/orders/all']);
   }
 }
 

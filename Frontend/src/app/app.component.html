@@ -4,8 +4,13 @@
   </button>
   <span>Sekacor.</span>
   @if (authService.isLoggedIn()){
+    <span>{{userName}}</span>
     <button mat-icon-button (click)="logOut()">
-      <mat-icon>delete</mat-icon>
+      <mat-icon>logout</mat-icon>
+    </button>
+  } @else {
+    <button mat-icon-button (click)="logIn()">
+      <mat-icon>login</mat-icon>
     </button>
   }
 </mat-toolbar>

@@ -1,5 +1,5 @@
 import {Component, inject} from '@angular/core';
-import {MatCard, MatCardContent} from "@angular/material/card";
+import {MatCard, MatCardContent, MatCardHeader} from "@angular/material/card";
 import {
   MatCell,
   MatCellDef,
@@ -16,6 +16,8 @@ import {MatIcon} from "@angular/material/icon";
 import {MatFormField, MatInput, MatLabel} from "@angular/material/input";
 import {UpdateConsumable} from "../../../core/interfaces/consumable/update-consumable";
 import {DialogService} from "../../../core/services/dialog.service";
+import {MatCheckbox} from "@angular/material/checkbox";
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-primary-consumables',
@@ -37,7 +39,10 @@ import {DialogService} from "../../../core/services/dialog.service";
     MatRowDef,
     MatInput,
     MatFormField,
-    MatLabel
+    MatLabel,
+    MatCardHeader,
+    MatCheckbox,
+    FormsModule
   ],
   templateUrl: './primary-consumables.component.html',
   styleUrl: './primary-consumables.component.css'
@@ -50,6 +55,7 @@ export class PrimaryConsumablesComponent {
   //variables
   consumablesList:PrimaryConsumable[] =[]
   columnsToDisplay:string[] = ['nombre','subtype','stock','agregar']
+  overwrite:boolean = false;
 
   //this is for the value neeeded to increse or decrese the stock of the primary consumables
   inputValues:{[id:number]:number} = {}
@@ -90,12 +96,13 @@ export class PrimaryConsumablesComponent {
     let update:UpdateConsumable = {//se genera el dto para madandar al backend
       consumableId: consumableToUpdatee.id,
       quantity: consumableToUpdatee.quantity + addValue
-
+    }
+    if (this.overwrite){
+      update.quantity = addValue
     }
 
     this.consumableService.putPrimaryConsumable(update).subscribe({
       next: data => {
-        console.log('consumable updated', data);
         this.inputValues[id] = 0
         this.loadConsumables()
       },

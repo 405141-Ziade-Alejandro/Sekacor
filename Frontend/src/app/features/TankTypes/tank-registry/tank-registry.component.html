@@ -1,16 +1,18 @@
 <h2>Nuevos tanques</h2>
 
-<button mat-fab> Pedidos</button>
+<button mat-fab (click)="toOrders()">Pedidos</button>
 
 <mat-card>
   <form [formGroup]="FormTankForm" (ngSubmit)="newTank()">
     <mat-card-header>
-      <mat-label>select Tank</mat-label>
-      <mat-select formControlName="typeId">
-        @for (tank of tankTypeList; track $index) {
-          <mat-option [value]="tank.id">{{ tank.type }}</mat-option>
-        }
-      </mat-select>
+      <mat-form-field appearance="outline">
+        <mat-label>Selecciona Tanque</mat-label>
+        <mat-select formControlName="typeId">
+          @for (tank of tankTypeList; track $index) {
+            <mat-option [value]="tank.id">{{ tank.type }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
     </mat-card-header>
     <mat-card-content>
       <button mat-fab extended type="submit" [disabled]="FormTankForm.invalid">

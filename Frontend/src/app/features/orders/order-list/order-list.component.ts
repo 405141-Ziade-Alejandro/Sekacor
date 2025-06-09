@@ -75,7 +75,6 @@ export class OrderListComponent {
   private loadOrders() {
     this.ordersService.getAllOrders(this.currentPage, this.pageSize).subscribe({
       next: data => {
-        console.log('we recive this: ', data);
         this.orderList = data.content
         this.totalOrders = data.totalElements
       },

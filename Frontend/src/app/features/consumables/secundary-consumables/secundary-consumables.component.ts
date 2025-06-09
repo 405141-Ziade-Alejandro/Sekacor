@@ -1,5 +1,5 @@
 import {Component, inject} from '@angular/core';
-import {MatCard, MatCardContent} from "@angular/material/card";
+import {MatCard, MatCardContent, MatCardHeader} from "@angular/material/card";
 import {
   MatCell,
   MatCellDef,
@@ -13,13 +13,14 @@ import {MatIcon} from "@angular/material/icon";
 import {MatIconButton, MatMiniFabButton} from "@angular/material/button";
 import {SecondaryConsumable} from "../../../core/interfaces/consumable/secondary-consumable";
 import {ConsumablesService} from "../../../core/services/consumables.service";
-import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatToolbar} from "@angular/material/toolbar";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {UpdateConsumable} from "../../../core/interfaces/consumable/update-consumable";
 import {DialogService} from "../../../core/services/dialog.service";
+import {MatCheckbox} from "@angular/material/checkbox";
 
 @Component({
   selector: 'app-secundary-consumables',
@@ -46,7 +47,10 @@ import {DialogService} from "../../../core/services/dialog.service";
     MatInput,
     MatIconButton,
     MatSelect,
-    MatOption
+    MatOption,
+    MatCardHeader,
+    MatCheckbox,
+    FormsModule
   ],
   templateUrl: './secundary-consumables.component.html',
   styleUrl: './secundary-consumables.component.css'
@@ -69,6 +73,8 @@ export class SecundaryConsumablesComponent {
   columnsToDisplay: string[] = ['name', 'subtype', 'stock', 'add']
 
   inputValues: { [id: number]: number } = {}
+
+  override: boolean = false;
 
   //methods
   ngOnInit(): void {
@@ -127,6 +133,9 @@ export class SecundaryConsumablesComponent {
     let update: UpdateConsumable = {
       consumableId: consumableToUpdate.id,
       quantity: consumableToUpdate.quantity + addedValue
+    }
+    if (this.override){
+      update.quantity = addedValue;
     }
 
     this.consumableService.putSecondaryConsumable(update).subscribe({

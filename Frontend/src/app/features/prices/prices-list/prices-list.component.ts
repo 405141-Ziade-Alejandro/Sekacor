@@ -21,6 +21,7 @@ import {CreatePriceDialogComponent} from "../create-price-dialog/create-price-di
 import {PricesService} from "../../../core/services/prices.service";
 import {PriceList} from "../../../core/interfaces/prices/price-list";
 import {DialogService} from "../../../core/services/dialog.service";
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-prices-list',
@@ -45,7 +46,8 @@ import {DialogService} from "../../../core/services/dialog.service";
     MatLabel,
     MatIcon,
     MatIconButton,
-    MatHeaderCellDef
+    MatHeaderCellDef,
+    FormsModule
   ],
   templateUrl: './prices-list.component.html',
   styleUrl: './prices-list.component.css'
@@ -105,7 +107,24 @@ export class PricesListComponent {
       width: '90vw',
       maxWidth: '900px',
       autoFocus: false,
-    })//todo ver el afterClosed y recargar la lista
+    }).afterClosed().subscribe(id=>{
+      if (id){
+        console.log(id)//
+        this.pricesService.getAllPrices().subscribe({
+          next: data => {
+            this.priceList = data
+            const priceListCreated = this.priceList.find(item => item.id === id)
+            console.log(priceListCreated)
+            if (priceListCreated){
+              this.priceListSelected = priceListCreated
+            }
+          },
+          error: err => {
+            console.error('error fetching prices list', err);
+          }
+        })
+      }
+    })
   }
 
   changeSelection(index: number) {
@@ -135,9 +154,9 @@ export class PricesListComponent {
   calculatePrice(tank: TankType) {
     let price = ((tank.cost + this.priceListSelected.profit) * this.priceListSelected.commission) + (this.priceListSelected.corralon * this.priceListSelected.profit);
     if (this.priceListSelected.volKm === "CIEN") {
-      price = price * tank.vol100
+      price = price + tank.vol100
     } else if (this.priceListSelected.volKm === "DOSCIENTOS") {
-      price = price * tank.vol200
+      price = price + tank.vol200
     }
     return price;
   }

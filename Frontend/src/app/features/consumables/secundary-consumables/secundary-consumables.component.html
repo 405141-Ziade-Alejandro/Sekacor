@@ -34,6 +34,9 @@
 </mat-toolbar>
 
 <mat-card>
+  <mat-card-header>
+    <mat-checkbox [(ngModel)]="override">Sobrescribir valores</mat-checkbox>
+  </mat-card-header>
   <mat-card-content>
     <table mat-table [dataSource]="consumablesList">
       <ng-container matColumnDef="name">
@@ -69,7 +72,11 @@
                    step="0.01">
           </mat-form-field>
           <button mat-mini-fab (click)="add(consumable.id)">
-            <mat-icon>add</mat-icon>
+            @if (override) {
+              <mat-icon>content_copy</mat-icon>
+            } @else {
+              <mat-icon>add</mat-icon>
+            }
           </button>
           <button mat-mini-fab (click)="delete(consumable.id)">
             <mat-icon>delete_forever</mat-icon>

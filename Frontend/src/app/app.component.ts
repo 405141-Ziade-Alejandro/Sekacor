@@ -4,7 +4,7 @@ import {MatSidenav, MatSidenavContainer, MatSidenavContent} from "@angular/mater
 import {MatToolbar} from "@angular/material/toolbar";
 import {MatIconButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
-import {RouterLink, RouterOutlet} from "@angular/router";
+import {Router, RouterLink, RouterOutlet} from "@angular/router";
 import {AuthService} from "./core/services/auth.service";
 
 
@@ -18,9 +18,23 @@ import {AuthService} from "./core/services/auth.service";
 export class AppComponent {
 //services
   authService = inject(AuthService)
+  router = inject(Router)
   //variables
+  get userName(){
+    const name = this.authService.currentUser()();
+    if(name){
+      return name.name;
+    } else {
+      return '';
+    }
+  }
   //methods
   logOut() {
     this.authService.logout()
+    this.router.navigate(['/'])
+  }
+
+  logIn() {
+    this.router.navigate(['/login'])
   }
 }

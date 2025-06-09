@@ -1,13 +1,15 @@
 import {ActivatedRouteSnapshot, CanActivateFn, Router} from "@angular/router";
 import {inject} from "@angular/core";
 import {AuthService} from "../services/auth.service";
+import {DialogService} from "../services/dialog.service";
 
 export const authGuard:CanActivateFn = (route:ActivatedRouteSnapshot) => {
   const auth = inject(AuthService)
   const router = inject(Router)
+  const dialogService = inject(DialogService)
 
   if (!auth.isLoggedIn()){
-    alert("necesita estar logueado para esta accion")
+    dialogService.alert('Error','Necesita estar logueado para esta accion').subscribe()
     router.navigate(['/login'])
     return false
   }
@@ -17,7 +19,7 @@ export const authGuard:CanActivateFn = (route:ActivatedRouteSnapshot) => {
   const allowedRoles = route.data?.['roles'] as string[] | undefined;
 
   if (allowedRoles && !allowedRoles.includes(currentUser?.role ?? '')){
-    alert('no tenes permiso para acceder a esta seccion')
+    dialogService.alert('Error','Usted no tiene permisos para acceder a esta seccion').subscribe()
     router.navigate(['/'])
     return false
   }

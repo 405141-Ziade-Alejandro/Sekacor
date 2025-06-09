@@ -8,6 +8,7 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {PricesService} from "../../../core/services/prices.service";
 import {PriceList} from "../../../core/interfaces/prices/price-list";
 import {Router} from "@angular/router";
+import {DialogService} from "../../../core/services/dialog.service";
 
 @Component({
   selector: 'app-create-price-dialog',
@@ -41,11 +42,13 @@ export class CreatePriceDialogComponent {
   //services
   priceListService=inject(PricesService)
   router = inject(Router)
+  dialogService =  inject(DialogService)
   //variables
   //methods
   close() {
     this.dialogRef.close();
   }
+
 
   get Km():boolean{
     const vol:string = this.formPriceList.controls['volKm'].value;
@@ -67,8 +70,10 @@ export class CreatePriceDialogComponent {
 
       this.priceListService.postList(newPriceList).subscribe({
         next: list=> {
-          console.log('success');
-          this.close();
+          this.dialogService.alert('Exito','La Lista fue creada exitosamente').subscribe()
+
+          this.dialogRef.close(list.id);
+
         },
         error: err => {
           console.error('error ', err);

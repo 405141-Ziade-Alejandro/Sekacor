@@ -2,6 +2,7 @@ package ar.edu.utn.frc.tup.lc.iii.dtos.tanks;
 
 import ar.edu.utn.frc.tup.lc.iii.entities.consumables.ConsumableSubType;
 import ar.edu.utn.frc.tup.lc.iii.entities.consumables.ConsumableType;
+import ar.edu.utn.frc.tup.lc.iii.entities.consumables.UnitMeasure;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,4 +18,5 @@ public class MissingConsumableDto {
     private ConsumableSubType subType;
     private BigDecimal required;
     private BigDecimal available;
+    private UnitMeasure unit;
 }

@@ -197,7 +197,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * what this does is reduce from stock all the tanks that were sold
      * only stock 1 because those are the ones that are sold this way
-     * @param details contains all the tanktypes and the amount sold of them
+     * @param details contains all the tankTypes and the amount sold of them
      */
     private void reduceTanksInStock(List<OrderDetailsEntity> details) {
         List<TankTypeEntity> tankTypeEntityList = new ArrayList<>();

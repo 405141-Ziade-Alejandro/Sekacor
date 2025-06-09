@@ -3,15 +3,18 @@
 <mat-toolbar>
   <mat-form-field>
     <mat-label>Elija la lista aca</mat-label>
+<!--(selectionChange)="changeSelection($event.value)"-->
     <mat-select (selectionChange)="changeSelection($event.value)">
       @for (price of priceList; track $index) {
         <mat-option [value]="$index">{{ price.name }}</mat-option>
       }
     </mat-select>
   </mat-form-field>
-  <button mat-icon-button (click)="delete()">
-    <mat-icon>delete</mat-icon>
-  </button>
+  @if (priceListSelected.id !== 0) {
+    <button mat-icon-button (click)="delete()">
+      <mat-icon>delete</mat-icon>
+    </button>
+  }
   <span class="example-spacer"></span>
   <button mat-icon-button class="example-icon" (click)="openCreateDialog()">
     <mat-icon>add</mat-icon>
