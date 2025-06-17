@@ -50,11 +50,15 @@
                    type="number"
                    step="0.01">
           </mat-form-field>
-          <button mat-mini-fab (click)="add(consumable.id)">
-            @if (overwrite) {
-              <mat-icon>content_copy</mat-icon>
+          <button mat-mini-fab (click)="add(consumable.id)" [disabled]="isLoading">
+            @if (isLoading) {
+              <mat-spinner diameter="20"></mat-spinner>
             } @else {
-              <mat-icon>add</mat-icon>
+              @if (overwrite) {
+                <mat-icon>content_copy</mat-icon>
+              } @else {
+                <mat-icon>add</mat-icon>
+              }
             }
           </button>
         </td>

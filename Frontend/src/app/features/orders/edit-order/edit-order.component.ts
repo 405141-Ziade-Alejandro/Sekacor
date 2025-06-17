@@ -28,6 +28,7 @@ import {ClientService} from "../../../core/services/client.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Order} from "../../../core/interfaces/orders/order";
 import {DialogService} from "../../../core/services/dialog.service";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
 
 @Component({
   selector: 'app-edit-order',
@@ -63,7 +64,8 @@ import {DialogService} from "../../../core/services/dialog.service";
     MatSuffix,
     MatTable,
     ReactiveFormsModule,
-    MatHeaderCellDef
+    MatHeaderCellDef,
+    MatProgressSpinner
   ],
   templateUrl: './edit-order.component.html',
   styleUrl: './edit-order.component.css'
@@ -96,6 +98,7 @@ export class EditOrderComponent {
 
   }
   currentId:number=0
+  isLoading:boolean=false
   //methods
   ngOnInit() {
     this.loadClientsAndTanks()
@@ -128,18 +131,25 @@ export class EditOrderComponent {
         this.dialogService.alert('Error','Debe  tener por lo menos un tanque en la  orden').subscribe()
       }else alert("el formulario es invalido")
     } else{
+      this.isLoading = true;
       this.currentOrder.clientId = this.formEditOrder.value.clientId;
       this.currentOrder.orderDate = this.formEditOrder.value.orderDate
 
       this.currentOrder.orderDetails = this.detailList
 
+      if (typeof this.formEditOrder.value.orderDate==="object") {
+        this.currentOrder.orderDate = this.toLocalDateTimeString(this.formEditOrder.value.orderDate)
+      }
+
       this.orderService.putOrder(this.currentOrder).subscribe({
         next: data => {
           this.dialogService.alert('Exito','La orden fue actualizada correctamente')
           this.router.navigate(['/orders/all']);
+          this.isLoading = false;
         },
         error: error => {
           console.error(error);
+          this.isLoading = false;
         }
       })
     }
@@ -173,7 +183,7 @@ export class EditOrderComponent {
   }
 
   leave() {
-    this.router.navigate(['/']);
+    this.router.navigate(['/orders/'+this.currentId]);
   }
 
   private loadClientsAndTanks() {

@@ -40,7 +40,9 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserDto> post(@RequestBody LoginDto dto) {
+    public ResponseEntity<UserDto> login(@RequestBody LoginDto dto) {
         return ResponseEntity.ok(userService.logIn(dto));
     }
+
+    //todo made the password change
 }

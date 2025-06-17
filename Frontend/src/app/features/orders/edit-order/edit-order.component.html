@@ -71,8 +71,14 @@
     <mat-icon>clear</mat-icon>
     Cancelar
   </button>
-  <button mat-fab extended type="submit" [disabled]="formEditOrder.invalid">
-    <mat-icon>done</mat-icon>
-    Aceptar
+  <button mat-fab extended type="submit" [disabled]="formEditOrder.invalid||isLoading">
+    @if (isLoading) {
+      <mat-spinner diameter="20"></mat-spinner>
+    } @else {
+      <ng-container>
+        <mat-icon>done</mat-icon>
+        Aceptar
+      </ng-container>
+    }
   </button>
 </form>

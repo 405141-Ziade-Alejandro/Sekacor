@@ -5,6 +5,9 @@ import ar.edu.utn.frc.tup.lc.iii.dtos.orders.OrderDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 public interface OrderService {
     OrderDto postOrder(NewOrderDto dto);
 
@@ -17,4 +20,6 @@ public interface OrderService {
     OrderDto getById(long id);
 
     OrderDto completeOrder(long id);
+
+    List<OrderDto> getOrderReport(LocalDateTime start, LocalDateTime end);
 }

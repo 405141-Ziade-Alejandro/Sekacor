@@ -27,8 +27,12 @@
       </mat-select>
     </mat-form-field>
 
-    <button mat-icon-button type="submit" [disabled]="ConsumableForm.invalid">
-      <mat-icon>add</mat-icon>
+    <button mat-icon-button type="submit" [disabled]="ConsumableForm.invalid||isLoading">
+      @if (isLoading) {
+        <mat-spinner diameter="20"></mat-spinner>
+      } @else {
+        <mat-icon>add</mat-icon>
+      }
     </button>
   </form>
 </mat-toolbar>
@@ -71,7 +75,7 @@
                    (input)="inputValues[consumable.id] = $any($event.target).valueAsNumber"
                    step="0.01">
           </mat-form-field>
-          <button mat-mini-fab (click)="add(consumable.id)">
+          <button mat-mini-fab (click)="add(consumable.id)" [disabled]="isLoading">
             @if (override) {
               <mat-icon>content_copy</mat-icon>
             } @else {

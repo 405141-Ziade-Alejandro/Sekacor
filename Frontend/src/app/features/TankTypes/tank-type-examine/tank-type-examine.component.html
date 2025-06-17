@@ -124,7 +124,11 @@
       <div>
         <button mat-raised-button color="primary" type="button" (click)="save()">
           @if (!isLoading) {
-            guardar
+            <ng-container>
+              <mat-icon>check</mat-icon>
+              guardar
+            </ng-container>
+
           } @else {
             <mat-spinner diameter="20"></mat-spinner>
           }
@@ -177,7 +181,14 @@
         }
 
         @if (tankType?.sticker !== "NONE") {
-          <div class="detail-item"><strong>Sticker:</strong> {{ tankType?.sticker }}</div>
+          <div class="detail-item">
+            <strong>Sticker:</strong>
+            @if (tankType?.sticker === "CAMARA_SEPTICA") {
+              Camara Septica
+            } @else {
+              Tanque
+            }
+          </div>
         }
       </div>
     </mat-card-content>

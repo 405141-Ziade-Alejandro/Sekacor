@@ -21,6 +21,7 @@ import {
   MatTable
 } from "@angular/material/table";
 import {DialogService} from "../../../core/services/dialog.service";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
 
 @Component({
   selector: 'app-clients',
@@ -47,7 +48,8 @@ import {DialogService} from "../../../core/services/dialog.service";
     MatHeaderRowDef,
     MatRow,
     MatRowDef,
-    MatMiniFabButton
+    MatMiniFabButton,
+    MatProgressSpinner
   ],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.css'
@@ -70,6 +72,8 @@ export class ClientsComponent {
   columnsToDisplay: string[] = ['Nombre', 'Telefono', 'direction', 'Lista de Precio', 'Accion']
   isUpdating: boolean = false;
   currentEditingId: number = 0;
+
+  isLoading:boolean=false;
 
   //methods
   ngOnInit() {
@@ -100,7 +104,7 @@ export class ClientsComponent {
     if (this.clientForm.invalid) {
       alert(' this form is invalid')
     } else {
-      console.log('is updating status before submitting ', this.isUpdating)
+      this.isLoading = true;
 
       if (this.isUpdating) {
 
@@ -117,9 +121,11 @@ export class ClientsComponent {
             this.clientForm.reset()
             this.clientForm.markAsPristine()
             this.clientForm.markAsUntouched()
+            this.isLoading = false
           },
           error: err => {
             console.log('hubo un error actualizando ', err)
+            this.isLoading = false
           }
         })
       } else {
@@ -134,9 +140,11 @@ export class ClientsComponent {
             this.clientForm.reset()
             this.clientForm.markAsPristine()
             this.clientForm.markAsUntouched()
+            this.isLoading = false
           },
           error: err => {
             console.log('hubo un error creando la entidad ', err)
+            this.isLoading = false
           }
         })
       }

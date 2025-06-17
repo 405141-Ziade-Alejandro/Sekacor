@@ -15,9 +15,17 @@
       </mat-form-field>
     </mat-card-header>
     <mat-card-content>
-      <button mat-fab extended type="submit" [disabled]="FormTankForm.invalid">
-        <mat-icon></mat-icon>
-        Tanque nuevo
+      <button mat-fab extended type="submit" [disabled]="FormTankForm.invalid||isLoading">
+        @if (isLoading) {
+          <mat-spinner diameter="20"></mat-spinner>
+        } @else {
+          <ng-container>
+            <mat-icon>
+              check_circle
+            </mat-icon>
+            Tanque nuevo
+          </ng-container>
+        }
       </button>
     </mat-card-content>
     <mat-card-footer>

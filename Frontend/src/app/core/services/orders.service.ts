@@ -46,4 +46,11 @@ export class OrdersService {
   completeORder(id: number): Observable<Order> {
     return this.httpClient.put<Order>(`${this.ordersUrl}/${id}/complete`, null);
   }
+
+  getOrdersreport(start:Date,end:Date): Observable<Order[]> {
+    const params = new HttpParams()
+      .set('start',start.toISOString())
+      .set('end',end.toISOString())
+    return this.httpClient.get<Order[]>(`${this.ordersUrl}/reports/tanks-sold`, {params})
+  }
 }

@@ -13,6 +13,7 @@ import {AuthService} from "../../../core/services/auth.service";
 import {MatDialog} from "@angular/material/dialog";
 import {MissingConsumablesDialogComponent} from "../missing-consumables-dialog/missing-consumables-dialog.component";
 import {Router} from "@angular/router";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
 
 @Component({
   selector: 'app-tank-registry',
@@ -30,7 +31,8 @@ import {Router} from "@angular/router";
     MatRadioButton,
     MatLabel,
     ReactiveFormsModule,
-    MatFormField
+    MatFormField,
+    MatProgressSpinner
   ],
   templateUrl: './tank-registry.component.html',
   styleUrl: './tank-registry.component.css'
@@ -52,6 +54,8 @@ export class TankRegistryComponent {
   //variables
   tankTypeList: TankType[] = []
   userId: number = 0
+
+  isLoading:boolean = false;
 
 
   //methods
@@ -76,6 +80,7 @@ export class TankRegistryComponent {
 
   newTank() {
     if (this.FormTankForm.valid) {
+      this.isLoading = true
       const newTank = {
         userId: this.userId,
         ...this.FormTankForm.value
@@ -88,6 +93,8 @@ export class TankRegistryComponent {
 
           // Si llegó aquí, es un Tank creado con éxito
           console.log('tankque creado con exito')
+          this.FormTankForm.get('quality')?.reset()
+          this.isLoading = false
         },
         error: err => {
           if (err.status === 409 && Array.isArray(err.error)) {
@@ -102,6 +109,8 @@ export class TankRegistryComponent {
                       this.tankService.postTank(newTank, true).subscribe({
                         next: () => {
                           this.dialogService.alert('Tanque registrado Forzosamente', 'Avisar al Administrador del estado del inventario').subscribe()
+                          this.FormTankForm.reset()
+                          this.isLoading=false
                         },
                         error: err => {
                           console.error(err)
@@ -109,12 +118,14 @@ export class TankRegistryComponent {
                       })
                     } else {
                       this.FormTankForm.reset();
+                      this.isLoading=false
                     }
                   })
               })
           } else {
             console.error('error inesperado', err)
           }
+
         }
       })
 
@@ -127,8 +138,3 @@ export class TankRegistryComponent {
     this.router.navigate(['/orders/all']);
   }
 }
-
-/*
- * todo:
- *  informes, vendido por tipo, ranking por cliente
- */

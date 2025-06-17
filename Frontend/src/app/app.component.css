@@ -1,9 +1,30 @@
-/*mat-sidenav-container {*/
-/*  height: 100vh;*/
-/*}*/
-/*.content {*/
-/*  padding: 16px;*/
-/*}*/
-.nav{
-  background-color: #e0e0e0;
+.nav {
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+}
+.title{
+  font-weight: 600;
+  margin-left: 10px;
+}
+.spacer {
+  flex: 1;
+}
+.username {
+  margin-right: 10px;
+  font-weight: 500;
+}
+
+.container {
+  height: calc(100vh - 64px);
+}
+
+.sidenav {
+  width: 250px;
+}
+
+.content {
+  padding: 1rem;
+  background-color: #f3f3f3;
+  min-height: 100vh;
 }

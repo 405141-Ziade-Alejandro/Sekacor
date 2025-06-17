@@ -108,7 +108,8 @@ public class PriceListServiceImpl implements PriceListService {
     public ExchangeRateDto getExchangeRateLatest() {
         Optional<ExchangeRateEntity> check = exchangeRateRepository.findTopByOrderByIdDesc();
         if (check.isEmpty()) {
-            throw new EntityNotFoundException("there were no exchange rate latest");
+            saveUsdRateFromExternalApi();
+            throw new EntityNotFoundException("there were no exchange rate latest, try again please");
         }
 
         return modelMapper.map(check.get(), ExchangeRateDto.class);

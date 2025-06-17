@@ -1,7 +1,6 @@
 import {Component, inject, signal, Signal} from '@angular/core';
 import {UserService} from "../../../core/services/user.service";
 import {TankServiceService} from "../../../core/services/tank-service.service";
-import {TankChartEntry} from "../../../core/interfaces/reports/tank-chart-entry";
 import {MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
@@ -104,9 +103,6 @@ export class ReportTanksMadeComponent {
     })
 
     this.chartData = transformed;
-    console.log('this is the chardata: ')
-    console.table(this.chartData)
-
   }
 
 

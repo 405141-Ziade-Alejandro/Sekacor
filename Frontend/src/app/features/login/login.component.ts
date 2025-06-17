@@ -6,6 +6,7 @@ import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MatButton} from "@angular/material/button";
 import {DialogService} from "../../core/services/dialog.service";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,8 @@ import {DialogService} from "../../core/services/dialog.service";
     MatFormField,
     MatLabel,
     MatInput,
-    MatButton
+    MatButton,
+    MatProgressSpinner
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
@@ -32,16 +34,22 @@ export class LoginComponent {
   router = inject(Router)
   dialogService = inject(DialogService)
   //variables
+  isLoading:boolean = false;
   //methods
   login() {
-    const {username, password} = this.form.value;
+    this.isLoading = true;
+    let {username, password} = this.form.value;
+    username = username.trim()
     this.auth.logIn(username, password).subscribe({
       next: () => {
+        this.isLoading=false
         this.router.navigate(['/']);
+
       },
       error: err => {
         this.dialogService.alert('Usuario o contraseña equivocados','Revise  los campos')
         console.log(err)
+        this.isLoading=false
       }
     })
   }

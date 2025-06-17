@@ -9,5 +9,11 @@
     <input matInput type="password" formControlName="password">
   </mat-form-field>
 
-  <button mat-raised-button type="submit">Ingresar</button>
+  <button mat-raised-button type="submit" [disabled]="isLoading">
+    @if (isLoading) {
+      <mat-spinner diameter="20"></mat-spinner>
+    } @else {
+      Ingresar
+    }
+  </button>
 </form>

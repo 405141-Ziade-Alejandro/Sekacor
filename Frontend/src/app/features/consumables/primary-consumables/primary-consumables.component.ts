@@ -18,6 +18,7 @@ import {UpdateConsumable} from "../../../core/interfaces/consumable/update-consu
 import {DialogService} from "../../../core/services/dialog.service";
 import {MatCheckbox} from "@angular/material/checkbox";
 import {FormsModule} from "@angular/forms";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
 
 @Component({
   selector: 'app-primary-consumables',
@@ -42,7 +43,8 @@ import {FormsModule} from "@angular/forms";
     MatLabel,
     MatCardHeader,
     MatCheckbox,
-    FormsModule
+    FormsModule,
+    MatProgressSpinner
   ],
   templateUrl: './primary-consumables.component.html',
   styleUrl: './primary-consumables.component.css'
@@ -56,6 +58,7 @@ export class PrimaryConsumablesComponent {
   consumablesList:PrimaryConsumable[] =[]
   columnsToDisplay:string[] = ['nombre','subtype','stock','agregar']
   overwrite:boolean = false;
+  isLoading:boolean = false;
 
   //this is for the value neeeded to increse or decrese the stock of the primary consumables
   inputValues:{[id:number]:number} = {}
@@ -86,6 +89,8 @@ export class PrimaryConsumablesComponent {
       this.inputValues[id] = 0
       return;
     }
+    this.isLoading = true
+
     //se encuentra el insumo a modificar
     const consumableToUpdatee = this.consumablesList.find(consumable => consumable.id === id)
 
@@ -105,9 +110,11 @@ export class PrimaryConsumablesComponent {
       next: data => {
         this.inputValues[id] = 0
         this.loadConsumables()
+        this.isLoading = false
       },
       error: error => {
         console.error('there was an error sending the information', error)
+        this.isLoading = false
       }
     })
 

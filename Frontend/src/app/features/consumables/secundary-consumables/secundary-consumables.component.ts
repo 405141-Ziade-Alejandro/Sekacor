@@ -21,6 +21,7 @@ import {MatOption, MatSelect} from "@angular/material/select";
 import {UpdateConsumable} from "../../../core/interfaces/consumable/update-consumable";
 import {DialogService} from "../../../core/services/dialog.service";
 import {MatCheckbox} from "@angular/material/checkbox";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
 
 @Component({
   selector: 'app-secundary-consumables',
@@ -50,7 +51,8 @@ import {MatCheckbox} from "@angular/material/checkbox";
     MatOption,
     MatCardHeader,
     MatCheckbox,
-    FormsModule
+    FormsModule,
+    MatProgressSpinner
   ],
   templateUrl: './secundary-consumables.component.html',
   styleUrl: './secundary-consumables.component.css'
@@ -75,6 +77,7 @@ export class SecundaryConsumablesComponent {
   inputValues: { [id: number]: number } = {}
 
   override: boolean = false;
+  isLoading:boolean = false;
 
   //methods
   ngOnInit(): void {
@@ -96,6 +99,7 @@ export class SecundaryConsumablesComponent {
     if (this.ConsumableForm.invalid) {
       console.error("this form is invalid");
     } else {
+      this.isLoading = true;
       const consumable: SecondaryConsumable = {
         ...this.ConsumableForm.value,
       }
@@ -108,9 +112,11 @@ export class SecundaryConsumablesComponent {
           this.ConsumableForm.markAsPristine()
 
           this.loadConsumables()
+          this.isLoading = false;
         },
         error: err => {
           console.error('something went wrong sending the data to the backend', err)
+          this.isLoading = false;
         }
       })
     }
@@ -129,6 +135,7 @@ export class SecundaryConsumablesComponent {
     const consumableToUpdate = this.consumablesList.find(consumable => consumable.id === id)
 
     if (!consumableToUpdate) return;
+    this.isLoading=true
 
     let update: UpdateConsumable = {
       consumableId: consumableToUpdate.id,
@@ -142,9 +149,11 @@ export class SecundaryConsumablesComponent {
       next: data => {
         this.inputValues[id] = 0
         this.loadConsumables()
+        this.isLoading=false
       },
       error: err => {
         console.error('something went wrong sending the data to the backend', err)
+        this.isLoading=false
       }
     })
 

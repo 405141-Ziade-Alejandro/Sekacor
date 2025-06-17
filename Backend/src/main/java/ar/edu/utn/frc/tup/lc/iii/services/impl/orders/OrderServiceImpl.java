@@ -16,6 +16,7 @@ import ar.edu.utn.frc.tup.lc.iii.services.OrderService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.query.Order;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -118,11 +119,10 @@ public class OrderServiceImpl implements OrderService {
 
             detailsEntityList.add(detail);
         }
-        orderEntity.setDetails(detailsEntityList);
-
+        orderEntity.getDetails().clear();
+        orderEntity.getDetails().addAll(detailsEntityList);
 
         OrderEntity orderEntityUpdated = orderRepository.save(orderEntity);
-
 
         return modelMapper.map(orderEntityUpdated, OrderDto.class);
     }
@@ -192,6 +192,19 @@ public class OrderServiceImpl implements OrderService {
         OrderEntity savedOrderEntity = orderRepository.save(checkOrderEntity.get());
 
         return modelMapper.map(savedOrderEntity, OrderDto.class);
+    }
+
+    @Override
+    public List<OrderDto> getOrderReport(LocalDateTime start, LocalDateTime end) {
+        List<OrderEntity> orderEntityList = orderRepository.findAllByOrderDateBetween(start, end);
+        List<OrderDto> orderDtoList = new ArrayList<>(orderEntityList.size());
+
+        for (OrderEntity orderEntity : orderEntityList) {
+//            if (orderEntity.getState() == OrderState.FINALIZADO) { todo: esto esta asi para facilitar el testing, una vez listo descomentar
+                orderDtoList.add(modelMapper.map(orderEntity, OrderDto.class));
+//            }
+        }
+        return orderDtoList;
     }
 
     /**

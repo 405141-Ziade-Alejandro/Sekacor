@@ -62,6 +62,7 @@ export class PricesListComponent {
   priceList: PriceList[] = []
 
   tankList: TankType[] = []
+  dolar: number = 0
 
   columnsToDisplay: string[] = ['Tipo de Tanque', 'Costo', 'Precio', 'recargo'];
 
@@ -100,6 +101,14 @@ export class PricesListComponent {
         console.error('error fetching prices list', err);
       }
     })
+    this.pricesService.getDolar().subscribe({
+      next: data => {
+        this.dolar = data.usdValue
+      },
+      error: err => {
+        console.error('error fetching dolar to dolar', err);
+      }
+    })
   }
 
   openCreateDialog() {
@@ -107,15 +116,15 @@ export class PricesListComponent {
       width: '90vw',
       maxWidth: '900px',
       autoFocus: false,
-    }).afterClosed().subscribe(id=>{
-      if (id){
+    }).afterClosed().subscribe(id => {
+      if (id) {
         console.log(id)//
         this.pricesService.getAllPrices().subscribe({
           next: data => {
             this.priceList = data
             const priceListCreated = this.priceList.find(item => item.id === id)
             console.log(priceListCreated)
-            if (priceListCreated){
+            if (priceListCreated) {
               this.priceListSelected = priceListCreated
             }
           },
@@ -158,11 +167,21 @@ export class PricesListComponent {
     } else if (this.priceListSelected.volKm === "DOSCIENTOS") {
       price = price + tank.vol200
     }
+    price = +(price / this.dolar).toFixed(2)
+
     return price;
   }
 
   calculateCommision() {
     const commision = this.priceListSelected.corralon * this.priceListSelected.profit
     return commision;
+  }
+
+  examine() {
+    let message = "[(Costo del tanque + ganancia: $" + this.priceListSelected.profit + ") * comission: " + this.priceListSelected.commission + " + (Recargo corralon: " + this.priceListSelected.corralon + " *  ganancia: $" + this.priceListSelected.profit + ")]"
+    if (this.priceListSelected.volKm === "CIEN" || this.priceListSelected.volKm === "DOSCIENTOS") {
+      message += " * Vol cargo de volumen del tanque"
+    }
+    this.dialogService.alert("composicion de la lista de precios: " + this.priceListSelected.name, message)
   }
 }

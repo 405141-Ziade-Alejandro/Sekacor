@@ -1,10 +1,13 @@
-<mat-toolbar class="nav">
+<mat-toolbar color="primary" class="nav">
   <button mat-icon-button (click)="sidenav.toggle()">
     <mat-icon>menu</mat-icon>
   </button>
-  <span>Sekacor.</span>
-  @if (authService.isLoggedIn()){
-    <span>{{userName}}</span>
+  <span class="title">Sekacor.</span>
+
+  <span class="spacer"></span>
+
+  @if (authService.isLoggedIn()) {
+    <span class="username">{{ userName }}</span>
     <button mat-icon-button (click)="logOut()">
       <mat-icon>logout</mat-icon>
     </button>
@@ -15,9 +18,8 @@
   }
 </mat-toolbar>
 
-<mat-sidenav-container>
-
-  <mat-sidenav mode="over" #sidenav>
+<mat-sidenav-container class="container">
+  <mat-sidenav mode="over" #sidenav class="sidenav" [autoFocus]="false">
     <p><a href="#">Inicio</a></p>
     <p><a routerLink="/tanktypes">Tanques</a></p>
     <p><a href="/prices">Precios</a></p>
@@ -29,12 +31,13 @@
     <p><a href="/users/lists">Usuarios</a></p>
     <p><a href="/orders/new">nueva orden</a></p>
     <p><a href="/orders/all">Orders</a></p>
-    <p><a href="/report/tanks">ReportTest</a></p>
+    <p><a href="/report/tanks">reporte tanques hechos</a></p>
+    <p><a href="/report/clients">venta a cliente reporte</a></p>
     <p (click)="openFaq()">FAQ</p>
     <p (click)="openTermsAndCondition()">Terms And Conditions</p>
   </mat-sidenav>
 
-  <mat-sidenav-content>
+  <mat-sidenav-content class="content">
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

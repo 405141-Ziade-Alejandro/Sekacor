@@ -23,11 +23,9 @@ export class UserService {
     return this.httpClient.post<User>(this.userUrl, user)
   }
 
-  putUser(user: User): Observable<User> {
-    return this.httpClient.put<User>(this.userUrl, user)
-  }
-
   deleteUser(id: number): Observable<void> {
     return this.httpClient.delete<void>(this.userUrl + "/" + id)
   }
+
+  //todo make the change of password
 }

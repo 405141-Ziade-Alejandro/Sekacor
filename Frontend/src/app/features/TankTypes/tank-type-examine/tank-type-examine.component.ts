@@ -56,7 +56,9 @@ export class TankTypeExamineComponent {
   tankType: TankType | undefined
   updating: boolean = false;
 
-  private id:number=0;
+  private id: number = 0;
+
+
   //methods
 
   ngOnInit(): void {
@@ -94,17 +96,17 @@ export class TankTypeExamineComponent {
 
 // update
 
-  showSticker:boolean=false;
-  showBigScrews:boolean=false;
+  showSticker: boolean = false;
+  showBigScrews: boolean = false;
   isLoading = false
 
 
   checkFlags() {
-    if(this.tankType){
-      if (this.tankType.bigScrews>0) {
+    if (this.tankType) {
+      if (this.tankType.bigScrews > 0) {
         this.showBigScrews = true;
       }
-      if (this.tankType.sticker!=="NONE"){
+      if (this.tankType.sticker !== "NONE") {
         this.showSticker = true;
       }
     }
@@ -117,23 +119,25 @@ export class TankTypeExamineComponent {
 
   save() {
     //this is necesary because the backend doesn't let you add empty strings as valid
-    if (this.tankType){
+    if (this.tankType) {
+      this.isLoading = true;
       if (!this.showSticker) {
-        this.tankType.sticker="NONE"
+        this.tankType.sticker = "NONE"
       }
-      if (!this.showBigScrews){
-        this.tankType.bigScrews=0
+      if (!this.showBigScrews) {
+        this.tankType.bigScrews = 0
       }
 
-      const newTank:NewTankType = this.toNewTankType(this.tankType)
+      const newTank: NewTankType = this.toNewTankType(this.tankType)
 
-      this.dialogService.confirm('Guardar Tanque','Esta accion es Permanente, los datos anteriores se perderan')
-        .subscribe(ok=>{
-          if (ok){
-            if (this.tankType){
-              this.tankService.putTankType(this.tankType.id,newTank).subscribe({
+      this.dialogService.confirm('Guardar Tanque', 'Esta accion es Permanente, los datos anteriores se perderan')
+        .subscribe(ok => {
+          this.isLoading = false;
+          if (ok) {
+            if (this.tankType) {
+              this.tankService.putTankType(this.tankType.id, newTank).subscribe({
                 next: (response) => {
-                  this.dialogService.alert('Exito','El tanque se actualizo correctamente')
+                  this.dialogService.alert('Exito', 'El tanque se actualizo correctamente')
                   this.tankService.setUpdating(false)
                   this.router.navigate(['/tanktypes']);
                 },
@@ -144,15 +148,11 @@ export class TankTypeExamineComponent {
             }
           }
         })
-
-
-
-      console.log(this.tankType);
     }
   }
 
   toNewTankType(tank: TankType): NewTankType {
-    const { id, createdDate, lastUpdatedAt, ...newTank } = tank;
+    const {id, createdDate, lastUpdatedAt, ...newTank} = tank;
     return newTank;
   }
 }

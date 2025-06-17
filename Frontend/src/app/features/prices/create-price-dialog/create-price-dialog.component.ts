@@ -9,6 +9,7 @@ import {PricesService} from "../../../core/services/prices.service";
 import {PriceList} from "../../../core/interfaces/prices/price-list";
 import {Router} from "@angular/router";
 import {DialogService} from "../../../core/services/dialog.service";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
 
 @Component({
   selector: 'app-create-price-dialog',
@@ -24,7 +25,8 @@ import {DialogService} from "../../../core/services/dialog.service";
     MatHint,
     MatRadioGroup,
     MatRadioButton,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatProgressSpinner
   ],
   templateUrl: './create-price-dialog.component.html',
   styleUrl: './create-price-dialog.component.css'
@@ -44,6 +46,7 @@ export class CreatePriceDialogComponent {
   router = inject(Router)
   dialogService =  inject(DialogService)
   //variables
+  isLoading:boolean = false;
   //methods
   close() {
     this.dialogRef.close();
@@ -63,6 +66,7 @@ export class CreatePriceDialogComponent {
     if (this.formPriceList.invalid){
       console.error('this form is invalid');
     } else {
+      this.isLoading = true;
       const newPriceList:PriceList = {
         ...this.formPriceList.value
       }
@@ -73,10 +77,12 @@ export class CreatePriceDialogComponent {
           this.dialogService.alert('Exito','La Lista fue creada exitosamente').subscribe()
 
           this.dialogRef.close(list.id);
+          this.isLoading = false;
 
         },
         error: err => {
           console.error('error ', err);
+          this.isLoading = false;
         }
       })
     }

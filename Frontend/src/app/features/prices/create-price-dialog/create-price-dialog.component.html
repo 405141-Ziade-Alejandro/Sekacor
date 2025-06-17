@@ -57,5 +57,12 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button (click)="close()">Cancelar</button>
-  <button mat-button (click)="submit()" [disabled]="formPriceList.invalid">Guardar</button>
+  <button mat-button (click)="submit()" [disabled]="formPriceList.invalid||isLoading">
+    @if (isLoading){
+      <mat-spinner diameter="20"></mat-spinner>
+    } @else {
+      Guardar
+    }
+
+  </button>
 </mat-dialog-actions>
