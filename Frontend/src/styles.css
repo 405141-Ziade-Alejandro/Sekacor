@@ -1,21 +1,38 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #fafafa;
+  color:#212121;
+}
 
+*{
+  box-sizing: border-box;
+}
 
-/*@use '@angular/material' as mat;*/
+mat-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
 
-/*@include mat.core();*/
+mat-sidenav-container {
+  height: calc(100vh - 56px); /* ajusta si tu toolbar es más alta */
+}
 
-/*$my-primary: mat.define-palette(mat.$cyan-palette);*/
-/*$my-accent: mat.define-palette(mat.$orange-palette, A200, A100, A400);*/
+button {
+  /*min-width: 100px;*/
+}
 
-/*$my-theme: mat.define-light-theme((*/
-/*  color: (*/
-/*    primary: $my-primary,*/
-/*    accent: $my-accent,*/
-/*  )*/
-/*));*/
+/* Mobile-friendly spacing */
+.container, .content {
+  padding: 1rem;
+}
 
-/*@include mat.all-component-themes($my-theme);*/
+.mat-form-field {
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 1rem;
+}

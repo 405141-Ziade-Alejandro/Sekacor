@@ -2,13 +2,14 @@ import {Component, inject} from '@angular/core';
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {MatSidenav, MatSidenavContainer, MatSidenavContent} from "@angular/material/sidenav";
 import {MatToolbar} from "@angular/material/toolbar";
-import {MatIconButton} from "@angular/material/button";
+import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {Router, RouterLink, RouterOutlet} from "@angular/router";
 import {AuthService} from "./core/services/auth.service";
 import {MatDialog} from "@angular/material/dialog";
 import {Extras} from "./core/interfaces/extras";
 import {ExtraDialogComponent} from "./shared/extra-dialog/extra-dialog.component";
+import {MatListItem, MatListItemIcon, MatNavList} from "@angular/material/list";
 
 const FAQ:Extras ={
   info: [
@@ -29,7 +30,7 @@ const TERMS_AND_CONDITIONS:Extras ={
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [MatSlideToggleModule, MatSidenavContainer, MatSidenav, MatSidenavContent, MatToolbar, MatIconButton, MatIcon, RouterOutlet, RouterLink],
+  imports: [MatSlideToggleModule, MatSidenavContainer, MatSidenav, MatSidenavContent, MatToolbar, MatIconButton, MatIcon, RouterOutlet, RouterLink, MatNavList, MatListItem, MatButton, MatListItemIcon],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

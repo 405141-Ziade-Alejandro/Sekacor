@@ -42,6 +42,8 @@ export class ReportTanksMadeComponent {
   tankTypeList: TankType[] = [];
   tanksMade: Tank[] = [];
 
+  showReport:boolean = false;
+
   chartData: { name: string, value: number }[] = [];
 
   //method
@@ -69,6 +71,7 @@ export class ReportTanksMadeComponent {
   }
 
   loadReport() {
+    this.showReport = true;
     this.tankService.getTanksReport(this.startDate, this.endDate).subscribe({
       next: data => {
         this.tanksMade = data
