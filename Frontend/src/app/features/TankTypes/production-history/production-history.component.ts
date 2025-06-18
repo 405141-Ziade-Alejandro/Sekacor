@@ -10,7 +10,7 @@ import {
   MatTable
 } from "@angular/material/table";
 import {Tank} from "../../../core/interfaces/tanks/tank";
-import {MatIconButton} from "@angular/material/button";
+import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {TankServiceService} from "../../../core/services/tank-service.service";
@@ -19,6 +19,7 @@ import {TankType} from "../../../core/interfaces/tanks/tank-type";
 import {UserService} from "../../../core/services/user.service";
 import {DatePipe} from "@angular/common";
 import {DialogService} from "../../../core/services/dialog.service";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-production-history',
@@ -40,7 +41,9 @@ import {DialogService} from "../../../core/services/dialog.service";
     MatRow,
     MatRowDef,
     MatPaginator,
-    DatePipe
+    DatePipe,
+    MatButton,
+    RouterLink
   ],
   templateUrl: './production-history.component.html',
   styleUrl: './production-history.component.css'

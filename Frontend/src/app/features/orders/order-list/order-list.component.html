@@ -1,6 +1,10 @@
-<h2>Pedidos</h2>
-
 <mat-card>
+  <mat-card-header>
+    <mat-card-title>Pedidos</mat-card-title>
+    <button mat-raised-button color="primary" routerLink="/orders/new">
+      <mat-icon>add_shopping_cart</mat-icon> Nueva orden
+    </button>
+  </mat-card-header>
   <mat-card-content>
     <table mat-table [dataSource]="orderList" class="mat-elevation-z8">
 

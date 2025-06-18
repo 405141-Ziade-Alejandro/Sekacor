@@ -36,3 +36,6 @@ button {
   max-width: 500px;
   margin-bottom: 1rem;
 }
+.ngx-charts text {
+  fill: #fff !important;
+}

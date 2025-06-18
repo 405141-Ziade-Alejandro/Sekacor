@@ -132,13 +132,12 @@ export class ReportSoldToClientsComponent {
 
   }
 
-  private getClientName(id: number):string {
-    const client = this.clientList.find(c=>c.id === id)
-
-    return client ? client.name : 'cliente Borrado'
-  }
   private getTankName(id:number):string {
     const tankType = this.tankTypeList.find(t=>t.id === id)
-    return tankType ? tankType.type+' '+tankType.coverType+' '+ tankType.quantity: 'Tanque Borrado'
+    return tankType ? tankType.type+' '+tankType.cover+' '+ tankType.quantity: 'Tanque Borrado'
   }
+
+  colorScheme = {
+    domain: ['#0288d1', '#ff7043', '#7cb342', '#ab47bc', '#fbc02d', '#8d6e63']
+  };
 }

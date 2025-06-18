@@ -14,6 +14,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {MissingConsumablesDialogComponent} from "../missing-consumables-dialog/missing-consumables-dialog.component";
 import {Router} from "@angular/router";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {MatListItemIcon} from "@angular/material/list";
 
 @Component({
   selector: 'app-tank-registry',
@@ -32,7 +33,8 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
     MatLabel,
     ReactiveFormsModule,
     MatFormField,
-    MatProgressSpinner
+    MatProgressSpinner,
+    MatListItemIcon
   ],
   templateUrl: './tank-registry.component.html',
   styleUrl: './tank-registry.component.css'

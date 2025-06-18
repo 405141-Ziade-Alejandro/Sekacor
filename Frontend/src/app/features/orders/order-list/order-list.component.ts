@@ -1,5 +1,5 @@
 import {Component, inject} from '@angular/core';
-import {MatCard, MatCardContent} from "@angular/material/card";
+import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
 import {OrdersService} from "../../../core/services/orders.service";
 import {Order} from "../../../core/interfaces/orders/order";
 import {
@@ -18,7 +18,8 @@ import {Client} from "../../../core/interfaces/client/client";
 import {DatePipe} from "@angular/common";
 import {MatButton} from "@angular/material/button";
 import {routes} from "../../../app.routes";
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
+import {MatIcon} from "@angular/material/icon";
 
 @Component({
   selector: 'app-order-list',
@@ -38,7 +39,11 @@ import {Router} from "@angular/router";
     MatRowDef,
     MatPaginator,
     DatePipe,
-    MatButton
+    MatButton,
+    MatCardHeader,
+    MatCardTitle,
+    MatIcon,
+    RouterLink
   ],
   templateUrl: './order-list.component.html',
   styleUrl: './order-list.component.css'

@@ -1,7 +1,11 @@
-<h2> historial de produccion</h2>
-
 <mat-card>
-  <mat-card-title>historial</mat-card-title>
+  <mat-card-title>
+    <span>historial de produccion</span>
+    <span class="spacer"></span>
+    <button mat-raised-button color="primary" routerLink="/production">
+      <mat-icon>build</mat-icon> Registrar tanque
+    </button>
+  </mat-card-title>
   <mat-card-content>
     <table mat-table [dataSource]="tankHistory" class="mat-elevation-z8">
 <!--      nombre-->

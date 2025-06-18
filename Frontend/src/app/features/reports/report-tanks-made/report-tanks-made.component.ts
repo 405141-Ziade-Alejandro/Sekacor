@@ -49,6 +49,7 @@ export class ReportTanksMadeComponent {
   //method
   ngOnInit() {
     this.loadUsersAndTypes()
+    this.loadReport()
   }
 
   private loadUsersAndTypes() {

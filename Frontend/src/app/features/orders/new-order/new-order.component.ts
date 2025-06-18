@@ -79,6 +79,7 @@ export class NewOrderComponent {
   clientService = inject(ClientService)
   router = inject(Router);
   dialogService = inject(DialogService)
+  //todo: this needs price service so to calculate the price of the detail
   //variables
   columnToDisplay: string[] = ['product', 'quantity', 'price', 'action'];
   clientList: Client[] = [];
@@ -112,7 +113,9 @@ export class NewOrderComponent {
 
     } else {
       const newDetail: OrderDetail = {
-        price: tankType.cost, quantity: 1, typeTankId: tankType.id
+        price: this.calculatePrice(tankType.cost),
+        quantity: 1,
+        typeTankId: tankType.id
       }
 
       this.detailList = [...this.detailList, newDetail];
@@ -194,5 +197,9 @@ export class NewOrderComponent {
   getTankName(id: number): string {
     const tankType = this.typeTankList.find(tt => tt.id === id)
     return tankType ? tankType.type + " | " + tankType.cover + " | " + tankType.quantity : "tanque borrado"
+  }
+
+  private calculatePrice(cost: number) {
+    return cost;
   }
 }

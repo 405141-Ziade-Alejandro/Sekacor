@@ -1,5 +1,25 @@
-.class {
+/*.report-card {*/
+/*  border-radius: 8px;*/
+/*  padding: 1.5rem;*/
+/*  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);*/
+/*  margin-top: 1rem;*/
+/*}*/
+
+.report-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.report-form mat-form-field {
+  flex: 1 1 200px;
+  min-width: 180px;
+}
+
+ngx-chart-pie-chart {
+  display: block;
   width: 100%;
-  height: auto;
-  max-width: 90vw;
+  height: 400px;
 }
