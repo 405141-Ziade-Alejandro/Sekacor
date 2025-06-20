@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, ViewChild} from '@angular/core';
 import {MatToolbar} from "@angular/material/toolbar";
 import {MatIconButton, MatMiniFabButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
@@ -18,10 +18,11 @@ import {
   MatHeaderCell,
   MatHeaderCellDef,
   MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef,
-  MatTable
+  MatTable, MatTableDataSource
 } from "@angular/material/table";
 import {DialogService} from "../../../core/services/dialog.service";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {MatSort, MatSortHeader} from "@angular/material/sort";
 
 @Component({
   selector: 'app-clients',
@@ -49,7 +50,9 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
     MatRow,
     MatRowDef,
     MatMiniFabButton,
-    MatProgressSpinner
+    MatProgressSpinner,
+    MatSort,
+    MatSortHeader
   ],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.css'
@@ -69,13 +72,23 @@ export class ClientsComponent {
   //variables
   priceList: PriceList[] = []
   clientList: Client[] = []
-  columnsToDisplay: string[] = ['Nombre', 'Telefono', 'direction', 'Lista de Precio', 'Accion']
+  columnsToDisplay: string[] = ['name', 'telephone', 'direction', 'priceListId', 'Accion']
   isUpdating: boolean = false;
   currentEditingId: number = 0;
 
   isLoading:boolean=false;
 
+  dataSource = new MatTableDataSource<Client>([]);
+
+
+
   //methods
+  @ViewChild(MatSort) sort!: MatSort;
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+  }
+
   ngOnInit() {
     this.loadClientList()
     this.priceListService.getAllPrices().subscribe({
@@ -91,7 +104,8 @@ export class ClientsComponent {
   private loadClientList() {
     this.clientService.getClientList().subscribe({
       next: data => {
-        this.clientList = data
+        // this.clientList = data
+        this.dataSource.data = data
       },
       error: err => {
         console.log(err)

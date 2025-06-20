@@ -1,11 +1,11 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, ViewChild} from '@angular/core';
 import {
   MatCell,
   MatCellDef,
   MatColumnDef,
   MatHeaderCell,
   MatHeaderCellDef, MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef,
-  MatTable,
+  MatTable, MatTableDataSource,
   MatTextColumn
 } from "@angular/material/table";
 import {MatToolbar} from "@angular/material/toolbar";
@@ -14,9 +14,10 @@ import {MatButton, MatMiniFabButton} from "@angular/material/button";
 import {Router, RouterLink} from "@angular/router";
 import {TankType} from "../../../core/interfaces/tanks/tank-type";
 import {TankServiceService} from "../../../core/services/tank-service.service";
-import {MatCard, MatCardContent} from "@angular/material/card";
+import {MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} from "@angular/material/card";
 import {MatTooltip} from "@angular/material/tooltip";
 import {DialogService} from "../../../core/services/dialog.service";
+import {MatSort, MatSortHeader} from "@angular/material/sort";
 
 
 @Component({
@@ -40,7 +41,12 @@ import {DialogService} from "../../../core/services/dialog.service";
     MatCard,
     MatCardContent,
     MatButton,
-    MatTooltip
+    MatTooltip,
+    MatSort,
+    MatSortHeader,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardSubtitle
   ],
   templateUrl: './tank-type-list.component.html',
   styleUrl: './tank-type-list.component.css'
@@ -51,11 +57,16 @@ export class TankTypeListComponent {
   router = inject(Router)
   dialogService = inject(DialogService)
   //variables
-  tankTypesList: TankType[] = []
+  dataSource = new MatTableDataSource<TankType>([]);
 
   columsToDisplay: string[] = ['type','cover','quantity', 'cost', 'stock1','stock2','actions']
 
   //methods
+  @ViewChild(MatSort)  sort!: MatSort
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort
+  }
 
   ngOnInit(): void {
     this.loadTanks()
@@ -64,8 +75,8 @@ export class TankTypeListComponent {
   private loadTanks() {
     this.tankService.getAllTankTypes().subscribe({
       next: data => {
-        this.tankTypesList = data
-        console.log(data)
+        // this.tankTypesList = data
+        this.dataSource.data = data
       },
       error: err => {
         console.log(err)

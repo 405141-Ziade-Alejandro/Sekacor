@@ -19,7 +19,7 @@ mat-toolbar {
 }
 
 mat-sidenav-container {
-  height: calc(100vh - 56px); /* ajusta si tu toolbar es más alta */
+  height: calc(100vh - 65px); /* ajusta si tu toolbar es más alta */
 }
 
 button {

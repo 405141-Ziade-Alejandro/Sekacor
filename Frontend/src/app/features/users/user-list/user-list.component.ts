@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, ViewChild} from '@angular/core';
 import {
   MatCell,
   MatCellDef,
@@ -6,7 +6,7 @@ import {
   MatHeaderCell,
   MatHeaderCellDef,
   MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef,
-  MatTable
+  MatTable, MatTableDataSource
 } from "@angular/material/table";
 import {MatToolbar} from "@angular/material/toolbar";
 import {MatIconButton, MatMiniFabButton} from "@angular/material/button";
@@ -18,6 +18,8 @@ import {MatInput} from "@angular/material/input";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {DialogService} from "../../../core/services/dialog.service";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {MatSort, MatSortHeader} from "@angular/material/sort";
 
 @Component({
   selector: 'app-user-list',
@@ -42,7 +44,10 @@ import {DialogService} from "../../../core/services/dialog.service";
     MatInput,
     MatSelect,
     MatOption,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatProgressSpinner,
+    MatSort,
+    MatSortHeader
   ],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.css'
@@ -58,10 +63,19 @@ export class UserListComponent {
   private userService = inject(UserService)
   dialogService = inject(DialogService)
   //variables
-  displayedColumns: string[] = ['Nombre', 'Rol', 'actions'];
-  userList: User[] = [];
+  displayedColumns: string[] = ['name', 'role', 'actions'];
+
+  dataSource  =new MatTableDataSource<User>([])
+
+  isLoading: boolean = false;
 
   //methods
+  @ViewChild(MatSort) sort!: MatSort;
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+  }
+
   ngOnInit() {
     this.loadUsers()
   }
@@ -69,7 +83,7 @@ export class UserListComponent {
   private loadUsers() {
     this.userService.getAllUsers().subscribe({
       next: data => {
-        this.userList = data
+        this.dataSource.data = data
       },
       error: error => {
         console.log(error)
@@ -78,8 +92,10 @@ export class UserListComponent {
   }
 
   delete(id: number) {
+
     this.dialogService.confirm('Borrar Usuario', 'Esta accion Borrara al usuario, esta seguro?')
       .subscribe(ok => {
+        this.isLoading = true;
         if (ok) {
           this.userService.deleteUser(id).subscribe({
             next: () => {
@@ -91,6 +107,7 @@ export class UserListComponent {
             }
           })
         }
+        this.isLoading = false;
       })
   }
 
@@ -98,6 +115,7 @@ export class UserListComponent {
     if (this.formUser.invalid) {
       console.error("this form is invalid")
     } else {
+      this.isLoading = true;
       const newUser: User = {
         ...this.formUser.value
       }
@@ -110,9 +128,11 @@ export class UserListComponent {
           this.formUser.reset()
 
           this.loadUsers()
+          this.isLoading = false
         },
         error: error => {
-          console.error('something went wrong', error)
+          console.error('something went wrong', error.message)
+          this.isLoading = false
         }
       })
     }

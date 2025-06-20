@@ -14,6 +14,7 @@ import {ConfirmDialogComponent} from "../../../shared/confirm-dialog/confirm-dia
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {DialogService} from "../../../core/services/dialog.service";
 import {routes} from "../../../app.routes";
+import {MatDivider} from "@angular/material/divider";
 
 @Component({
   selector: 'app-new-tank-type',
@@ -32,7 +33,8 @@ import {routes} from "../../../app.routes";
     MatButton,
     RouterLink,
     MatProgressSpinner,
-    MatHint
+    MatHint,
+    MatDivider
   ],
   templateUrl: './new-tank-type.component.html',
   styleUrl: './new-tank-type.component.css'
@@ -94,14 +96,28 @@ export class NewTankTypeComponent {
           this.dialogService.confirm('¡Guardado exitosamente!','¿Deseás cargar otro tipo de tanque?').subscribe(
             ok=>{
               if (ok) {
-                this.tankTypeForm.reset();
-                this.tankTypeForm.patchValue({
-                  tee:false,
-                  coverType:"NONE",
-                  sticker:"NONE",
-                  bigScrews:0
-                })
-                this.tankTypeForm.untouched
+                this.tankTypeForm.reset({
+                  type: '',
+                  cover: tankType.cover,
+                  quantity: 0,
+                  plasticBlack: 0,
+                  plasticColor: 0,
+                  cost: 0,
+                  screws: 0,
+                  coverType: 'NONE',
+                  stock1: 0,
+                  stock2: 0,
+                  bigScrews: 0,
+                  tee: false,
+                  sticker: 'NONE',
+                  vol100: 0,
+                  vol200: 0,
+                  showSticker: false,
+                  showBigScrews: false
+                });
+                this.tankTypeForm.markAsPristine()
+                this.tankTypeForm.markAsUntouched()
+                this.tankTypeForm.updateValueAndValidity()
               } else {
                 this.router.navigate(['/tanktypes'])
               }

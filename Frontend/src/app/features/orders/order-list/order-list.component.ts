@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, ViewChild} from '@angular/core';
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
 import {OrdersService} from "../../../core/services/orders.service";
 import {Order} from "../../../core/interfaces/orders/order";
@@ -9,7 +9,7 @@ import {
   MatHeaderCell,
   MatHeaderCellDef,
   MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef,
-  MatTable
+  MatTable, MatTableDataSource
 } from "@angular/material/table";
 import {literal} from "@angular/compiler";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
@@ -20,6 +20,7 @@ import {MatButton} from "@angular/material/button";
 import {routes} from "../../../app.routes";
 import {Router, RouterLink} from "@angular/router";
 import {MatIcon} from "@angular/material/icon";
+import {MatSort, MatSortHeader} from "@angular/material/sort";
 
 @Component({
   selector: 'app-order-list',
@@ -43,7 +44,9 @@ import {MatIcon} from "@angular/material/icon";
     MatCardHeader,
     MatCardTitle,
     MatIcon,
-    RouterLink
+    RouterLink,
+    MatSortHeader,
+    MatSort
   ],
   templateUrl: './order-list.component.html',
   styleUrl: './order-list.component.css'
@@ -54,13 +57,20 @@ export class OrderListComponent {
   clientService = inject(ClientService)
   router= inject(Router)
   //variables
-  columnsToDisplay:string[] = ['N','client','deliverDate','state']
-  orderList:Order[]=[];
+  columnsToDisplay:string[] = ['id','clientId','orderDate','state']
+  // orderList:Order[]=[];
+  dataSource = new MatTableDataSource<Order>([])
   clientList:Client[]=[];
   totalOrders: number = 0;
   pageSize:number = 5;
   currentPage:number = 0;
   //methods
+  @ViewChild(MatSort) sort!: MatSort
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+  }
+
   ngOnInit() {
     this.loadOrders()
     this.loadClients()
@@ -80,7 +90,7 @@ export class OrderListComponent {
   private loadOrders() {
     this.ordersService.getAllOrders(this.currentPage, this.pageSize).subscribe({
       next: data => {
-        this.orderList = data.content
+        this.dataSource.data = data.content
         this.totalOrders = data.totalElements
       },
       error: err => {

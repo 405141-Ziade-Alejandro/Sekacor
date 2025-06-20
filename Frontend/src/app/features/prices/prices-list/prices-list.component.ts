@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, ViewChild} from '@angular/core';
 import {MatToolbar} from "@angular/material/toolbar";
 import {TankType} from "../../../core/interfaces/tanks/tank-type";
 import {TankServiceService} from "../../../core/services/tank-service.service";
@@ -10,7 +10,7 @@ import {
   MatHeaderCell, MatHeaderCellDef,
   MatHeaderRow,
   MatHeaderRowDef, MatRow, MatRowDef,
-  MatTable
+  MatTable, MatTableDataSource
 } from "@angular/material/table";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
@@ -22,6 +22,7 @@ import {PricesService} from "../../../core/services/prices.service";
 import {PriceList} from "../../../core/interfaces/prices/price-list";
 import {DialogService} from "../../../core/services/dialog.service";
 import {FormsModule} from "@angular/forms";
+import {MatSort, MatSortHeader} from "@angular/material/sort";
 
 @Component({
   selector: 'app-prices-list',
@@ -47,7 +48,9 @@ import {FormsModule} from "@angular/forms";
     MatIcon,
     MatIconButton,
     MatHeaderCellDef,
-    FormsModule
+    FormsModule,
+    MatSort,
+    MatSortHeader
   ],
   templateUrl: './prices-list.component.html',
   styleUrl: './prices-list.component.css'
@@ -62,9 +65,10 @@ export class PricesListComponent {
   priceList: PriceList[] = []
 
   tankList: TankType[] = []
+  dataSource= new MatTableDataSource<TankType>([])
   dolar: number = 0
 
-  columnsToDisplay: string[] = ['Tipo de Tanque', 'Costo', 'Precio', 'recargo'];
+  columnsToDisplay: string[] = ['type', 'cost', 'Precio', 'recargo'];
 
   priceListSelected: PriceList = {
     id: 0,
@@ -78,11 +82,17 @@ export class PricesListComponent {
   somethingSelected: boolean = false
 
   //methods
+  @ViewChild(MatSort) sort!: MatSort
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+  }
 
   ngOnInit() {
     this.TankTypeService.getAllTankTypes().subscribe({
       next: data => {
-        this.tankList = data;
+        // this.tankList = data;
+        this.dataSource.data = data
       },
       error: err => {
         console.error('error fetching tank type list', err);

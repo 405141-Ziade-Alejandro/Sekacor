@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, ViewChild} from '@angular/core';
 import {MatCard, MatCardContent, MatCardTitle} from "@angular/material/card";
 import {
   MatCell,
@@ -7,7 +7,7 @@ import {
   MatHeaderCell,
   MatHeaderCellDef,
   MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef,
-  MatTable
+  MatTable, MatTableDataSource
 } from "@angular/material/table";
 import {Tank} from "../../../core/interfaces/tanks/tank";
 import {MatButton, MatIconButton} from "@angular/material/button";
@@ -20,6 +20,7 @@ import {UserService} from "../../../core/services/user.service";
 import {DatePipe} from "@angular/common";
 import {DialogService} from "../../../core/services/dialog.service";
 import {RouterLink} from "@angular/router";
+import {MatSort, MatSortHeader} from "@angular/material/sort";
 
 @Component({
   selector: 'app-production-history',
@@ -43,7 +44,9 @@ import {RouterLink} from "@angular/router";
     MatPaginator,
     DatePipe,
     MatButton,
-    RouterLink
+    RouterLink,
+    MatSort,
+    MatSortHeader
   ],
   templateUrl: './production-history.component.html',
   styleUrl: './production-history.component.css'
@@ -56,8 +59,9 @@ export class ProductionHistoryComponent {
 
 
   //variables
-  columnsToDisplay:string[]=['nombre', 'operario', 'fecha', 'acciones']
+  columnsToDisplay:string[]=['typeId', 'userId', 'createdDate', 'acciones']
   tankHistory:Tank[]=[]
+  dataSource = new MatTableDataSource<Tank>([])
   totalTanks: number=0;
   pageSize:number=5
   currentPage:number = 0
@@ -67,6 +71,13 @@ export class ProductionHistoryComponent {
 
 
   //methods
+
+  @ViewChild(MatSort) sort!: MatSort;
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+  }
+
   ngOnInit() {
     this.loadHistory()
     this.loadUsersAndTypes()
@@ -95,7 +106,7 @@ export class ProductionHistoryComponent {
     this.tankService.getAllTanksPaginated(this.currentPage, this.pageSize).subscribe({
       next: response => {
 
-        this.tankHistory = response.content
+        this.dataSource.data = response.content
         this.totalTanks = response.totalElements
       },
       error: error => {
