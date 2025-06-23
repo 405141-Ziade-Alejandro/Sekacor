@@ -20,6 +20,8 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {DialogService} from "../../../core/services/dialog.service";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {MatSort, MatSortHeader} from "@angular/material/sort";
+import {MatCard, MatCardContent} from "@angular/material/card";
+import {MatDivider} from "@angular/material/divider";
 
 @Component({
   selector: 'app-user-list',
@@ -47,7 +49,10 @@ import {MatSort, MatSortHeader} from "@angular/material/sort";
     ReactiveFormsModule,
     MatProgressSpinner,
     MatSort,
-    MatSortHeader
+    MatSortHeader,
+    MatCard,
+    MatDivider,
+    MatCardContent
   ],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.css'

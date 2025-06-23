@@ -1,5 +1,5 @@
 import {Component, inject, ViewChild} from '@angular/core';
-import {MatCard, MatCardContent, MatCardTitle} from "@angular/material/card";
+import {MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} from "@angular/material/card";
 import {
   MatCell,
   MatCellDef,
@@ -10,7 +10,7 @@ import {
   MatTable, MatTableDataSource
 } from "@angular/material/table";
 import {Tank} from "../../../core/interfaces/tanks/tank";
-import {MatButton, MatIconButton} from "@angular/material/button";
+import {MatButton, MatIconButton, MatMiniFabButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {TankServiceService} from "../../../core/services/tank-service.service";
@@ -21,6 +21,8 @@ import {DatePipe} from "@angular/common";
 import {DialogService} from "../../../core/services/dialog.service";
 import {RouterLink} from "@angular/router";
 import {MatSort, MatSortHeader} from "@angular/material/sort";
+import {MatDivider} from "@angular/material/divider";
+import {MatTooltip} from "@angular/material/tooltip";
 
 @Component({
   selector: 'app-production-history',
@@ -46,7 +48,12 @@ import {MatSort, MatSortHeader} from "@angular/material/sort";
     MatButton,
     RouterLink,
     MatSort,
-    MatSortHeader
+    MatSortHeader,
+    MatCardHeader,
+    MatCardSubtitle,
+    MatDivider,
+    MatTooltip,
+    MatMiniFabButton
   ],
   templateUrl: './production-history.component.html',
   styleUrl: './production-history.component.css'

@@ -22,6 +22,8 @@ import {UpdateConsumable} from "../../../core/interfaces/consumable/update-consu
 import {DialogService} from "../../../core/services/dialog.service";
 import {MatCheckbox} from "@angular/material/checkbox";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {MatDivider} from "@angular/material/divider";
+import {MatTooltip} from "@angular/material/tooltip";
 
 @Component({
   selector: 'app-secundary-consumables',
@@ -52,7 +54,9 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
     MatCardHeader,
     MatCheckbox,
     FormsModule,
-    MatProgressSpinner
+    MatProgressSpinner,
+    MatDivider,
+    MatTooltip
   ],
   templateUrl: './secundary-consumables.component.html',
   styleUrl: './secundary-consumables.component.css'

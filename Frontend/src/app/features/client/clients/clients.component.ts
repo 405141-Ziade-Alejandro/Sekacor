@@ -23,6 +23,7 @@ import {
 import {DialogService} from "../../../core/services/dialog.service";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {MatSort, MatSortHeader} from "@angular/material/sort";
+import {MatDivider} from "@angular/material/divider";
 
 @Component({
   selector: 'app-clients',
@@ -52,7 +53,8 @@ import {MatSort, MatSortHeader} from "@angular/material/sort";
     MatMiniFabButton,
     MatProgressSpinner,
     MatSort,
-    MatSortHeader
+    MatSortHeader,
+    MatDivider
   ],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.css'
@@ -71,7 +73,6 @@ export class ClientsComponent {
   private dialogService = inject(DialogService)
   //variables
   priceList: PriceList[] = []
-  clientList: Client[] = []
   columnsToDisplay: string[] = ['name', 'telephone', 'direction', 'priceListId', 'Accion']
   isUpdating: boolean = false;
   currentEditingId: number = 0;
@@ -184,7 +185,7 @@ export class ClientsComponent {
   }
 
   edit(id: number) {
-    const clientFilter = this.clientList.find(c => c.id === id);
+    const clientFilter = this.dataSource.data.find(c => c.id === id);
     if (clientFilter) {
       this.isUpdating = true
 

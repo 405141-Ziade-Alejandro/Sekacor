@@ -19,6 +19,7 @@ import {DialogService} from "../../../core/services/dialog.service";
 import {MatCheckbox} from "@angular/material/checkbox";
 import {FormsModule} from "@angular/forms";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {MatDivider} from "@angular/material/divider";
 
 @Component({
   selector: 'app-primary-consumables',
@@ -44,7 +45,8 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
     MatCardHeader,
     MatCheckbox,
     FormsModule,
-    MatProgressSpinner
+    MatProgressSpinner,
+    MatDivider
   ],
   templateUrl: './primary-consumables.component.html',
   styleUrl: './primary-consumables.component.css'

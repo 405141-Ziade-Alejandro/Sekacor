@@ -1,5 +1,5 @@
 import {Component, inject, ViewChild} from '@angular/core';
-import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
+import {MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} from "@angular/material/card";
 import {OrdersService} from "../../../core/services/orders.service";
 import {Order} from "../../../core/interfaces/orders/order";
 import {
@@ -16,11 +16,13 @@ import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {ClientService} from "../../../core/services/client.service";
 import {Client} from "../../../core/interfaces/client/client";
 import {DatePipe} from "@angular/common";
-import {MatButton} from "@angular/material/button";
+import {MatButton, MatMiniFabButton} from "@angular/material/button";
 import {routes} from "../../../app.routes";
 import {Router, RouterLink} from "@angular/router";
 import {MatIcon} from "@angular/material/icon";
 import {MatSort, MatSortHeader} from "@angular/material/sort";
+import {MatTooltip} from "@angular/material/tooltip";
+import {MatDivider} from "@angular/material/divider";
 
 @Component({
   selector: 'app-order-list',
@@ -46,7 +48,11 @@ import {MatSort, MatSortHeader} from "@angular/material/sort";
     MatIcon,
     RouterLink,
     MatSortHeader,
-    MatSort
+    MatSort,
+    MatCardSubtitle,
+    MatMiniFabButton,
+    MatTooltip,
+    MatDivider
   ],
   templateUrl: './order-list.component.html',
   styleUrl: './order-list.component.css'

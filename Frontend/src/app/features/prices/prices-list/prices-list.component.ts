@@ -2,7 +2,7 @@ import {Component, inject, ViewChild} from '@angular/core';
 import {MatToolbar} from "@angular/material/toolbar";
 import {TankType} from "../../../core/interfaces/tanks/tank-type";
 import {TankServiceService} from "../../../core/services/tank-service.service";
-import {MatCard, MatCardContent} from "@angular/material/card";
+import {MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} from "@angular/material/card";
 import {
   MatCell,
   MatCellDef,
@@ -12,7 +12,7 @@ import {
   MatHeaderRowDef, MatRow, MatRowDef,
   MatTable, MatTableDataSource
 } from "@angular/material/table";
-import {MatButton, MatIconButton} from "@angular/material/button";
+import {MatButton, MatIconButton, MatMiniFabButton} from "@angular/material/button";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {MatIcon} from "@angular/material/icon";
@@ -23,6 +23,9 @@ import {PriceList} from "../../../core/interfaces/prices/price-list";
 import {DialogService} from "../../../core/services/dialog.service";
 import {FormsModule} from "@angular/forms";
 import {MatSort, MatSortHeader} from "@angular/material/sort";
+import {MatTooltip} from "@angular/material/tooltip";
+import {RouterLink} from "@angular/router";
+import {MatDivider} from "@angular/material/divider";
 
 @Component({
   selector: 'app-prices-list',
@@ -50,7 +53,14 @@ import {MatSort, MatSortHeader} from "@angular/material/sort";
     MatHeaderCellDef,
     FormsModule,
     MatSort,
-    MatSortHeader
+    MatSortHeader,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardSubtitle,
+    MatMiniFabButton,
+    MatTooltip,
+    RouterLink,
+    MatDivider
   ],
   templateUrl: './prices-list.component.html',
   styleUrl: './prices-list.component.css'

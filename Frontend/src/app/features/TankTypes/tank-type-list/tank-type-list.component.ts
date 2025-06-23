@@ -18,6 +18,7 @@ import {MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} f
 import {MatTooltip} from "@angular/material/tooltip";
 import {DialogService} from "../../../core/services/dialog.service";
 import {MatSort, MatSortHeader} from "@angular/material/sort";
+import {MatDivider} from "@angular/material/divider";
 
 
 @Component({
@@ -46,7 +47,8 @@ import {MatSort, MatSortHeader} from "@angular/material/sort";
     MatSortHeader,
     MatCardHeader,
     MatCardTitle,
-    MatCardSubtitle
+    MatCardSubtitle,
+    MatDivider
   ],
   templateUrl: './tank-type-list.component.html',
   styleUrl: './tank-type-list.component.css'
