@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
     public UserDto postUser(UserNewDto dto) {
         UserEntity user = modelMapper.map(dto, UserEntity.class);
 
-        user.setPassword("1234");
+        user.setPassword(dto.getName());
 
         UserEntity savedUser = userRepository.save(user);
 

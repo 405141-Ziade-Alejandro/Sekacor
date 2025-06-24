@@ -10,6 +10,7 @@ import {PriceList} from "../../../core/interfaces/prices/price-list";
 import {Router} from "@angular/router";
 import {DialogService} from "../../../core/services/dialog.service";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {MatDivider} from "@angular/material/divider";
 
 @Component({
   selector: 'app-create-price-dialog',
@@ -26,7 +27,8 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
     MatRadioGroup,
     MatRadioButton,
     ReactiveFormsModule,
-    MatProgressSpinner
+    MatProgressSpinner,
+    MatDivider
   ],
   templateUrl: './create-price-dialog.component.html',
   styleUrl: './create-price-dialog.component.css'
@@ -34,7 +36,7 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
 export class CreatePriceDialogComponent {
   private dialogRef = inject(MatDialogRef<CreatePriceDialogComponent>)
   //form
-  formPriceList:FormGroup = new FormGroup({
+  formPriceList: FormGroup = new FormGroup({
     name: new FormControl("", Validators.required),
     profit: new FormControl('', Validators.required),
     commission: new FormControl('', Validators.required),
@@ -42,39 +44,72 @@ export class CreatePriceDialogComponent {
     volKm: new FormControl('ZERO', Validators.required),
   })
   //services
-  priceListService=inject(PricesService)
+  priceListService = inject(PricesService)
   router = inject(Router)
-  dialogService =  inject(DialogService)
+  dialogService = inject(DialogService)
   //variables
-  isLoading:boolean = false;
+  isLoading: boolean = false;
+
   //methods
   close() {
     this.dialogRef.close();
   }
 
+  get profit(): number {
+    return this.formPriceList.get('profit')?.value || 0;
+  }
 
-  get Km():boolean{
-    const vol:string = this.formPriceList.controls['volKm'].value;
+  get commission(): number {
+    return this.formPriceList.get('commission')?.value || 0;
+  }
 
-    if (vol == "ZERO"){
+  get corralon(): number {
+    return this.formPriceList.get('corralon')?.value || 0;
+  }
+
+  get finalPrice(): number | string {
+    if (this.formPriceList.invalid) {
+      return "Precio final"
+    } else {
+      const tankCost = 1000
+      const vol100 = 100
+      const vol200 = 200
+
+      if (this.Km) {
+        if (this.formPriceList.get('volKm')?.value === "CIEN") {
+          return ((tankCost + this.profit) * this.commission) + (this.corralon * this.profit) + vol100
+        } else {
+          return ((tankCost + this.profit) * this.commission) + (this.corralon * this.profit) + vol200
+        }
+      }
+
+      return ((tankCost + this.profit) * this.commission) + (this.corralon * this.profit);
+    }
+  }
+
+
+  get Km(): boolean {
+    const vol: string = this.formPriceList.controls['volKm'].value;
+
+    if (vol == "ZERO") {
       return false;
     }
     return true;
   }
 
   submit() {
-    if (this.formPriceList.invalid){
+    if (this.formPriceList.invalid) {
       console.error('this form is invalid');
     } else {
       this.isLoading = true;
-      const newPriceList:PriceList = {
+      const newPriceList: PriceList = {
         ...this.formPriceList.value
       }
 
 
       this.priceListService.postList(newPriceList).subscribe({
-        next: list=> {
-          this.dialogService.alert('Exito','La Lista fue creada exitosamente').subscribe()
+        next: list => {
+          this.dialogService.alert('Exito', 'La Lista fue creada exitosamente').subscribe()
 
           this.dialogRef.close(list.id);
           this.isLoading = false;

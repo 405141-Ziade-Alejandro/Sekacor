@@ -133,8 +133,8 @@ export class PricesListComponent {
 
   openCreateDialog() {
     this.dialog.open(CreatePriceDialogComponent, {
-      width: '90vw',
-      maxWidth: '900px',
+      width: '100%',
+      maxWidth: '600px',
       autoFocus: false,
     }).afterClosed().subscribe(id => {
       if (id) {

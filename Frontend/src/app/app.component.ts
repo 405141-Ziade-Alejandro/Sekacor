@@ -18,6 +18,7 @@ const FAQ:Extras ={
     {title:'question',message:'Answer'}
   ], Headline: "FAQ"
 }
+//todo: make the terms and   conditions right
 const TERMS_AND_CONDITIONS:Extras ={
   Headline:'Terms And Conditions',
   info: [

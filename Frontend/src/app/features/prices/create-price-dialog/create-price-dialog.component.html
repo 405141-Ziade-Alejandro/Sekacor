@@ -1,63 +1,71 @@
 <h2 mat-dialog-title>Nueva Lista de Precios</h2>
-<mat-dialog-content>
+<mat-dialog-content class="dialog-content">
   <!-- Acá irá el formulario -->
-  <form [formGroup]="formPriceList">
-    <div>
+  <form [formGroup]="formPriceList" class="form-section">
+
       <mat-form-field appearance="outline">
         <mat-label>Nombre:</mat-label>
         <input matInput formControlName="name">
       </mat-form-field>
-    </div>
-    <div>
-      <span>[(</span>
-      <mat-form-field appearance="outline">
-        <mat-label>Costo Tanque</mat-label>
-        <input matInput disabled>
-      </mat-form-field>
-      <span> + </span>
+
+    <div class="form-row">
+
       <mat-form-field appearance="outline">
         <mat-label>Ganancia</mat-label>
         <input matInput type="number" min="0" formControlName="profit">
       </mat-form-field>
-      <span>) X </span>
+    </div>
+    <div class="form-row">
       <mat-form-field appearance="outline">
-        <mat-label>Commission</mat-label>
+        <mat-label>Comisión</mat-label>
         <input matInput type="number" step="0.01" min="0" formControlName="commission">
         <mat-hint>porcentaje</mat-hint>
       </mat-form-field>
-      <span> + (</span>
+
       <mat-form-field appearance="outline">
         <mat-label>Recargo Correlon</mat-label>
         <input matInput type="number" step="0.01" min="0" formControlName="corralon">
         <mat-hint>porcentaje</mat-hint>
       </mat-form-field>
-      <span> X </span>
-      <mat-form-field appearance="outline">
-        <mat-label>Ganancia</mat-label>
-        <input matInput disabled [value]="formPriceList.get('profit')?.value">
-      </mat-form-field>
-      <span>)]</span>
-      @if (Km) {
-        <span> + </span>
-        <mat-form-field appearance="outline">
-          <mat-label>Vol</mat-label>
-          <input matInput disabled>
-        </mat-form-field>
-
-      }
     </div>
-    <div>
-      <mat-radio-group aria-label="Select an option" formControlName="volKm">
+    <div class="form-row">
+      <mat-radio-group aria-label="Seleccionar tipo de volumen" formControlName="volKm" class="radio-group">
         <mat-radio-button value="ZERO">0Km</mat-radio-button>
         <mat-radio-button value="CIEN">Vol 100Km</mat-radio-button>
         <mat-radio-button value="DOSCIENTOS">Vol 200Kg</mat-radio-button>
       </mat-radio-group>
     </div>
   </form>
+  <h3>Vista Previa de los precios</h3>
+  <div class="preview-section">
+    <p>
+      <code>
+        [(Costo del tanque + <b>Ganancia</b>) x <b>Comisión</b>] + (<b>recargo Corralon</b> x <b>Ganancia</b>)
+        @if (Km) {
+          + volumen del tanque
+        }
+        = Precio final
+      </code>
+    </p>
+    <mat-divider></mat-divider>
+    <p>
+      <code>
+        [(1000 + <b>{{profit}}</b>) x <b>{{ commission }}</b>] + (<b>{{ corralon }}</b> x <b>{{ profit }}</b>)
+        @if (Km) {
+          @if (this.formPriceList.get('volKm')?.value === "CIEN") {
+            100
+          } @else {
+            200
+          }
+        }
+        = {{ finalPrice }}
+      </code>
+    </p>
+  </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button (click)="close()">Cancelar</button>
-  <button mat-button (click)="submit()" [disabled]="formPriceList.invalid||isLoading">
+  <button mat-button color="primary" (click)="submit()" [disabled]="formPriceList.invalid||isLoading">
     @if (isLoading){
       <mat-spinner diameter="20"></mat-spinner>
     } @else {
