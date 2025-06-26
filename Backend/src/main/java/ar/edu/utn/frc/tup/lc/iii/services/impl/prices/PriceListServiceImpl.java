@@ -3,8 +3,10 @@ package ar.edu.utn.frc.tup.lc.iii.services.impl.prices;
 import ar.edu.utn.frc.tup.lc.iii.client.UsdRestClient;
 import ar.edu.utn.frc.tup.lc.iii.dtos.prices.ExchangeRateDto;
 import ar.edu.utn.frc.tup.lc.iii.dtos.prices.PriceListDto;
+import ar.edu.utn.frc.tup.lc.iii.entities.clients.ClientEntity;
 import ar.edu.utn.frc.tup.lc.iii.entities.prices.ExchangeRateEntity;
 import ar.edu.utn.frc.tup.lc.iii.entities.prices.PriceListEntity;
+import ar.edu.utn.frc.tup.lc.iii.repositories.clients.ClientsRepository;
 import ar.edu.utn.frc.tup.lc.iii.repositories.prices.ExchangeRateRepository;
 import ar.edu.utn.frc.tup.lc.iii.repositories.prices.PriceListRepository;
 import ar.edu.utn.frc.tup.lc.iii.services.PriceListService;
@@ -15,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,8 @@ public class PriceListServiceImpl implements PriceListService {
     private final PriceListRepository priceListRepository;
 
     private final UsdRestClient usdRestClient;
+
+    private final ClientsRepository clientsRepository;
 
     private final ModelMapper modelMapper;
 
@@ -101,6 +104,13 @@ public class PriceListServiceImpl implements PriceListService {
             log.error("Price list with id {} not found", id);
             throw new EntityNotFoundException("there were no price list with id " + id);
         }
+        List<ClientEntity> clientList = clientsRepository.findAllByPriceList(check.get());
+
+        for (ClientEntity client : clientList) {
+            client.setPriceList(null);
+        }
+        clientsRepository.saveAll(clientList);
+
         priceListRepository.deleteById(id);
     }
 

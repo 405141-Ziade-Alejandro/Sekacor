@@ -111,6 +111,13 @@ public class TankServiceImpl implements TankService {
             log.error("Tank type with id {} not found", id);
             throw new EntityNotFoundException("Tank Type with id '" + id + "' does not exist");
         }
+        List<TankEntity> tankEntities = tankRepository.findAllByType(check.get());
+
+        for (TankEntity tank : tankEntities) {
+            tank.setType(null);
+        }
+        tankRepository.saveAll(tankEntities);
+
         tankTypeRepository.delete(check.get());
         log.info("Tank type with id {} deleted", id);
     }

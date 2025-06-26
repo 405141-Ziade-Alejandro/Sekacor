@@ -1,7 +1,7 @@
 import {Component, inject} from '@angular/core';
 import {MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle} from "@angular/material/dialog";
 import {MatButton} from "@angular/material/button";
-import {MatFormField, MatHint, MatLabel} from "@angular/material/form-field";
+import {MatFormField, MatHint, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
@@ -28,7 +28,9 @@ import {MatDivider} from "@angular/material/divider";
     MatRadioButton,
     ReactiveFormsModule,
     MatProgressSpinner,
-    MatDivider
+    MatDivider,
+    MatSuffix,
+    MatPrefix
   ],
   templateUrl: './create-price-dialog.component.html',
   styleUrl: './create-price-dialog.component.css'

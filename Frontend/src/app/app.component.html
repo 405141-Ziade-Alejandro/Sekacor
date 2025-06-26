@@ -27,13 +27,9 @@
         <mat-icon matListItemIcon>inventory_2</mat-icon>
         Tanques
       </a>
-      <a mat-list-item routerLink="/prices">
-        <mat-icon matListItemIcon>attach_money</mat-icon>
-        Lista de precios
-      </a>
-      <a mat-list-item routerLink="/clients">
-        <mat-icon matListItemIcon>person</mat-icon>
-        Clientes
+      <a mat-list-item routerLink="/orders/all">
+        <mat-icon matListItemIcon>assignment</mat-icon>
+        Pedidos
       </a>
       <a mat-list-item routerLink="/consumables/primary">
         <mat-icon matListItemIcon>category</mat-icon>
@@ -47,14 +43,19 @@
         <mat-icon matListItemIcon>history</mat-icon>
         Historial de tanques hechos
       </a>
+      <a mat-list-item routerLink="/clients">
+        <mat-icon matListItemIcon>person</mat-icon>
+        Clientes
+      </a>
+      <a mat-list-item routerLink="/prices">
+        <mat-icon matListItemIcon>attach_money</mat-icon>
+        Lista de precios
+      </a>
       <a mat-list-item routerLink="/users/lists">
         <mat-icon matListItemIcon>admin_panel_settings</mat-icon>
         Usuarios Sekacor
       </a>
-      <a mat-list-item routerLink="/orders/all">
-        <mat-icon matListItemIcon>assignment</mat-icon>
-        Pedidos
-      </a>
+
       <a mat-list-item (click)="openTermsAndCondition()">
         <mat-icon matListItemIcon>gavel</mat-icon>
         Terminos y Condiciones

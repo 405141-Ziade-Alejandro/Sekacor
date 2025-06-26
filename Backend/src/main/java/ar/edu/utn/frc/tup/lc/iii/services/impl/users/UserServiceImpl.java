@@ -3,7 +3,9 @@ package ar.edu.utn.frc.tup.lc.iii.services.impl.users;
 import ar.edu.utn.frc.tup.lc.iii.dtos.users.LoginDto;
 import ar.edu.utn.frc.tup.lc.iii.dtos.users.UserDto;
 import ar.edu.utn.frc.tup.lc.iii.dtos.users.UserNewDto;
+import ar.edu.utn.frc.tup.lc.iii.entities.tanks.TankEntity;
 import ar.edu.utn.frc.tup.lc.iii.entities.users.UserEntity;
+import ar.edu.utn.frc.tup.lc.iii.repositories.tanks.TankRepository;
 import ar.edu.utn.frc.tup.lc.iii.repositories.users.UserRepository;
 import ar.edu.utn.frc.tup.lc.iii.services.UserService;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,6 +23,8 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
+    private final TankRepository tankRepository;
 
     private final ModelMapper modelMapper;
 
@@ -71,6 +75,12 @@ public class UserServiceImpl implements UserService {
         if(check.isEmpty()) {
             throw new EntityNotFoundException("this user does not exist");
         }
+        List<TankEntity> tanks = tankRepository.findAllByUser(check.get());
+        for(TankEntity tank : tanks) {
+            tank.setUser(null);
+        }
+        tankRepository.saveAll(tanks);
+
         userRepository.deleteById(id);
     }
 
