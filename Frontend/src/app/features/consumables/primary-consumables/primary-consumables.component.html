@@ -55,7 +55,7 @@
                    type="number"
                    step="0.01">
           </mat-form-field>
-          <button mat-mini-fab (click)="add(consumable.id)" [disabled]="isLoading">
+          <button mat-mini-fab (click)="add(consumable.id)" color="primary" [disabled]="isLoading">
             @if (isLoading) {
               <mat-spinner diameter="20"></mat-spinner>
             } @else {
