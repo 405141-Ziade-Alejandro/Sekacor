@@ -31,7 +31,6 @@ import {MatDivider} from "@angular/material/divider";
   selector: 'app-prices-list',
   standalone: true,
   imports: [
-    MatToolbar,
     MatCard,
     MatCardContent,
     MatTable,
@@ -49,14 +48,10 @@ import {MatDivider} from "@angular/material/divider";
     MatOption,
     MatLabel,
     MatIcon,
-    MatIconButton,
     MatHeaderCellDef,
     FormsModule,
     MatSort,
     MatSortHeader,
-    MatCardHeader,
-    MatCardTitle,
-    MatCardSubtitle,
     MatMiniFabButton,
     MatTooltip,
     RouterLink,
@@ -199,9 +194,11 @@ export class PricesListComponent {
 
   examine() {
     let message = "[(Costo del tanque + ganancia: $" + this.priceListSelected.profit + ") * comission: " + this.priceListSelected.commission + " + (Recargo corralon: " + this.priceListSelected.corralon + " *  ganancia: $" + this.priceListSelected.profit + ")]"
-    if (this.priceListSelected.volKm === "CIEN" || this.priceListSelected.volKm === "DOSCIENTOS") {
-      message += " * Vol cargo de volumen del tanque"
+    if (this.priceListSelected.volKm === "CIEN") {
+      message += " * cargo de volumen del tanque de 100 km"
+    } else if (this.priceListSelected.volKm === "DOSCIENTOS") {
+      message += " * cargo de volumen del tanque de 200 km"
     }
-    this.dialogService.alert("composicion de la lista de precios: " + this.priceListSelected.name, message)
+    this.dialogService.alert("composicion de la lista de precios: " + this.priceListSelected.name, message+' = Precio Final')
   }
 }

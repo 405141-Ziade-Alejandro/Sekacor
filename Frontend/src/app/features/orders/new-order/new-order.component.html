@@ -6,7 +6,7 @@
     <div class="form-row">
       <mat-form-field appearance="outline">
         <mat-label>cliente</mat-label>
-        <mat-select formControlName="clientId">
+        <mat-select formControlName="clientId" change>
           @for (client of clientList; track $index) {
             <mat-option [value]="client.id">{{ client.name }}</mat-option>
           }
@@ -24,11 +24,11 @@
   </div>
   <div class="form-section">
     <h3>Agregar productos</h3>
-    <p><small>Nombre de tanque  (stock actual)</small></p>
+    <p><small>Nombre de tanque (stock actual)</small></p>
     <mat-list>
       @for (tankType of typeTankList; track $index) {
         <mat-list-item>
-          <button mat-raised-button type="button" (click)="addTank($index)">
+          <button mat-raised-button type="button" (click)="addTank($index)" [disabled]="!isClientSelected">
             {{ tankType.type + " | " + tankType.cover + " | " + tankType.quantity + "     (" + tankType.stock1 + ")" }}
             <mat-icon>add</mat-icon>
           </button>

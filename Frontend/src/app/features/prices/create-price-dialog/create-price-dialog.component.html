@@ -3,10 +3,10 @@
   <!-- Acá irá el formulario -->
   <form [formGroup]="formPriceList" class="form-section">
 
-      <mat-form-field appearance="outline">
-        <mat-label>Nombre:</mat-label>
-        <input matInput formControlName="name">
-      </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre:</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
 
     <div class="form-row">
 
@@ -51,15 +51,16 @@
     <mat-divider></mat-divider>
     <p>
       <code>
-        [(1000 + <b>{{profit}}</b>) x <b>{{ commission }}</b>] + (<b>{{ corralon }}</b> x <b>{{ profit }}</b>)
+        [({{ 76000|currency }} + <b>{{ profit|currency }}</b>) x <b>{{ commission }}</b>] + (<b>{{ corralon }}</b> x
+        <b>{{ profit|currency }}</b>)
         @if (Km) {
           @if (this.formPriceList.get('volKm')?.value === "CIEN") {
-            100
+            + {{ 2100|currency }}
           } @else {
-            200
+            + {{ 4200|currency }}
           }
         }
-        = {{ finalPrice }}
+        = {{ finalPrice|currency }}
       </code>
     </p>
   </div>
@@ -67,7 +68,7 @@
 <mat-dialog-actions align="end">
   <button mat-button (click)="close()">Cancelar</button>
   <button mat-button color="primary" (click)="submit()" [disabled]="formPriceList.invalid||isLoading">
-    @if (isLoading){
+    @if (isLoading) {
       <mat-spinner diameter="20"></mat-spinner>
     } @else {
       Guardar

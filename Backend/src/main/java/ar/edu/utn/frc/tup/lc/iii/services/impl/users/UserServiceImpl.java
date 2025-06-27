@@ -1,6 +1,7 @@
 package ar.edu.utn.frc.tup.lc.iii.services.impl.users;
 
 import ar.edu.utn.frc.tup.lc.iii.dtos.users.LoginDto;
+import ar.edu.utn.frc.tup.lc.iii.dtos.users.PassChangeDto;
 import ar.edu.utn.frc.tup.lc.iii.dtos.users.UserDto;
 import ar.edu.utn.frc.tup.lc.iii.dtos.users.UserNewDto;
 import ar.edu.utn.frc.tup.lc.iii.entities.tanks.TankEntity;
@@ -92,5 +93,23 @@ public class UserServiceImpl implements UserService {
         }
 
         return modelMapper.map(check.get(), UserDto.class);
+    }
+
+    @Override
+    public Boolean changePass(PassChangeDto dto) {
+        Optional<UserEntity> check = userRepository.findById(dto.getUserId());
+        if(check.isEmpty()) {
+            throw new EntityNotFoundException("this user does not exist");
+        }
+        UserEntity user = check.get();
+
+        if (!user.getPassword().equals(dto.getOldPassword())) {
+            //this means the passwords are incorrect
+            return false;
+        }
+        user.setPassword(dto.getNewPassword());
+        userRepository.save(user);
+
+        return true;
     }
 }

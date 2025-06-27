@@ -2,6 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {User} from "../interfaces/users/user";
 import {Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
+import {PasswordChange} from "../interfaces/users/password-change";
 
 @Injectable({
   providedIn: 'root'
@@ -27,5 +28,7 @@ export class UserService {
     return this.httpClient.delete<void>(this.userUrl + "/" + id)
   }
 
-  //todo make the change of password
+  changePassword(newPassword:PasswordChange):Observable<boolean> {
+    return this.httpClient.put<boolean>(this.userUrl+"/pass-change",newPassword)
+  }
 }

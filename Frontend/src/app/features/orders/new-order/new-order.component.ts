@@ -31,6 +31,8 @@ import {Order} from "../../../core/interfaces/orders/order";
 import {Router} from "@angular/router";
 import {DialogService} from "../../../core/services/dialog.service";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {PricesService} from "../../../core/services/prices.service";
+import {PriceList} from "../../../core/interfaces/prices/price-list";
 
 @Component({
   selector: 'app-new-order',
@@ -79,27 +81,43 @@ export class NewOrderComponent {
   clientService = inject(ClientService)
   router = inject(Router);
   dialogService = inject(DialogService)
-  //todo: this needs price service so to calculate the price of the detail
+  priceService = inject(PricesService)
   //variables
   columnToDisplay: string[] = ['product', 'quantity', 'price', 'action'];
   clientList: Client[] = [];
   typeTankList: TankType[] = [];
-  detailList: OrderDetail[] = []
+  detailList: OrderDetail[] = [];
+  priceListList:PriceList[]=[]
   currentDate = new Date();
 
   isLoading: boolean = false;
 
   //methods
-  ngOnInit() {
-    this.loadClientsAndTanks()
+
+  get isClientSelected(): boolean {
+    return this.formOrder.get('clientId')?.valid ?? false;
   }
 
-  private loadClientsAndTanks() {
+  ngOnInit() {
+    this.loadData()
+    this.setupFormListeners()
+  }
+
+  private setupFormListeners() {
+    this.formOrder.get('clientId')?.valueChanges.subscribe(()=>{
+      this.detailList=[]
+    })
+  }
+
+  private loadData() {
     this.clientService.getClientList().subscribe(data => {
       this.clientList = data;
     })
     this.tankService.getAllTankTypes().subscribe(data => {
       this.typeTankList = data;
+    })
+    this.priceService.getAllPrices().subscribe(data => {
+      this.priceListList = data;
     })
   }
 
@@ -113,7 +131,7 @@ export class NewOrderComponent {
 
     } else {
       const newDetail: OrderDetail = {
-        price: this.calculatePrice(tankType.cost),
+        price: this.calculatePrice(tankType),
         quantity: 1,
         typeTankId: tankType.id
       }
@@ -199,7 +217,27 @@ export class NewOrderComponent {
     return tankType ? tankType.type + " | " + tankType.cover + " | " + tankType.quantity : "tanque borrado"
   }
 
-  private calculatePrice(cost: number) {
-    return cost;
+  //this is what needs
+  private calculatePrice(tank: TankType) {
+    const clientId = this.formOrder.get('clientId')?.value;
+
+    if (clientId) {
+      const client = this.clientList.find(c=>c.id === clientId);
+      if (client) {
+        const priceList = this.priceListList.find(pl=>pl.id===client.priceListId)
+        if (priceList) {
+          let price = ((tank.cost + priceList.profit) * priceList.commission) + (priceList.corralon * priceList.profit);
+          if (priceList.volKm === "CIEN") {
+            price = price + tank.vol100
+          } else if (priceList.volKm === "DOSCIENTOS") {
+            price = price + tank.vol200
+          }
+          // price = +(price / this.dolar).toFixed(2)  not necesary since it won't  be tied to the dolar
+          return price
+        }
+        return 0
+      }
+    }
+    return 0
   }
 }

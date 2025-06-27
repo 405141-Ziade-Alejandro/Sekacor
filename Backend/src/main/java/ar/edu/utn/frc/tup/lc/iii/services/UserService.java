@@ -1,6 +1,7 @@
 package ar.edu.utn.frc.tup.lc.iii.services;
 
 import ar.edu.utn.frc.tup.lc.iii.dtos.users.LoginDto;
+import ar.edu.utn.frc.tup.lc.iii.dtos.users.PassChangeDto;
 import ar.edu.utn.frc.tup.lc.iii.dtos.users.UserDto;
 import ar.edu.utn.frc.tup.lc.iii.dtos.users.UserNewDto;
 
@@ -16,4 +17,6 @@ public interface UserService {
     void deleteUser(long id);
 
     UserDto logIn(LoginDto dto);
+
+    Boolean changePass(PassChangeDto dto);
 }

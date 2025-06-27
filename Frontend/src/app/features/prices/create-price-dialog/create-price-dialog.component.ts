@@ -11,6 +11,7 @@ import {Router} from "@angular/router";
 import {DialogService} from "../../../core/services/dialog.service";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {MatDivider} from "@angular/material/divider";
+import {CurrencyPipe} from "@angular/common";
 
 @Component({
   selector: 'app-create-price-dialog',
@@ -30,7 +31,8 @@ import {MatDivider} from "@angular/material/divider";
     MatProgressSpinner,
     MatDivider,
     MatSuffix,
-    MatPrefix
+    MatPrefix,
+    CurrencyPipe
   ],
   templateUrl: './create-price-dialog.component.html',
   styleUrl: './create-price-dialog.component.css'
@@ -73,9 +75,9 @@ export class CreatePriceDialogComponent {
     if (this.formPriceList.invalid) {
       return "Precio final"
     } else {
-      const tankCost = 1000
-      const vol100 = 100
-      const vol200 = 200
+      const tankCost = 76000
+      const vol100 = 2100
+      const vol200 = 4200
 
       if (this.Km) {
         if (this.formPriceList.get('volKm')?.value === "CIEN") {

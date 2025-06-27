@@ -10,6 +10,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {Extras} from "./core/interfaces/extras";
 import {ExtraDialogComponent} from "./shared/extra-dialog/extra-dialog.component";
 import {MatListItem, MatListItemIcon, MatNavList} from "@angular/material/list";
+import {ChangePasswordDialogComponent} from "./shared/change-password-dialog/change-password-dialog.component";
 
 const FAQ:Extras ={
   info: [
@@ -18,7 +19,6 @@ const FAQ:Extras ={
     {title:'question',message:'Answer'}
   ], Headline: "FAQ"
 }
-//todo: make the terms and   conditions right
 const TERMS_AND_CONDITIONS:Extras ={
   Headline:'Terminos Y Condiciones',
   info: [
@@ -34,7 +34,7 @@ const TERMS_AND_CONDITIONS:Extras ={
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [MatSlideToggleModule, MatSidenavContainer, MatSidenav, MatSidenavContent, MatToolbar, MatIconButton, MatIcon, RouterOutlet, RouterLink, MatNavList, MatListItem, MatButton, MatListItemIcon],
+  imports: [MatSlideToggleModule, MatSidenavContainer, MatSidenav, MatSidenavContent, MatToolbar, MatIconButton, MatIcon, RouterOutlet, RouterLink, MatNavList, MatListItem, MatListItemIcon],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -72,5 +72,9 @@ export class AppComponent {
     this.dialog.open(ExtraDialogComponent,{
       data: TERMS_AND_CONDITIONS
     })
+  }
+
+  openChangePassword(){
+    this.dialog.open(ChangePasswordDialogComponent)
   }
 }

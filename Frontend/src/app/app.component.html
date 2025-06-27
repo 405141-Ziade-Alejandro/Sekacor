@@ -9,6 +9,9 @@
 
   @if (authService.isLoggedIn()) {
     <span>{{ userName }}</span>
+    <button mat-icon-button (click)="openChangePassword()">
+      <mat-icon>lock_reset</mat-icon>
+    </button>
     <button mat-icon-button (click)="logOut()">
       <mat-icon>logout</mat-icon>
     </button>
