@@ -15,7 +15,17 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {DialogService} from "../../../core/services/dialog.service";
 import {routes} from "../../../app.routes";
 import {MatDivider} from "@angular/material/divider";
+import {FaqComponent} from "../../../shared/faq/faq.component";
+import {Extras} from "../../../core/interfaces/extras";
 
+const FAQ:Extras = {
+  Headline: "FAQ",
+  info: [
+    {title:'Vol100 que significa?',message:'vol100 se refiere     al recargo monetario que se  le asigna al    tanque  por    trasladarlo hasta 100km',},
+    {title:'que es capas?',message:'se refiere a las capas que componen el tanque, si esta  hecho con    una, dos    o tres    capas',},
+  ]
+
+}
 @Component({
   selector: 'app-new-tank-type',
   standalone: true,
@@ -34,7 +44,8 @@ import {MatDivider} from "@angular/material/divider";
     RouterLink,
     MatProgressSpinner,
     MatHint,
-    MatDivider
+    MatDivider,
+    FaqComponent
   ],
   templateUrl: './new-tank-type.component.html',
   styleUrl: './new-tank-type.component.css'
@@ -138,4 +149,6 @@ export class NewTankTypeComponent {
       this.tankTypeForm.markAsTouched()
     }
   }
+
+  protected readonly FAQ = FAQ;
 }

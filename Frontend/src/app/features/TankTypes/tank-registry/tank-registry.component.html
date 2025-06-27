@@ -1,10 +1,10 @@
-<h2>Nuevos tanques</h2>
+<div class="tank-container">
+  <h2>Registrar nuevo tanque</h2>
+  <button mat-stroked-button color="accent" (click)="toOrders()">Ir a pedidos</button>
 
-<button mat-fab (click)="toOrders()">Pedidos</button>
-
-<mat-card>
-  <form [formGroup]="FormTankForm" (ngSubmit)="newTank()">
-    <mat-card-header>
+  <mat-card class="tank-card">
+    <form [formGroup]="FormTankForm" (ngSubmit)="newTank()" class="tank-form">
+      <!--tipo de tanque-->
       <mat-form-field appearance="outline">
         <mat-label>Selecciona Tanque</mat-label>
         <mat-select formControlName="typeId">
@@ -13,27 +13,29 @@
           }
         </mat-select>
       </mat-form-field>
-    </mat-card-header>
-    <mat-card-content>
-      <button mat-fab extended type="submit" [disabled]="FormTankForm.invalid||isLoading">
-        @if (isLoading) {
-          <mat-spinner diameter="20"></mat-spinner>
-        } @else {
-          <ng-container>
-            <mat-icon matListItemIcon>
-              check_circle
-            </mat-icon>
-            Tanque nuevo
-          </ng-container>
-        }
-      </button>
-    </mat-card-content>
-    <mat-card-footer>
-      <mat-radio-group formControlName="quality">
+      <!--calidad-->
+      <mat-radio-group formControlName="quality" class="quality-group">
         <mat-label>calidad del tanque:</mat-label>
         <mat-radio-button value="PRIMERA">Primera</mat-radio-button>
         <mat-radio-button value="SEGUNDA">Segunda</mat-radio-button>
       </mat-radio-group>
-    </mat-card-footer>
-  </form>
-</mat-card>
+      <!--Boton-->
+      <div class="form-actions">
+        <button mat-fab color="primary" extended type="submit" [disabled]="FormTankForm.invalid||isLoading">
+          @if (isLoading) {
+            <mat-spinner diameter="20"></mat-spinner>
+          } @else {
+            <ng-container>
+              <mat-icon>
+                add_task
+              </mat-icon>
+              Tanque nuevo
+            </ng-container>
+          }
+        </button>
+      </div>
+    </form>
+  </mat-card>
+</div>
+
+

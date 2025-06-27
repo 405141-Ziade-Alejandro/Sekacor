@@ -75,6 +75,11 @@ export class AppComponent {
   }
 
   openChangePassword(){
-    this.dialog.open(ChangePasswordDialogComponent)
+    this.dialog.open(ChangePasswordDialogComponent, {
+      width:'100%',
+      maxWidth: '400px',
+      autoFocus: false,
+      disableClose: true,
+    })
   }
 }

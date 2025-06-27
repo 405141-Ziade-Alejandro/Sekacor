@@ -36,6 +36,7 @@ export class AuthService {
     this.userSignal.set(null);
   }
 
+  //todo: if the user  has been   deleted, it will still allow them to operate if they are in the localstorage
   currentUser() {
     return this.userSignal.asReadonly()
   }

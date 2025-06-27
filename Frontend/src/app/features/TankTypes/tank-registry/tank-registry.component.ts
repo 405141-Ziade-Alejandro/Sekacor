@@ -2,7 +2,7 @@ import {Component, inject} from '@angular/core';
 import {TankServiceService} from "../../../core/services/tank-service.service";
 import {TankType} from "../../../core/interfaces/tanks/tank-type";
 import {MatCard, MatCardContent, MatCardFooter, MatCardHeader} from "@angular/material/card";
-import {MatFabButton} from "@angular/material/button";
+import {MatButton, MatFabButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {MatFormField, MatLabel, MatOption, MatSelect} from "@angular/material/select";
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
@@ -34,7 +34,8 @@ import {MatListItemIcon} from "@angular/material/list";
     ReactiveFormsModule,
     MatFormField,
     MatProgressSpinner,
-    MatListItemIcon
+    MatListItemIcon,
+    MatButton
   ],
   templateUrl: './tank-registry.component.html',
   styleUrl: './tank-registry.component.css'

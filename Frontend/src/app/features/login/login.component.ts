@@ -7,6 +7,8 @@ import {MatInput} from "@angular/material/input";
 import {MatButton} from "@angular/material/button";
 import {DialogService} from "../../core/services/dialog.service";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
+import {MatIcon} from "@angular/material/icon";
 
 @Component({
   selector: 'app-login',
@@ -18,7 +20,12 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
     MatLabel,
     MatInput,
     MatButton,
-    MatProgressSpinner
+    MatProgressSpinner,
+    MatCard,
+    MatCardTitle,
+    MatCardHeader,
+    MatCardContent,
+    MatIcon
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
