@@ -20,6 +20,18 @@ import {MatCheckbox} from "@angular/material/checkbox";
 import {FormsModule} from "@angular/forms";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {MatDivider} from "@angular/material/divider";
+import {Extras} from "../../../core/interfaces/extras";
+import {FaqComponent} from "../../../shared/faq/faq.component";
+
+const FAQ: Extras = {
+  Headline: "FAQ",
+  info: [
+    {
+      title: 'puedo agregar un nuevo insumo primario?',
+      message: 'no, estos insumos estan calculados por tanque, y requeriria una reestructuracion del sistema, es posible si contactas al encargado del sistema para que lo agrege, pero no seria algo posible para el usuario',
+    },
+  ]
+}
 
 @Component({
   selector: 'app-primary-consumables',
@@ -42,11 +54,11 @@ import {MatDivider} from "@angular/material/divider";
     MatInput,
     MatFormField,
     MatLabel,
-    MatCardHeader,
     MatCheckbox,
     FormsModule,
     MatProgressSpinner,
-    MatDivider
+    MatDivider,
+    FaqComponent
   ],
   templateUrl: './primary-consumables.component.html',
   styleUrl: './primary-consumables.component.css'
@@ -57,13 +69,13 @@ export class PrimaryConsumablesComponent {
   private consumableService = inject(ConsumablesService)
   private dialogService = inject(DialogService);
   //variables
-  consumablesList:PrimaryConsumable[] =[]
-  columnsToDisplay:string[] = ['nombre','subtype','stock','agregar']
-  overwrite:boolean = false;
-  isLoading:boolean = false;
+  consumablesList: PrimaryConsumable[] = []
+  columnsToDisplay: string[] = ['nombre', 'subtype', 'stock', 'agregar']
+  overwrite: boolean = false;
+  isLoading: boolean = false;
 
   //this is for the value neeeded to increse or decrese the stock of the primary consumables
-  inputValues:{[id:number]:number} = {}
+  inputValues: { [id: number]: number } = {}
 
   //methods
   ngOnInit() {
@@ -82,11 +94,11 @@ export class PrimaryConsumablesComponent {
   }
 
 
-  add(id:number) {
+  add(id: number) {
     //se extrae el valor del campo en la fila de la tabla
     const addValue = this.inputValues[id]
     if (isNaN(addValue)) {//si el valor resulta no ser un numero salta error
-      this.dialogService.alert('Error','El valor ingresado no es un numero').subscribe()
+      this.dialogService.alert('Error', 'El valor ingresado no es un numero').subscribe()
 
       this.inputValues[id] = 0
       return;
@@ -100,11 +112,11 @@ export class PrimaryConsumablesComponent {
       return;
     }
 
-    let update:UpdateConsumable = {//se genera el dto para madandar al backend
+    let update: UpdateConsumable = {//se genera el dto para madandar al backend
       consumableId: consumableToUpdatee.id,
       quantity: consumableToUpdatee.quantity + addValue
     }
-    if (this.overwrite){
+    if (this.overwrite) {
       update.quantity = addValue
     }
 
@@ -121,4 +133,6 @@ export class PrimaryConsumablesComponent {
     })
 
   }
+
+  protected readonly FAQ = FAQ;
 }

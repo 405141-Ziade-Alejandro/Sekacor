@@ -15,7 +15,7 @@ import {literal} from "@angular/compiler";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {ClientService} from "../../../core/services/client.service";
 import {Client} from "../../../core/interfaces/client/client";
-import {DatePipe} from "@angular/common";
+import {CurrencyPipe, DatePipe} from "@angular/common";
 import {MatButton, MatMiniFabButton} from "@angular/material/button";
 import {routes} from "../../../app.routes";
 import {Router, RouterLink} from "@angular/router";
@@ -23,7 +23,16 @@ import {MatIcon} from "@angular/material/icon";
 import {MatSort, MatSortHeader} from "@angular/material/sort";
 import {MatTooltip} from "@angular/material/tooltip";
 import {MatDivider} from "@angular/material/divider";
-
+import {Extras} from "../../../core/interfaces/extras";
+const FAQ: Extras = {
+  Headline: "FAQ",
+  info: [
+    {
+      title: 'Placeholder question?',
+      message: 'placeholder answer',
+    },
+  ]
+}
 @Component({
   selector: 'app-order-list',
   standalone: true,
@@ -52,7 +61,8 @@ import {MatDivider} from "@angular/material/divider";
     MatCardSubtitle,
     MatMiniFabButton,
     MatTooltip,
-    MatDivider
+    MatDivider,
+    CurrencyPipe
   ],
   templateUrl: './order-list.component.html',
   styleUrl: './order-list.component.css'
@@ -63,7 +73,7 @@ export class OrderListComponent {
   clientService = inject(ClientService)
   router= inject(Router)
   //variables
-  columnsToDisplay:string[] = ['id','clientId','orderDate','state']
+  columnsToDisplay:string[] = ['id','clientId','orderDate','totalPrice','state']
   // orderList:Order[]=[];
   dataSource = new MatTableDataSource<Order>([])
   clientList:Client[]=[];

@@ -1,6 +1,8 @@
 <div class="tank-container">
   <h2>Registrar nuevo tanque</h2>
-  <button mat-stroked-button color="accent" (click)="toOrders()">Ir a pedidos</button>
+
+    <button mat-stroked-button color="accent" (click)="toOrders()">Ir a pedidos</button>
+
 
   <mat-card class="tank-card">
     <form [formGroup]="FormTankForm" (ngSubmit)="newTank()" class="tank-form">

@@ -1,104 +1,100 @@
 <!--Todo: make the examine part a dialog and leave this as editing only-->
 @if (updating && tankType !== undefined) {
-
-  <mat-card>
-    <mat-card-header>
-      <mat-toolbar>
-        <button mat-icon-button (click)="back()">
-          <mat-icon>arrow_back</mat-icon>
-        </button>
-        <span>Detalle del Tanque</span>
-        <span class="example-spacer"></span>
-      </mat-toolbar>
-    </mat-card-header>
-
-    <mat-card-content>
-      <mat-form-field appearance="outline">
-        <!--nombre-->
-        <mat-label>Nombre</mat-label>
-        <input matInput minlength="3" maxlength="50" [(ngModel)]="tankType.type">
-        <mat-hint>minimo 3 letras</mat-hint>
-      </mat-form-field>
-
-      <!--capas-->
-      <mat-form-field appearance="outline">
-        <mat-label>Capa</mat-label>
-        <mat-select [(ngModel)]="tankType.cover">
-          <mat-option value="UNICAPA">Unicapa</mat-option>
-          <mat-option value="BICAPA">Bicapa</mat-option>
-          <mat-option value="TRICAPA">Tricapa</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <!--cantidad-->
-      <mat-form-field appearance="outline">
-        <mat-label>Cantidad</mat-label>
-        <input matInput type="number" min="0" step="0.01" [(ngModel)]="tankType.quantity">
-        <span matTextSuffix>Lts</span>
-      </mat-form-field>
-      <!--plastico negro-->
-      <mat-form-field appearance="outline">
-        <mat-label>Plastico Negro</mat-label>
-        <input matInput type="number" min="0" step="0.01" [(ngModel)]="tankType.plasticBlack">
-        <span matTextSuffix>Kg</span>
-      </mat-form-field>
-      <!--plastico Color-->
-      <mat-form-field appearance="outline">
-        <mat-label>Plastico Color</mat-label>
-        <input matInput type="number" min="0" step="0.01" [(ngModel)]="tankType.plasticColor">
-        <span matTextSuffix>Kg</span>
-      </mat-form-field>
-      <!--tapa-->
-      <mat-form-field appearance="outline">
-        <mat-label>Tipo de Tapa</mat-label>
-        <mat-select [(ngModel)]="tankType.coverType">
-          <mat-option value="ROSCA">Rosca</mat-option>
-          <mat-option value="CALCE">Calce</mat-option>
-          <mat-option value="NONE">Ninguna</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <!--tornillos-->
-      @if (tankType.coverType !== "NONE") {
+  <div class="tank-form">
+    <div class="form-section">
+      <h2>Datos del tipo de tanque</h2>
+      <div class="form-row">
         <mat-form-field appearance="outline">
-          <mat-label>Tornillos</mat-label>
-          <input matInput type="number" min="0" [(ngModel)]="tankType.screws">
+          <!--nombre-->
+          <mat-label>Nombre</mat-label>
+          <input matInput minlength="3" maxlength="50" [(ngModel)]="tankType.type">
+          <mat-hint>minimo 3 letras</mat-hint>
         </mat-form-field>
-      }
-      <!--costo-->
-      <mat-form-field appearance="outline">
-        <mat-label>Costo</mat-label>
-        <input matInput type="number" min="0" step="0.01" [(ngModel)]="tankType.cost">
-        <span matTextPrefix>$</span>
-      </mat-form-field>
+        <!--capas-->
+        <mat-form-field appearance="outline">
+          <mat-label>Capa</mat-label>
+          <mat-select [(ngModel)]="tankType.cover">
+            <mat-option value="UNICAPA">Unicapa</mat-option>
+            <mat-option value="BICAPA">Bicapa</mat-option>
+            <mat-option value="TRICAPA">Tricapa</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <!--cantidad-->
+        <mat-form-field appearance="outline">
+          <mat-label>Cantidad</mat-label>
+          <input matInput type="number" min="0" step="0.01" [(ngModel)]="tankType.quantity">
+          <span matTextSuffix>Lts</span>
+        </mat-form-field>
+      </div>
+      <div class="form-row">
+        <!--costo-->
+        <mat-form-field appearance="outline">
+          <mat-label>Costo</mat-label>
+          <input matInput type="number" min="0" step="0.01" [(ngModel)]="tankType.cost">
+          <span matTextPrefix>$</span>
+        </mat-form-field>
 
-      <!--vol100-->
-      <mat-form-field appearance="outline">
-        <mat-label>Volumen 100 Km</mat-label>
-        <input matInput type="number" min="0" step="0.01" [(ngModel)]="tankType.vol100">
-        <span matTextSuffix>%</span>
-      </mat-form-field>
-      <!--vol200-->
-      <mat-form-field appearance="outline">
-        <mat-label>Volumen 200 Km</mat-label>
-        <input matInput type="number" min="0" step="0.01" [(ngModel)]="tankType.vol200">
-        <span matTextSuffix>%</span>
-      </mat-form-field>
-
-      <!--stock1-->
-      <mat-form-field appearance="outline">
-        <mat-label>Stock Primera</mat-label>
-        <input matInput type="number" min="0" [(ngModel)]="tankType.stock1">
-      </mat-form-field>
-      <!--stock2-->
-      <mat-form-field appearance="outline">
-        <mat-label>Stock Segunda</mat-label>
-        <input matInput type="number" min="0" [(ngModel)]="tankType.stock2">
-      </mat-form-field>
-
-      <!--tee-->
-      <mat-checkbox class="example-margin" [(ngModel)]="tankType.tee">Tee</mat-checkbox>
-      <!--Extras-->
-      <div>
-
+        <!--vol100-->
+        <mat-form-field appearance="outline">
+          <mat-label>Volumen 100 Km</mat-label>
+          <input matInput type="number" min="0" step="0.01" [(ngModel)]="tankType.vol100">
+          <span matTextSuffix>%</span>
+        </mat-form-field>
+        <!--vol200-->
+        <mat-form-field appearance="outline">
+          <mat-label>Volumen 200 Km</mat-label>
+          <input matInput type="number" min="0" step="0.01" [(ngModel)]="tankType.vol200">
+          <span matTextSuffix>%</span>
+        </mat-form-field>
+      </div>
+      <div class="form-row">
+        <!--stock1-->
+        <mat-form-field appearance="outline">
+          <mat-label>Stock Primera</mat-label>
+          <input matInput type="number" min="0" [(ngModel)]="tankType.stock1">
+        </mat-form-field>
+        <!--stock2-->
+        <mat-form-field appearance="outline">
+          <mat-label>Stock Segunda</mat-label>
+          <input matInput type="number" min="0" [(ngModel)]="tankType.stock2">
+        </mat-form-field>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="form-row">
+        <!--plastico negro-->
+        <mat-form-field appearance="outline">
+          <mat-label>Plastico Negro</mat-label>
+          <input matInput type="number" min="0" step="0.01" [(ngModel)]="tankType.plasticBlack">
+          <span matTextSuffix>Kg</span>
+        </mat-form-field>
+        <!--plastico Color-->
+        <mat-form-field appearance="outline">
+          <mat-label>Plastico Color</mat-label>
+          <input matInput type="number" min="0" step="0.01" [(ngModel)]="tankType.plasticColor">
+          <span matTextSuffix>Kg</span>
+        </mat-form-field>
+      </div>
+      <div class="form-row">
+        <!--tapa-->
+        <mat-form-field appearance="outline">
+          <mat-label>Tipo de Tapa</mat-label>
+          <mat-select [(ngModel)]="tankType.coverType">
+            <mat-option value="ROSCA">Rosca</mat-option>
+            <mat-option value="CALCE">Calce</mat-option>
+            <mat-option value="NONE">Ninguna</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <!--tornillos-->
+        @if (tankType.coverType !== "NONE") {
+          <mat-form-field appearance="outline">
+            <mat-label>Tornillos</mat-label>
+            <input matInput type="number" min="0" [(ngModel)]="tankType.screws">
+          </mat-form-field>
+        }
+        <!--tee-->
+        <mat-checkbox class="example-margin" [(ngModel)]="tankType.tee">Tee</mat-checkbox>
+      </div>
+      <div class="form-row">
         <!--sticker-->
         <mat-checkbox class="example-margin" [(ngModel)]="showSticker">Sticker</mat-checkbox>
         @if (showSticker) {
@@ -110,6 +106,8 @@
             </mat-select>
           </mat-form-field>
         }
+      </div>
+      <div class="form-row">
         <!--tornillos grandes-->
         <mat-checkbox class="example-margin" [(ngModel)]="showBigScrews">Tornillos Grandes</mat-checkbox>
         @if (showBigScrews) {
@@ -119,28 +117,19 @@
           </mat-form-field>
         }
       </div>
-
-
-      <div>
-        <button mat-raised-button color="primary" type="button" (click)="save()">
+      <div class="form-actions">
+        <button mat-raised-button color="primary" type="button" (click)="save()" [disabled]="isLoading">
           @if (!isLoading) {
-            <ng-container>
-              <mat-icon>check</mat-icon>
-              guardar
-            </ng-container>
-
+            guardar
           } @else {
             <mat-spinner diameter="20"></mat-spinner>
           }
         </button>
         <button mat-raised-button color="color" type="button" (click)="switch()">Cancelar</button>
+        <app-faq [faq]="FAQ"></app-faq>
       </div>
-
-      <p>
-        Los campos con * son obligatorios
-      </p>
-    </mat-card-content>
-  </mat-card>
+    </div>
+  </div>
 
 } @else {
   <mat-card>

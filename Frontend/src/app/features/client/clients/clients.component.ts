@@ -24,13 +24,21 @@ import {DialogService} from "../../../core/services/dialog.service";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {MatSort, MatSortHeader} from "@angular/material/sort";
 import {MatDivider} from "@angular/material/divider";
-
+import {FaqComponent} from "../../../shared/faq/faq.component";
+import {Extras} from "../../../core/interfaces/extras";
+const FAQ: Extras = {
+  Headline: "FAQ",
+  info: [
+    {
+      title: 'Placeholder question?',
+      message: 'placeholder answer',
+    },
+  ]
+}
 @Component({
   selector: 'app-clients',
   standalone: true,
   imports: [
-    MatToolbar,
-    MatIconButton,
     MatIcon,
     MatFormField,
     MatLabel,
@@ -54,7 +62,8 @@ import {MatDivider} from "@angular/material/divider";
     MatProgressSpinner,
     MatSort,
     MatSortHeader,
-    MatDivider
+    MatDivider,
+    FaqComponent
   ],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.css'
@@ -214,4 +223,6 @@ export class ClientsComponent {
       return 'error'
     }
   }
+
+  protected readonly FAQ = FAQ;
 }

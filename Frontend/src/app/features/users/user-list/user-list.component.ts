@@ -22,6 +22,18 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {MatSort, MatSortHeader} from "@angular/material/sort";
 import {MatCard, MatCardContent} from "@angular/material/card";
 import {MatDivider} from "@angular/material/divider";
+import {Extras} from "../../../core/interfaces/extras";
+import {FaqComponent} from "../../../shared/faq/faq.component";
+
+const FAQ: Extras = {
+  Headline: "FAQ",
+  info: [
+    {
+      title: 'como creo un usuario con rol de administrador?',
+      message: 'dado el gran control que un usuario de administrador tiene, es recomendado que se contacte con el programador para ingresarlo en la base de datos directamente',
+    },
+  ]
+}
 
 @Component({
   selector: 'app-user-list',
@@ -37,8 +49,6 @@ import {MatDivider} from "@angular/material/divider";
     MatRow,
     MatRowDef,
     MatHeaderRowDef,
-    MatToolbar,
-    MatIconButton,
     MatIcon,
     MatMiniFabButton,
     MatFormField,
@@ -52,7 +62,8 @@ import {MatDivider} from "@angular/material/divider";
     MatSortHeader,
     MatCard,
     MatDivider,
-    MatCardContent
+    MatCardContent,
+    FaqComponent
   ],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.css'
@@ -70,7 +81,7 @@ export class UserListComponent {
   //variables
   displayedColumns: string[] = ['name', 'role', 'actions'];
 
-  dataSource  =new MatTableDataSource<User>([])
+  dataSource = new MatTableDataSource<User>([])
 
   isLoading: boolean = false;
 
@@ -128,7 +139,7 @@ export class UserListComponent {
       this.userService.postUser(newUser).subscribe({
         next: data => {
           console.log('post user', data)
-          this.dialogService.alert('Exito','Usuario'+newUser.name+' Creado').subscribe()
+          this.dialogService.alert('Exito', 'Usuario' + newUser.name + ' Creado').subscribe()
 
           this.formUser.reset()
 
@@ -142,4 +153,6 @@ export class UserListComponent {
       })
     }
   }
+
+  protected readonly FAQ = FAQ;
 }

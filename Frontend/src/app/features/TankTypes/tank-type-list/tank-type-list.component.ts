@@ -19,14 +19,23 @@ import {MatTooltip} from "@angular/material/tooltip";
 import {DialogService} from "../../../core/services/dialog.service";
 import {MatSort, MatSortHeader} from "@angular/material/sort";
 import {MatDivider} from "@angular/material/divider";
+import {FaqComponent} from "../../../shared/faq/faq.component";
+import {Extras} from "../../../core/interfaces/extras";
 
-
+const FAQ: Extras = {
+  Headline: "FAQ",
+  info: [
+    {
+      title: 'como creo un usuario con rol de administrador?',
+      message: 'responce',
+    },
+  ]
+}
 @Component({
   selector: 'app-tank-type-list',
   standalone: true,
   imports: [
     MatTable,
-    MatToolbar,
     MatIcon,
     MatMiniFabButton,
     RouterLink,
@@ -48,7 +57,8 @@ import {MatDivider} from "@angular/material/divider";
     MatCardHeader,
     MatCardTitle,
     MatCardSubtitle,
-    MatDivider
+    MatDivider,
+    FaqComponent
   ],
   templateUrl: './tank-type-list.component.html',
   styleUrl: './tank-type-list.component.css'
@@ -108,4 +118,7 @@ export class TankTypeListComponent {
     this.tankService.setUpdating(true);
     this.router.navigate([`tanktypes/${id}`])
   }
+
+  protected readonly FaqComponent = FaqComponent;
+  protected readonly FAQ = FAQ;
 }

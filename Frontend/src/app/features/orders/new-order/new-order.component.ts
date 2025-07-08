@@ -33,6 +33,18 @@ import {DialogService} from "../../../core/services/dialog.service";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {PricesService} from "../../../core/services/prices.service";
 import {PriceList} from "../../../core/interfaces/prices/price-list";
+import {Extras} from "../../../core/interfaces/extras";
+import {FaqComponent} from "../../../shared/faq/faq.component";
+
+const FAQ: Extras = {
+  Headline: "FAQ",
+  info: [
+    {
+      title: 'Placeholder question?',
+      message: 'placeholder answer',
+    },
+  ]
+}
 
 @Component({
   selector: 'app-new-order',
@@ -65,6 +77,7 @@ import {PriceList} from "../../../core/interfaces/prices/price-list";
     CurrencyPipe,
     ReactiveFormsModule,
     MatProgressSpinner,
+    FaqComponent,
   ],
   templateUrl: './new-order.component.html',
   styleUrl: './new-order.component.css'
@@ -209,7 +222,7 @@ export class NewOrderComponent {
   }
 
   leave() {
-    this.router.navigate(['/']);
+    this.router.navigate(['/orders/all']);
   }
 
   getTankName(id: number): string {
@@ -240,4 +253,6 @@ export class NewOrderComponent {
     }
     return 0
   }
+
+  protected readonly FAQ = FAQ;
 }

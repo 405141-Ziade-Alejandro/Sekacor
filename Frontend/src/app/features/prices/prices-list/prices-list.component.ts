@@ -133,15 +133,9 @@ export class PricesListComponent {
       autoFocus: false,
     }).afterClosed().subscribe(id => {
       if (id) {
-        console.log(id)//
         this.pricesService.getAllPrices().subscribe({
           next: data => {
             this.priceList = data
-            const priceListCreated = this.priceList.find(item => item.id === id)
-            console.log(priceListCreated)
-            if (priceListCreated) {
-              this.priceListSelected = priceListCreated
-            }
           },
           error: err => {
             console.error('error fetching prices list', err);

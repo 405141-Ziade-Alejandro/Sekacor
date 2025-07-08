@@ -4,6 +4,7 @@
       <h2 class="title">Clientes</h2>
       <p class="subtitle">Gestión y carga de clientes</p>
     </div>
+<!--    <app-faq [faq]="FAQ"></app-faq>-->
   </div>
 
   <form [formGroup]="clientForm" (ngSubmit)="save()" class="client-form">
@@ -86,10 +87,10 @@
       <ng-container matColumnDef="Accion">
         <th mat-header-cell *matHeaderCellDef>Accion</th>
         <td mat-cell *matCellDef="let client">
-          <button mat-mini-fab color="primary" (click)="edit(client.id)">
+          <button mat-mini-fab color="primary" (click)="edit(client.id)" [disabled]="isUpdating">
             <mat-icon>edit</mat-icon>
           </button>
-          <button mat-mini-fab (click)="delete(client.id)">
+          <button mat-mini-fab (click)="delete(client.id)" [disabled]="isUpdating">
             <mat-icon>delete_forever</mat-icon>
           </button>
         </td>

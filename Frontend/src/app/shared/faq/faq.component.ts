@@ -3,14 +3,17 @@ import {MatIcon} from "@angular/material/icon";
 import {Extras} from "../../core/interfaces/extras";
 import {MatDialog} from "@angular/material/dialog";
 import {ExtraDialogComponent} from "../extra-dialog/extra-dialog.component";
-import {MatFabButton} from "@angular/material/button";
+import {MatFabButton, MatMiniFabButton} from "@angular/material/button";
+import {MatTooltip} from "@angular/material/tooltip";
 
 @Component({
   selector: 'app-faq',
   standalone: true,
   imports: [
     MatIcon,
-    MatFabButton
+    MatFabButton,
+    MatMiniFabButton,
+    MatTooltip
   ],
   templateUrl: './faq.component.html',
   styleUrl: './faq.component.css'

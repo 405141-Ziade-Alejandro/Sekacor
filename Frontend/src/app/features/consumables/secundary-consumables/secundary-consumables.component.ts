@@ -24,7 +24,17 @@ import {MatCheckbox} from "@angular/material/checkbox";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {MatDivider} from "@angular/material/divider";
 import {MatTooltip} from "@angular/material/tooltip";
-
+import {Extras} from "../../../core/interfaces/extras";
+import {FaqComponent} from "../../../shared/faq/faq.component";
+const FAQ: Extras = {
+  Headline: "FAQ",
+  info: [
+    {
+      title: 'Quiero editar un insumo que registre, como lo hago?',
+      message: 'la edicion de un insumo solo esta habilitado para el stock, si quisiera modificar el nombre o subtipo, lo mejor seria borrar el insumo equivocado y cargarlo de nuevo correctamente',
+    },
+  ]
+}
 @Component({
   selector: 'app-secundary-consumables',
   standalone: true,
@@ -43,20 +53,18 @@ import {MatTooltip} from "@angular/material/tooltip";
     MatRowDef,
     MatTable,
     MatHeaderCellDef,
-    MatToolbar,
     ReactiveFormsModule,
     MatFormField,
     MatLabel,
     MatInput,
-    MatIconButton,
     MatSelect,
     MatOption,
-    MatCardHeader,
     MatCheckbox,
     FormsModule,
     MatProgressSpinner,
     MatDivider,
-    MatTooltip
+    MatTooltip,
+    FaqComponent
   ],
   templateUrl: './secundary-consumables.component.html',
   styleUrl: './secundary-consumables.component.css'
@@ -178,4 +186,6 @@ export class SecundaryConsumablesComponent {
         }
       })
   }
+
+  protected readonly FAQ = FAQ;
 }

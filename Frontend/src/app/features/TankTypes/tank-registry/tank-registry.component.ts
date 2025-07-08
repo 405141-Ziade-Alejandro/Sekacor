@@ -15,27 +15,34 @@ import {MissingConsumablesDialogComponent} from "../missing-consumables-dialog/m
 import {Router} from "@angular/router";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {MatListItemIcon} from "@angular/material/list";
-
+import {Extras} from "../../../core/interfaces/extras";
+import {FaqComponent} from "../../../shared/faq/faq.component";
+const FAQ: Extras = {
+  Headline: "FAQ",
+  info: [
+    {
+      title: 'Placeholder question?',
+      message: 'placeholder answer',
+    },
+  ]
+}
 @Component({
   selector: 'app-tank-registry',
   standalone: true,
   imports: [
     MatCard,
-    MatCardContent,
     MatFabButton,
     MatIcon,
-    MatCardHeader,
     MatSelect,
     MatOption,
-    MatCardFooter,
     MatRadioGroup,
     MatRadioButton,
     MatLabel,
     ReactiveFormsModule,
     MatFormField,
     MatProgressSpinner,
-    MatListItemIcon,
-    MatButton
+    MatButton,
+    FaqComponent
   ],
   templateUrl: './tank-registry.component.html',
   styleUrl: './tank-registry.component.css'
@@ -140,4 +147,6 @@ export class TankRegistryComponent {
   toOrders() {
     this.router.navigate(['/orders/all']);
   }
+
+  protected readonly FAQ = FAQ;
 }

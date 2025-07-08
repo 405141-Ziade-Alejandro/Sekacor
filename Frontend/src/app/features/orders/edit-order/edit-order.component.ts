@@ -29,7 +29,17 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Order} from "../../../core/interfaces/orders/order";
 import {DialogService} from "../../../core/services/dialog.service";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
-
+import {Extras} from "../../../core/interfaces/extras";
+import {FaqComponent} from "../../../shared/faq/faq.component";
+const FAQ: Extras = {
+  Headline: "FAQ",
+  info: [
+    {
+      title: 'Placeholder question?',
+      message: 'placeholder answer',
+    },
+  ]
+}
 @Component({
   selector: 'app-edit-order',
   standalone: true,
@@ -65,7 +75,8 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
     MatTable,
     ReactiveFormsModule,
     MatHeaderCellDef,
-    MatProgressSpinner
+    MatProgressSpinner,
+    FaqComponent
   ],
   templateUrl: './edit-order.component.html',
   styleUrl: './edit-order.component.css'
@@ -209,4 +220,6 @@ export class EditOrderComponent {
   toLocalDateTimeString(date: Date): string {
     return date.toISOString().slice(0, 19);
   }
+
+  protected readonly FAQ = FAQ;
 }

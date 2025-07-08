@@ -1,9 +1,9 @@
-<h2 matDialogTitle>{{data.Headline}}</h2>
+<h2 matDialogTitle>{{ data.Headline }}</h2>
 <mat-dialog-content>
-  @for (info of data.info;track $index){
+  @for (info of data.info; track $index) {
     <div>
-      <p>{{info.title}}</p>
-      <p>{{info.message}}</p>
+      <p class="bold">{{ info.title }}</p>
+      <p>{{ info.message }}</p>
     </div>
   }
 </mat-dialog-content>

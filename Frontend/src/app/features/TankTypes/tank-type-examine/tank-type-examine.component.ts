@@ -19,7 +19,17 @@ import {MatSelect} from "@angular/material/select";
 import {ConfirmDialogComponent} from "../../../shared/confirm-dialog/confirm-dialog.component";
 import {NewTankType} from "../../../core/interfaces/tanks/new-tank-type";
 import {DialogService} from "../../../core/services/dialog.service";
+import {MatDivider} from "@angular/material/divider";
+import {FaqComponent} from "../../../shared/faq/faq.component";
+import {Extras} from "../../../core/interfaces/extras";
+const FAQ:Extras = {
+  Headline: "FAQ",
+  info: [
+    {title:'Vol100 que significa?',message:'vol100 se refiere     al recargo monetario que se  le asigna al    tanque  por    trasladarlo hasta 100km',},
+    {title:'que es capas?',message:'se refiere a las capas que componen el tanque, si esta  hecho con    una, dos    o tres    capas',},
+  ]
 
+}
 @Component({
   selector: 'app-tank-type-examine',
   standalone: true,
@@ -42,6 +52,8 @@ import {DialogService} from "../../../core/services/dialog.service";
     MatSelect,
     MatSuffix,
     ReactiveFormsModule,
+    MatDivider,
+    FaqComponent,
   ],
   templateUrl: './tank-type-examine.component.html',
   styleUrl: './tank-type-examine.component.css'
@@ -155,4 +167,6 @@ export class TankTypeExamineComponent {
     const {id, createdDate, lastUpdatedAt, ...newTank} = tank;
     return newTank;
   }
+
+  protected readonly FAQ = FAQ;
 }

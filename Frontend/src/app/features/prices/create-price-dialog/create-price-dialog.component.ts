@@ -12,6 +12,18 @@ import {DialogService} from "../../../core/services/dialog.service";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {MatDivider} from "@angular/material/divider";
 import {CurrencyPipe} from "@angular/common";
+import {Extras} from "../../../core/interfaces/extras";
+import {FaqComponent} from "../../../shared/faq/faq.component";
+
+const FAQ: Extras = {
+  Headline: "FAQ",
+  info: [
+    {
+      title: 'Que diferencia hay entre comision y recargo Correlon?',
+      message: 'preguntar al oso',
+    },
+  ]
+}
 
 @Component({
   selector: 'app-create-price-dialog',
@@ -30,9 +42,9 @@ import {CurrencyPipe} from "@angular/common";
     ReactiveFormsModule,
     MatProgressSpinner,
     MatDivider,
-    MatSuffix,
     MatPrefix,
-    CurrencyPipe
+    CurrencyPipe,
+    FaqComponent
   ],
   templateUrl: './create-price-dialog.component.html',
   styleUrl: './create-price-dialog.component.css'
@@ -126,4 +138,6 @@ export class CreatePriceDialogComponent {
       })
     }
   }
+
+  protected readonly FAQ = FAQ;
 }

@@ -18,14 +18,20 @@ import {MatDivider} from "@angular/material/divider";
 import {FaqComponent} from "../../../shared/faq/faq.component";
 import {Extras} from "../../../core/interfaces/extras";
 
-const FAQ:Extras = {
+const FAQ: Extras = {
   Headline: "FAQ",
   info: [
-    {title:'Vol100 que significa?',message:'vol100 se refiere     al recargo monetario que se  le asigna al    tanque  por    trasladarlo hasta 100km',},
-    {title:'que es capas?',message:'se refiere a las capas que componen el tanque, si esta  hecho con    una, dos    o tres    capas',},
+    {
+      title: 'Vol100 que significa?',
+      message: 'vol100 se refiere     al recargo monetario que se  le asigna al    tanque  por    trasladarlo hasta 100km',
+    },
+    {
+      title: 'que es capas?',
+      message: 'se refiere a las capas que componen el tanque, si esta  hecho con    una, dos    o tres    capas',
+    },
   ]
-
 }
+
 @Component({
   selector: 'app-new-tank-type',
   standalone: true,
@@ -104,8 +110,8 @@ export class NewTankTypeComponent {
         next: (response) => {
           console.log('guardado exitosamente', response);
 
-          this.dialogService.confirm('¡Guardado exitosamente!','¿Deseás cargar otro tipo de tanque?').subscribe(
-            ok=>{
+          this.dialogService.confirm('¡Guardado exitosamente!', '¿Deseás cargar otro tipo de tanque?').subscribe(
+            ok => {
               if (ok) {
                 this.tankTypeForm.reset({
                   type: '',

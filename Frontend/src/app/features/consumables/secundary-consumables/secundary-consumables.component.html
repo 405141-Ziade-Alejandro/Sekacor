@@ -4,6 +4,7 @@
       <h2 class="title">Insumos Secundarios</h2>
       <p class="subtitle">Carga y Gestion de insumos secundarios</p>
     </div>
+    <app-faq [faq]="FAQ"></app-faq>
   </div>
   <form [formGroup]="ConsumableForm" (ngSubmit)="save()" class="consumable-form">
     <mat-form-field appearance="outline">
@@ -75,7 +76,7 @@
                    (input)="inputValues[consumable.id] = $any($event.target).valueAsNumber"
                    step="0.01">
           </mat-form-field>
-          <button mat-mini-fab (click)="add(consumable.id)" [disabled]="isLoading">
+          <button mat-mini-fab (click)="add(consumable.id)" color="primary" [disabled]="isLoading">
             @if (override) {
               <mat-icon>content_copy</mat-icon>
             } @else {
