@@ -28,7 +28,7 @@ public class OrderEntity extends BaseEntity {
     @Column(name = "FECHA_ENTREGA")
     private LocalDateTime orderDate;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderDetailsEntity> details;
 
     @Column(name = "PRECIO_TOTAL",precision = 10,scale = 2)

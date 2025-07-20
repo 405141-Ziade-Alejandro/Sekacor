@@ -65,14 +65,14 @@ public class OrderServiceImpl implements OrderService {
         for (OrderDetailDto detailDto : dto.getOrderDetails()) {
             OrderDetailsEntity detail = new OrderDetailsEntity();
 
-            /*todo: see if this can be better,
-            *  for now it just search the DB for each detail*/
+
             detail.setTankType(tankTypeRepository.findById(detailDto.getTypeTankId())
                     .orElseThrow(() -> new EntityNotFoundException("Tank type not found")));
 
 
             detail.setQuantity(detailDto.getQuantity());
             detail.setPrice(detailDto.getPrice());
+            detail.setOrder(orderEntity);
             detailsEntityList.add(detail);
         }
         orderEntity.setDetails(detailsEntityList);
@@ -113,6 +113,7 @@ public class OrderServiceImpl implements OrderService {
             OrderDetailsEntity detail = new OrderDetailsEntity();
             detail.setQuantity(detailDto.getQuantity());
             detail.setPrice(detailDto.getPrice());
+            detail.setOrder(orderEntity);
 
             detail.setTankType(tankTypeRepository.findById(detailDto.getTypeTankId())
                     .orElseThrow(() -> new EntityNotFoundException("Tank type not found")));
@@ -201,7 +202,7 @@ public class OrderServiceImpl implements OrderService {
 
         for (OrderEntity orderEntity : orderEntityList) {
 //            if (orderEntity.getState() == OrderState.FINALIZADO) { todo: esto esta asi para facilitar el testing, una vez listo descomentar
-                orderDtoList.add(modelMapper.map(orderEntity, OrderDto.class));
+            orderDtoList.add(modelMapper.map(orderEntity, OrderDto.class));
 //            }
         }
         return orderDtoList;
@@ -210,14 +211,15 @@ public class OrderServiceImpl implements OrderService {
     /**
      * what this does is reduce from stock all the tanks that were sold
      * only stock 1 because those are the ones that are sold this way
+     *
      * @param details contains all the tankTypes and the amount sold of them
      */
     private void reduceTanksInStock(List<OrderDetailsEntity> details) {
         List<TankTypeEntity> tankTypeEntityList = new ArrayList<>();
 
         for (OrderDetailsEntity detail : details) {
-          detail.getTankType().setStock1(detail.getTankType().getStock1() - detail.getQuantity());
-          tankTypeEntityList.add(detail.getTankType());
+            detail.getTankType().setStock1(detail.getTankType().getStock1() - detail.getQuantity());
+            tankTypeEntityList.add(detail.getTankType());
         }
         tankTypeRepository.saveAll(tankTypeEntityList);
     }

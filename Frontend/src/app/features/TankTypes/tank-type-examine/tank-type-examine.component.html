@@ -2,13 +2,13 @@
 @if (updating && tankType !== undefined) {
   <div class="tank-form">
     <div class="form-section">
-      <h2>Datos del tipo de tanque</h2>
+      <h2>Datos del Tipo de Tanque</h2>
       <div class="form-row">
         <mat-form-field appearance="outline">
           <!--nombre-->
           <mat-label>Nombre</mat-label>
           <input matInput minlength="3" maxlength="50" [(ngModel)]="tankType.type">
-          <mat-hint>minimo 3 letras</mat-hint>
+          <mat-hint>Mínimo 3 letras</mat-hint>
         </mat-form-field>
         <!--capas-->
         <mat-form-field appearance="outline">
@@ -38,7 +38,7 @@
         <mat-form-field appearance="outline">
           <mat-label>Volumen 100 Km</mat-label>
           <input matInput type="number" min="0" step="0.01" [(ngModel)]="tankType.vol100">
-          <span matTextSuffix>%</span>
+          <span matTextPrefix>$</span>
         </mat-form-field>
         <!--vol200-->
         <mat-form-field appearance="outline">
@@ -99,10 +99,10 @@
         <mat-checkbox class="example-margin" [(ngModel)]="showSticker">Sticker</mat-checkbox>
         @if (showSticker) {
           <mat-form-field appearance="outline">
-            <mat-label>Tipo de Tapa</mat-label>
+            <mat-label>Sticker</mat-label>
             <mat-select [(ngModel)]="tankType.sticker">
               <mat-option value="TANQUE">Tanque</mat-option>
-              <mat-option value="CAMARA_SEPTICA">Camara Septica</mat-option>
+              <mat-option value="CAMARA_SEPTICA">Cámara Séptica</mat-option>
             </mat-select>
           </mat-form-field>
         }
@@ -120,12 +120,12 @@
       <div class="form-actions">
         <button mat-raised-button color="primary" type="button" (click)="save()" [disabled]="isLoading">
           @if (!isLoading) {
-            guardar
+            Guardar
           } @else {
             <mat-spinner diameter="20"></mat-spinner>
           }
         </button>
-        <button mat-raised-button color="color" type="button" (click)="switch()">Cancelar</button>
+        <button mat-raised-button type="button" (click)="switch()">Cancelar</button>
         <app-faq [faq]="FAQ"></app-faq>
       </div>
     </div>
@@ -173,7 +173,7 @@
           <div class="detail-item">
             <strong>Sticker:</strong>
             @if (tankType?.sticker === "CAMARA_SEPTICA") {
-              Camara Septica
+              Cámara Séptica
             } @else {
               Tanque
             }

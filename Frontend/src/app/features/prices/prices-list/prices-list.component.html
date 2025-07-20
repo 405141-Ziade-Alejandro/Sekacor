@@ -3,13 +3,13 @@
     <div>
       <h2 class="title">Listado de Precios</h2>
       @if (dolar !== 0) {
-        <p class="subtitle">Valor dólar a principio de mes: ${{ dolar }}</p>
+        <p class="subtitle">Valor del dólar a principios de mes: ${{ dolar }}</p>
       }
     </div>
 
     <div class="header-actions">
       <mat-form-field appearance="outline">
-        <mat-label>Elija la lista</mat-label>
+        <mat-label>Seleccione una lista</mat-label>
         <mat-select (selectionChange)="changeSelection($event.value)">
           @for (price of priceList; track $index) {
             <mat-option [value]="$index">{{ price.name }}</mat-option>
@@ -20,7 +20,7 @@
       <button mat-mini-fab color="primary" (click)="examine()" [disabled]="priceListSelected.id===0" matTooltip="Examinar lista">
         <mat-icon>visibility</mat-icon>
       </button>
-      <button mat-mini-fab color="accent" (click)="delete()" [disabled]="priceListSelected.id===0" matTooltip="Borrar Lista">
+      <button mat-mini-fab color="accent" (click)="delete()" [disabled]="priceListSelected.id===0" matTooltip="Borrar lista">
         <mat-icon>delete</mat-icon>
       </button>
 
@@ -58,7 +58,7 @@
         </ng-container>
 
         <ng-container matColumnDef="recargo">
-          <th mat-header-cell *matHeaderCellDef>Recargo Correlon</th>
+          <th mat-header-cell *matHeaderCellDef>Recargo Corralón</th>
 
           <td mat-cell *matCellDef="let tank">
             @if (somethingSelected) {

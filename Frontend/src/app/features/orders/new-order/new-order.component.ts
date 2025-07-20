@@ -103,6 +103,8 @@ export class NewOrderComponent {
   priceListList:PriceList[]=[]
   currentDate = new Date();
 
+  dolar:number = 0
+
   isLoading: boolean = false;
 
   //methods
@@ -131,6 +133,9 @@ export class NewOrderComponent {
     })
     this.priceService.getAllPrices().subscribe(data => {
       this.priceListList = data;
+    })
+    this.priceService.getDolar().subscribe(data => {
+      this.dolar = data.usdValue
     })
   }
 
@@ -227,7 +232,7 @@ export class NewOrderComponent {
 
   getTankName(id: number): string {
     const tankType = this.typeTankList.find(tt => tt.id === id)
-    return tankType ? tankType.type + " | " + tankType.cover + " | " + tankType.quantity : "tanque borrado"
+    return tankType ? tankType.type + " | " + tankType.cover + " | " + tankType.quantity : "Tipo de tanque borrado"
   }
 
   //this is what needs
@@ -245,10 +250,9 @@ export class NewOrderComponent {
           } else if (priceList.volKm === "DOSCIENTOS") {
             price = price + tank.vol200
           }
-          // price = +(price / this.dolar).toFixed(2)  not necesary since it won't  be tied to the dolar
+          price = +(price / this.dolar).toFixed(2)  //not necesary since it won't  be tied to the dolar
           return price
         }
-        return 0
       }
     }
     return 0

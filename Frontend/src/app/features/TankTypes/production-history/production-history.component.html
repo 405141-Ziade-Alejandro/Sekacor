@@ -1,7 +1,7 @@
 <mat-card appearance="outlined" class="tank-list-card">
   <mat-card-header>
-    <mat-card-title>historial de produccion</mat-card-title>
-    <mat-card-subtitle>lista ded tanques hechos</mat-card-subtitle>
+    <mat-card-title>Historial de Producción</mat-card-title>
+    <mat-card-subtitle>Lista de tanques hechos</mat-card-subtitle>
     <span class="spacer"></span>
     <button mat-mini-fab color="primary" routerLink="/production" matTooltip="Registrar un tanque nuevo">
       <mat-icon>build</mat-icon>
@@ -13,25 +13,25 @@
       <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
         <!--      nombre-->
         <ng-container matColumnDef="typeId">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>nombre</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
           <td mat-cell *matCellDef="let tank"> {{ getTankType(tank.typeId) }}</td>
         </ng-container>
 
         <!--      operario-->
         <ng-container matColumnDef="userId">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>hecho por</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Hecho por</th>
           <td mat-cell *matCellDef="let tank"> {{ getUserName(tank.userId) }}</td>
         </ng-container>
 
         <!--      fecha-->
         <ng-container matColumnDef="createdDate">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>fecha</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
           <td mat-cell *matCellDef="let tank"> {{ tank.createdDate | date }}</td>
         </ng-container>
 
         <!--      accion-->
         <ng-container matColumnDef="acciones">
-          <th mat-header-cell *matHeaderCellDef>acciones</th>
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
           <td mat-cell *matCellDef="let tank">
             <button mat-icon-button color="warn" (click)="deleteTank(tank.id)">
               <mat-icon>delete</mat-icon>
