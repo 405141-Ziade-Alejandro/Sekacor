@@ -1,8 +1,12 @@
-<h2>Insumos secundarios</h2>
-<mat-toolbar>
-<!--agrega nuevo insumo, que pueden ser de cualquier cosa-->
-  <form [formGroup]="ConsumableForm" (ngSubmit)="save()">
-    <h3>nuevo insumo</h3>
+<mat-card class="consumable-list-card" appearance="outlined">
+  <div class="custom-card-header">
+    <div>
+      <h2 class="title">Insumos Secundarios</h2>
+      <p class="subtitle">Carga y Gestion de insumos secundarios</p>
+    </div>
+    <app-faq [faq]="FAQ"></app-faq>
+  </div>
+  <form [formGroup]="ConsumableForm" (ngSubmit)="save()" class="consumable-form">
     <mat-form-field appearance="outline">
       <mat-label>nombre</mat-label>
       <input matInput minlength="3" maxlength="50" formControlName="type">
@@ -27,13 +31,17 @@
       </mat-select>
     </mat-form-field>
 
-    <button mat-icon-button type="submit" [disabled]="ConsumableForm.invalid">
-      <mat-icon>add</mat-icon>
+    <button mat-mini-fab color="primary" type="submit" [disabled]="ConsumableForm.invalid||isLoading" matTooltip="Agregar nuevo Insumo" >
+      @if (isLoading) {
+        <mat-spinner diameter="20"></mat-spinner>
+      } @else {
+        <mat-icon>add</mat-icon>
+      }
     </button>
+    <mat-checkbox [(ngModel)]="override">Sobrescribir valores</mat-checkbox>
   </form>
-</mat-toolbar>
 
-<mat-card>
+  <mat-divider></mat-divider>
   <mat-card-content>
     <table mat-table [dataSource]="consumablesList">
       <ng-container matColumnDef="name">
@@ -46,14 +54,21 @@
       <ng-container matColumnDef="stock">
         <th mat-header-cell *matHeaderCellDef>stock</th>
         <td mat-cell *matCellDef="let consumable">
-          {{ consumable.quantity }} {{consumable.unit}}
+          {{ consumable.quantity }}
+          @if ( consumable.unit==="LITRO") {
+            Litros
+          } @else if (consumable.unit === "KILOGRAMO") {
+            Kilogramos
+          } @else {
+            Unidades
+          }
         </td>
       </ng-container>
 
       <ng-container matColumnDef="subtype">
         <th mat-header-cell *matHeaderCellDef>subtipo</th>
         <td mat-cell *matCellDef="let consumable">
-          {{consumable.subType}}
+          {{ consumable.subType }}
         </td>
       </ng-container>
 
@@ -68,8 +83,12 @@
                    (input)="inputValues[consumable.id] = $any($event.target).valueAsNumber"
                    step="0.01">
           </mat-form-field>
-          <button mat-mini-fab (click)="add(consumable.id)">
-            <mat-icon>add</mat-icon>
+          <button mat-mini-fab (click)="add(consumable.id)" color="primary" [disabled]="isLoading">
+            @if (override) {
+              <mat-icon>content_copy</mat-icon>
+            } @else {
+              <mat-icon>add</mat-icon>
+            }
           </button>
           <button mat-mini-fab (click)="delete(consumable.id)">
             <mat-icon>delete_forever</mat-icon>

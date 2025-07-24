@@ -1,5 +1,7 @@
 package ar.edu.utn.frc.tup.lc.iii.controllers.users;
 
+import ar.edu.utn.frc.tup.lc.iii.dtos.users.LoginDto;
+import ar.edu.utn.frc.tup.lc.iii.dtos.users.PassChangeDto;
 import ar.edu.utn.frc.tup.lc.iii.dtos.users.UserDto;
 import ar.edu.utn.frc.tup.lc.iii.dtos.users.UserNewDto;
 import ar.edu.utn.frc.tup.lc.iii.services.UserService;
@@ -36,5 +38,15 @@ public class UserController {
     public ResponseEntity<Void> delete(@PathVariable long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<UserDto> login(@RequestBody LoginDto dto) {
+        return ResponseEntity.ok(userService.logIn(dto));
+    }
+
+    @PutMapping("/pass-change")
+    public ResponseEntity<Boolean> changePassword(@RequestBody PassChangeDto dto) {
+        return ResponseEntity.ok(userService.changePass(dto));
     }
 }

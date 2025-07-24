@@ -16,10 +16,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -92,5 +94,13 @@ public class TankController {
         Page<TankDto> tankDtoPage = tankService.getAllTanks(pageable);
 
         return ResponseEntity.ok(tankDtoPage);
+    }
+
+    @GetMapping("/reports/tank-made")
+    public ResponseEntity<List<TankDto>> getTanksReport(
+            @RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)LocalDateTime start,
+            @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)LocalDateTime end
+            ) {
+        return ResponseEntity.ok(tankService.getTankReport(start,end));
     }
 }

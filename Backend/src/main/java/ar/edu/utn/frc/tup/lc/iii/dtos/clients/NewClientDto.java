@@ -13,4 +13,5 @@ public class NewClientDto {
     private String name;
     private String telephone;
     private long  priceListId;
+    private String direction;
 }

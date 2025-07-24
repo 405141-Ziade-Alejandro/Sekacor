@@ -1,5 +1,6 @@
 package ar.edu.utn.frc.tup.lc.iii.controllers.prices;
 
+import ar.edu.utn.frc.tup.lc.iii.dtos.prices.ExchangeRateDto;
 import ar.edu.utn.frc.tup.lc.iii.dtos.prices.PriceListDto;
 import ar.edu.utn.frc.tup.lc.iii.services.PriceListService;
 import lombok.RequiredArgsConstructor;
@@ -34,5 +35,10 @@ public class PriceListController {
     public ResponseEntity<Void> delete(@PathVariable long id) {
         priceListService.deleteList(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/dolar")
+    public ResponseEntity<ExchangeRateDto> getLatestExchangeRate() {
+        return ResponseEntity.ok(priceListService.getExchangeRateLatest());
     }
 }

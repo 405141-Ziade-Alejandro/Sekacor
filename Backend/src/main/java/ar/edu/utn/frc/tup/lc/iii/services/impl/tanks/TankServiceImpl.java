@@ -25,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -110,6 +111,13 @@ public class TankServiceImpl implements TankService {
             log.error("Tank type with id {} not found", id);
             throw new EntityNotFoundException("Tank Type with id '" + id + "' does not exist");
         }
+        List<TankEntity> tankEntities = tankRepository.findAllByType(check.get());
+
+        for (TankEntity tank : tankEntities) {
+            tank.setType(null);
+        }
+        tankRepository.saveAll(tankEntities);
+
         tankTypeRepository.delete(check.get());
         log.info("Tank type with id {} deleted", id);
     }
@@ -275,7 +283,7 @@ public class TankServiceImpl implements TankService {
         BigDecimal availableConsumable = primaryConsumable.getQuantity();
 
         if (availableConsumable.compareTo(consumableRequiredByTheTank) < 0) {
-            missingList.add(new MissingConsumableDto(consumableType, consumableSubType, consumableRequiredByTheTank, availableConsumable));
+            missingList.add(new MissingConsumableDto(consumableType, consumableSubType, consumableRequiredByTheTank, availableConsumable,primaryConsumable.getUnit()));
         }
     }
 
@@ -311,5 +319,15 @@ public class TankServiceImpl implements TankService {
         return new PageImpl<>(tankDtos, pageable, page.getTotalElements());
     }
 
+    @Override
+    public List<TankDto> getTankReport(LocalDateTime start, LocalDateTime end) {
+        List<TankEntity> tankEntities = tankRepository.findAllByCreatedDateBetween(start, end);
+        List<TankDto> tankDtos = new ArrayList<>(tankEntities.size());
+
+        for (TankEntity tankEntity : tankEntities) {
+            tankDtos.add(modelMapper.map(tankEntity, TankDto.class));
+        }
+        return tankDtos;
+    }
+
 }
-//todo: make sure to add @transactional to all post, put delete in the sistem

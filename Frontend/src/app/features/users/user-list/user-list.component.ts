@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, ViewChild} from '@angular/core';
 import {
   MatCell,
   MatCellDef,
@@ -6,7 +6,7 @@ import {
   MatHeaderCell,
   MatHeaderCellDef,
   MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef,
-  MatTable
+  MatTable, MatTableDataSource
 } from "@angular/material/table";
 import {MatToolbar} from "@angular/material/toolbar";
 import {MatIconButton, MatMiniFabButton} from "@angular/material/button";
@@ -17,6 +17,23 @@ import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {DialogService} from "../../../core/services/dialog.service";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {MatSort, MatSortHeader} from "@angular/material/sort";
+import {MatCard, MatCardContent} from "@angular/material/card";
+import {MatDivider} from "@angular/material/divider";
+import {Extras} from "../../../core/interfaces/extras";
+import {FaqComponent} from "../../../shared/faq/faq.component";
+
+const FAQ: Extras = {
+  Headline: "FAQ",
+  info: [
+    {
+      title: 'como creo un usuario con rol de administrador?',
+      message: 'dado el gran control que un usuario de administrador tiene, es recomendado que se contacte con el programador para ingresarlo en la base de datos directamente',
+    },
+  ]
+}
 
 @Component({
   selector: 'app-user-list',
@@ -32,8 +49,6 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/
     MatRow,
     MatRowDef,
     MatHeaderRowDef,
-    MatToolbar,
-    MatIconButton,
     MatIcon,
     MatMiniFabButton,
     MatFormField,
@@ -41,25 +56,42 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/
     MatInput,
     MatSelect,
     MatOption,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatProgressSpinner,
+    MatSort,
+    MatSortHeader,
+    MatCard,
+    MatDivider,
+    MatCardContent,
+    FaqComponent
   ],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.css'
 })
 export class UserListComponent {
   //form
-  formUser:FormGroup = new FormGroup({
+  formUser: FormGroup = new FormGroup({
     name: new FormControl('', Validators.required),
     role: new FormControl('', Validators.required)
   });
 
   //services
   private userService = inject(UserService)
+  dialogService = inject(DialogService)
   //variables
-  displayedColumns: string[] = ['Nombre', 'Rol', 'actions'];
-  userList: User[] = [];
+  displayedColumns: string[] = ['name', 'role', 'actions'];
+
+  dataSource = new MatTableDataSource<User>([])
+
+  isLoading: boolean = false;
 
   //methods
+  @ViewChild(MatSort) sort!: MatSort;
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+  }
+
   ngOnInit() {
     this.loadUsers()
   }
@@ -67,7 +99,7 @@ export class UserListComponent {
   private loadUsers() {
     this.userService.getAllUsers().subscribe({
       next: data => {
-        this.userList = data
+        this.dataSource.data = data
       },
       error: error => {
         console.log(error)
@@ -76,23 +108,30 @@ export class UserListComponent {
   }
 
   delete(id: number) {
-    if (confirm("Are you sure you want to delete this user?")) {
-      this.userService.deleteUser(id).subscribe({
-        next: data => {
-          console.log('deleted user', data)
-          this.loadUsers()
-        },
-        error: error => {
-          console.error(error)
+
+    this.dialogService.confirm('Borrar Usuario', 'Esta accion Borrara al usuario, esta seguro?')
+      .subscribe(ok => {
+        this.isLoading = true;
+        if (ok) {
+          this.userService.deleteUser(id).subscribe({
+            next: () => {
+              this.dialogService.alert('Exito', 'El usuario fue borrado permanentemente').subscribe()
+              this.loadUsers()
+            },
+            error: error => {
+              console.log(error)
+            }
+          })
         }
+        this.isLoading = false;
       })
-    }
   }
 
   submit() {
     if (this.formUser.invalid) {
       console.error("this form is invalid")
     } else {
+      this.isLoading = true;
       const newUser: User = {
         ...this.formUser.value
       }
@@ -100,15 +139,20 @@ export class UserListComponent {
       this.userService.postUser(newUser).subscribe({
         next: data => {
           console.log('post user', data)
+          this.dialogService.alert('Exito', 'Usuario' + newUser.name + ' Creado').subscribe()
 
           this.formUser.reset()
 
           this.loadUsers()
+          this.isLoading = false
         },
         error: error => {
-          console.error('something went wrong', error)
+          console.error('something went wrong', error.message)
+          this.isLoading = false
         }
       })
     }
   }
+
+  protected readonly FAQ = FAQ;
 }

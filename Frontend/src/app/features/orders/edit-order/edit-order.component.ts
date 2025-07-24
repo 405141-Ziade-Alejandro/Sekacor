@@ -27,7 +27,21 @@ import {TankServiceService} from "../../../core/services/tank-service.service";
 import {ClientService} from "../../../core/services/client.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Order} from "../../../core/interfaces/orders/order";
-
+import {DialogService} from "../../../core/services/dialog.service";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {Extras} from "../../../core/interfaces/extras";
+import {FaqComponent} from "../../../shared/faq/faq.component";
+import {PriceList} from "../../../core/interfaces/prices/price-list";
+import {PricesService} from "../../../core/services/prices.service";
+const FAQ: Extras = {
+  Headline: "FAQ",
+  info: [
+    {
+      title: 'Placeholder question?',
+      message: 'placeholder answer',
+    },
+  ]
+}
 @Component({
   selector: 'app-edit-order',
   standalone: true,
@@ -62,7 +76,9 @@ import {Order} from "../../../core/interfaces/orders/order";
     MatSuffix,
     MatTable,
     ReactiveFormsModule,
-    MatHeaderCellDef
+    MatHeaderCellDef,
+    MatProgressSpinner,
+    FaqComponent
   ],
   templateUrl: './edit-order.component.html',
   styleUrl: './edit-order.component.css'
@@ -78,25 +94,29 @@ export class EditOrderComponent {
     orderDate: new FormControl('')
   })
   //services
-  orderService = inject(OrdersService)
-  tankService = inject(TankServiceService)
-  clientService = inject(ClientService)
-  router = inject(Router);
+  private orderService = inject(OrdersService)
+  private tankService = inject(TankServiceService)
+  private clientService = inject(ClientService)
+  private priceListService = inject(PricesService)
+  private router = inject(Router);
+  private dialogService= inject(DialogService)
   private activatedRoute = inject(ActivatedRoute)
   //variables
   columnsToDisplay: string[] = ['product', 'quantity', 'price', 'action']
   detailList:OrderDetail[]=[]
   clientList: Client[]= [];
   typeTankList: TankType[]=[];
+  priceLists:PriceList[]=[]
   currentDate:Date= new Date()
   currentOrder:Order = {
     clientId: 0, createdDate: "", id: 0, lastUpdatedAt: "", orderDate: "", orderDetails: [], state: "", totalPrice: 0
-
   }
   currentId:number=0
+  dolar:number = 0
+  isLoading:boolean=false
   //methods
   ngOnInit() {
-    this.loadClientsAndTanks()
+    this.loadData()
     this.getOrderInfo()
   }
 
@@ -111,7 +131,7 @@ export class EditOrderComponent {
             clientId: this.currentOrder.clientId,
             orderDate: this.currentOrder.orderDate,
           })
-          this.detailList = this.currentOrder.orderDetails
+          this.detailList = this.processedDetails(this.currentOrder.orderDetails)
         },
         error: error => {
           console.error(error);
@@ -122,21 +142,29 @@ export class EditOrderComponent {
 
   editOrder() {
     if (this.formEditOrder.invalid || this.detailList.length < 1) {
-      alert("el formulario es invalido o no tiene tanques cargados")
+      if (this.detailList.length < 1) {
+        this.dialogService.alert('Error','Debe  tener por lo menos un tanque en la  orden').subscribe()
+      }else alert("el formulario es invalido")
     } else{
+      this.isLoading = true;
       this.currentOrder.clientId = this.formEditOrder.value.clientId;
       this.currentOrder.orderDate = this.formEditOrder.value.orderDate
 
       this.currentOrder.orderDetails = this.detailList
 
+      if (typeof this.formEditOrder.value.orderDate==="object") {
+        this.currentOrder.orderDate = this.toLocalDateTimeString(this.formEditOrder.value.orderDate)
+      }
+
       this.orderService.putOrder(this.currentOrder).subscribe({
         next: data => {
-          console.log('success', data);
+          this.dialogService.alert('Exito','La orden fue actualizada correctamente')
           this.router.navigate(['/orders/all']);
+          this.isLoading = false;
         },
-
         error: error => {
           console.error(error);
+          this.isLoading = false;
         }
       })
     }
@@ -152,7 +180,9 @@ export class EditOrderComponent {
 
     } else {
       const newDetail: OrderDetail = {
-        price: tankType.cost, quantity: 1, typeTankId: tankType.id
+        price: this.calculatePrice(tankType), //todo fix this, is not the cose
+        quantity: 1,
+        typeTankId: tankType.id
       }
 
       this.detailList = [...this.detailList, newDetail];
@@ -170,15 +200,21 @@ export class EditOrderComponent {
   }
 
   leave() {
-    this.router.navigate(['/']);
+    this.router.navigate(['/orders/'+this.currentId]);
   }
 
-  private loadClientsAndTanks() {
+  private loadData() {
     this.clientService.getClientList().subscribe(data => {
       this.clientList = data;
     })
     this.tankService.getAllTankTypes().subscribe(data => {
       this.typeTankList = data;
+    })
+    this.priceListService.getAllPrices().subscribe(data => {
+      this.priceLists = data;
+    })
+    this.priceListService.getDolar().subscribe(data => {
+      this.dolar = data.usdValue
     })
   }
 
@@ -195,5 +231,51 @@ export class EditOrderComponent {
 
   toLocalDateTimeString(date: Date): string {
     return date.toISOString().slice(0, 19);
+  }
+
+  protected readonly FAQ = FAQ;
+
+  private calculatePrice(tankType: TankType) {
+    const clientId = this.formEditOrder.get('clientId')?.value;
+
+    if (clientId){
+      const client = this.clientList.find(c=>c.id === clientId);
+      if (client){
+        const priceList = this.priceLists.find(pl=> pl.id ===client.priceListId)
+        if (priceList){
+          let price = ((tankType.cost + priceList.profit) * priceList.commission) + (priceList.corralon * priceList.profit);
+          if (priceList.volKm === "CIEN") {
+            price = price + tankType.vol100
+          } else if (priceList.volKm === "DOSCIENTOS") {
+            price = price + tankType.vol200
+          }
+          price = +(price / this.dolar).toFixed(2)  //not necesary since it won't  be tied to the dolar
+          return price
+        }
+      }
+    }
+    return 0;
+  }
+
+  getTankName(id: number) {
+    const tanType = this.typeTankList.find(tt=>tt.id === id);
+    return tanType ? tanType.type + " | " + tanType.cover + " | " + tanType.quantity : "Tipo de tanque borrado";
+  }
+
+  private processedDetails(orderDetails: OrderDetail[]) {
+    const processedList:OrderDetail[] = []
+
+    for (let detail of orderDetails) {
+      let tankType = this.typeTankList.find(tt => tt.id === detail.typeTankId)
+      if (tankType){
+        const newDetail: OrderDetail = {
+          typeTankId : detail.typeTankId,
+          quantity: detail.quantity,
+          price : this.calculatePrice(tankType),
+        }
+        processedList.push(newDetail)
+      }
+    }
+    return processedList;
   }
 }

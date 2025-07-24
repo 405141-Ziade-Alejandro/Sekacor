@@ -1,5 +1,5 @@
 import {Component, inject} from '@angular/core';
-import {MatCard, MatCardContent} from "@angular/material/card";
+import {MatCard, MatCardContent, MatCardHeader} from "@angular/material/card";
 import {
   MatCell,
   MatCellDef,
@@ -13,13 +13,28 @@ import {MatIcon} from "@angular/material/icon";
 import {MatIconButton, MatMiniFabButton} from "@angular/material/button";
 import {SecondaryConsumable} from "../../../core/interfaces/consumable/secondary-consumable";
 import {ConsumablesService} from "../../../core/services/consumables.service";
-import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatToolbar} from "@angular/material/toolbar";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {UpdateConsumable} from "../../../core/interfaces/consumable/update-consumable";
-
+import {DialogService} from "../../../core/services/dialog.service";
+import {MatCheckbox} from "@angular/material/checkbox";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {MatDivider} from "@angular/material/divider";
+import {MatTooltip} from "@angular/material/tooltip";
+import {Extras} from "../../../core/interfaces/extras";
+import {FaqComponent} from "../../../shared/faq/faq.component";
+const FAQ: Extras = {
+  Headline: "FAQ",
+  info: [
+    {
+      title: 'Quiero editar un insumo que registre, como lo hago?',
+      message: 'la edicion de un insumo solo esta habilitado para el stock, si quisiera modificar el nombre o subtipo, lo mejor seria borrar el insumo equivocado y cargarlo de nuevo correctamente',
+    },
+  ]
+}
 @Component({
   selector: 'app-secundary-consumables',
   standalone: true,
@@ -38,14 +53,18 @@ import {UpdateConsumable} from "../../../core/interfaces/consumable/update-consu
     MatRowDef,
     MatTable,
     MatHeaderCellDef,
-    MatToolbar,
     ReactiveFormsModule,
     MatFormField,
     MatLabel,
     MatInput,
-    MatIconButton,
     MatSelect,
-    MatOption
+    MatOption,
+    MatCheckbox,
+    FormsModule,
+    MatProgressSpinner,
+    MatDivider,
+    MatTooltip,
+    FaqComponent
   ],
   templateUrl: './secundary-consumables.component.html',
   styleUrl: './secundary-consumables.component.css'
@@ -60,13 +79,17 @@ export class SecundaryConsumablesComponent {
   })
 
   //services
-  consumableService=inject(ConsumablesService)
+  consumableService = inject(ConsumablesService)
+  dialogService = inject(DialogService)
 
   //variables
-  consumablesList: SecondaryConsumable[]=[];
-  columnsToDisplay: string[]=['name','subtype','stock','add']
+  consumablesList: SecondaryConsumable[] = [];
+  columnsToDisplay: string[] = ['name', 'subtype', 'stock', 'add']
 
-  inputValues: {[id:number]:number} = {}
+  inputValues: { [id: number]: number } = {}
+
+  override: boolean = false;
+  isLoading:boolean = false;
 
   //methods
   ngOnInit(): void {
@@ -88,23 +111,24 @@ export class SecundaryConsumablesComponent {
     if (this.ConsumableForm.invalid) {
       console.error("this form is invalid");
     } else {
+      this.isLoading = true;
       const consumable: SecondaryConsumable = {
         ...this.ConsumableForm.value,
       }
-      if (consumable.subType==="") {
+      if (consumable.subType === "") {
         consumable.subType = "-";
       }
       this.consumableService.postSecondaryConsumable(consumable).subscribe({
         next: data => {
-          console.log('consumable saved', data);
-
           this.ConsumableForm.reset();
           this.ConsumableForm.markAsPristine()
 
           this.loadConsumables()
+          this.isLoading = false;
         },
         error: err => {
           console.error('something went wrong sending the data to the backend', err)
+          this.isLoading = false;
         }
       })
     }
@@ -113,46 +137,55 @@ export class SecundaryConsumablesComponent {
   /**
    * mirar el add de primary consumables, es casi igual y esta mas detallado ahi
    */
-  add(id:number) {
+  add(id: number) {
 
     const addedValue = this.inputValues[id]
-    if (typeof addedValue!=='number'|| isNaN(addedValue)) {
-      console.warn('invalid value');
+    if (typeof addedValue !== 'number' || isNaN(addedValue)) {
       this.inputValues[id] = 0;
       return;
     }
     const consumableToUpdate = this.consumablesList.find(consumable => consumable.id === id)
 
     if (!consumableToUpdate) return;
+    this.isLoading=true
 
     let update: UpdateConsumable = {
       consumableId: consumableToUpdate.id,
       quantity: consumableToUpdate.quantity + addedValue
     }
+    if (this.override){
+      update.quantity = addedValue;
+    }
 
     this.consumableService.putSecondaryConsumable(update).subscribe({
       next: data => {
-        console.log('consumable updated', data);
         this.inputValues[id] = 0
         this.loadConsumables()
+        this.isLoading=false
       },
       error: err => {
         console.error('something went wrong sending the data to the backend', err)
+        this.isLoading=false
       }
     })
 
   }
 
-  delete(id:number) {
-
-    this.consumableService.deleteSecondaryConsumable(id).subscribe({
-      next: data => {
-        console.log('consumable deleted');
-        this.loadConsumables()
-      },
-      error: err => {
-        console.error('something went wrong sending the data to the backend', err)
-      }
-    })
+  delete(id: number) {
+    this.dialogService.confirm('Confirmar Borrado','Esta Accion borrara el insumo, desea continuar?')
+      .subscribe(ok=> {
+        if (ok){
+          this.consumableService.deleteSecondaryConsumable(id).subscribe({
+            next: data => {
+              this.loadConsumables()
+            },
+            error: err => {
+              console.error('something went wrong sending the data to the backend', err)
+            }
+          })
+        }
+      })
   }
+
+  protected readonly FAQ = FAQ;
 }

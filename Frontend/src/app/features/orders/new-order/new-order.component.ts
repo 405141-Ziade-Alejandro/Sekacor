@@ -29,6 +29,22 @@ import {CurrencyPipe} from "@angular/common";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Order} from "../../../core/interfaces/orders/order";
 import {Router} from "@angular/router";
+import {DialogService} from "../../../core/services/dialog.service";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {PricesService} from "../../../core/services/prices.service";
+import {PriceList} from "../../../core/interfaces/prices/price-list";
+import {Extras} from "../../../core/interfaces/extras";
+import {FaqComponent} from "../../../shared/faq/faq.component";
+
+const FAQ: Extras = {
+  Headline: "FAQ",
+  info: [
+    {
+      title: 'Placeholder question?',
+      message: 'placeholder answer',
+    },
+  ]
+}
 
 @Component({
   selector: 'app-new-order',
@@ -60,6 +76,8 @@ import {Router} from "@angular/router";
     MatMiniFabButton,
     CurrencyPipe,
     ReactiveFormsModule,
+    MatProgressSpinner,
+    FaqComponent,
   ],
   templateUrl: './new-order.component.html',
   styleUrl: './new-order.component.css'
@@ -68,30 +86,56 @@ export class NewOrderComponent {
   //form
   formOrder: FormGroup = new FormGroup({
     clientId: new FormControl('', [Validators.required]),
-    orderDate: new FormControl(''),
+    orderDate: new FormControl('', [Validators.required]),
   })
   //services
   orderService = inject(OrdersService)
   tankService = inject(TankServiceService)
   clientService = inject(ClientService)
   router = inject(Router);
+  dialogService = inject(DialogService)
+  priceService = inject(PricesService)
   //variables
   columnToDisplay: string[] = ['product', 'quantity', 'price', 'action'];
   clientList: Client[] = [];
   typeTankList: TankType[] = [];
-  detailList: OrderDetail[] = []
+  detailList: OrderDetail[] = [];
+  priceListList:PriceList[]=[]
   currentDate = new Date();
+
+  dolar:number = 0
+
+  isLoading: boolean = false;
+
   //methods
-  ngOnInit() {
-    this.loadClientsAndTanks()
+
+  get isClientSelected(): boolean {
+    return this.formOrder.get('clientId')?.valid ?? false;
   }
 
-  private loadClientsAndTanks() {
+  ngOnInit() {
+    this.loadData()
+    this.setupFormListeners()
+  }
+
+  private setupFormListeners() {
+    this.formOrder.get('clientId')?.valueChanges.subscribe(()=>{
+      this.detailList=[]
+    })
+  }
+
+  private loadData() {
     this.clientService.getClientList().subscribe(data => {
       this.clientList = data;
     })
     this.tankService.getAllTankTypes().subscribe(data => {
       this.typeTankList = data;
+    })
+    this.priceService.getAllPrices().subscribe(data => {
+      this.priceListList = data;
+    })
+    this.priceService.getDolar().subscribe(data => {
+      this.dolar = data.usdValue
     })
   }
 
@@ -105,7 +149,9 @@ export class NewOrderComponent {
 
     } else {
       const newDetail: OrderDetail = {
-        price: tankType.cost, quantity: 1, typeTankId: tankType.id
+        price: this.calculatePrice(tankType),
+        quantity: 1,
+        typeTankId: tankType.id
       }
 
       this.detailList = [...this.detailList, newDetail];
@@ -141,12 +187,13 @@ export class NewOrderComponent {
   sendOrder() {
     if (this.formOrder.invalid || this.detailList.length < 1) {
       if (this.detailList.length < 1) {
-        alert("debe por lo menos tener un tipo de tanque");
+        this.dialogService.alert('Error', 'Debe por lo menos tener un tipo de tanque en la orden').subscribe()
       } else {
         alert('this formulary is invalid')
       }
 
     } else if (this.formOrder.valid) {
+      this.isLoading = true;
       const newOrder: Order = {
         ...this.formOrder.value,
         orderDate: this.toLocalDateTimeString(this.formOrder.value.orderDate)
@@ -156,12 +203,15 @@ export class NewOrderComponent {
 
       this.orderService.postOrder(newOrder).subscribe({
         next: (responce) => {
-          console.log('order saved: ', responce);
+          // console.log('order saved: ', responce);
+          this.dialogService.alert('Exito', 'La orden se creo exitosamente').subscribe()
           this.formOrder.reset()
           this.detailList = []
+          this.isLoading = false
         },
         error: (error) => {
           console.log(error);
+          this.isLoading = false
         }
       })
     }
@@ -177,6 +227,36 @@ export class NewOrderComponent {
   }
 
   leave() {
-    this.router.navigate(['/']);
+    this.router.navigate(['/orders/all']);
   }
+
+  getTankName(id: number): string {
+    const tankType = this.typeTankList.find(tt => tt.id === id)
+    return tankType ? tankType.type + " | " + tankType.cover + " | " + tankType.quantity : "Tipo de tanque borrado"
+  }
+
+  //this is what needs
+  private calculatePrice(tank: TankType) {
+    const clientId = this.formOrder.get('clientId')?.value;
+
+    if (clientId) {
+      const client = this.clientList.find(c=>c.id === clientId);
+      if (client) {
+        const priceList = this.priceListList.find(pl=>pl.id===client.priceListId)
+        if (priceList) {
+          let price = ((tank.cost + priceList.profit) * priceList.commission) + (priceList.corralon * priceList.profit);
+          if (priceList.volKm === "CIEN") {
+            price = price + tank.vol100
+          } else if (priceList.volKm === "DOSCIENTOS") {
+            price = price + tank.vol200
+          }
+          price = +(price / this.dolar).toFixed(2)  //not necesary since it won't  be tied to the dolar
+          return price
+        }
+      }
+    }
+    return 0
+  }
+
+  protected readonly FAQ = FAQ;
 }

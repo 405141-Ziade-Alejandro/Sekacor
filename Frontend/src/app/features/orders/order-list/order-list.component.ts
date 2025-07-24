@@ -1,5 +1,5 @@
-import {Component, inject} from '@angular/core';
-import {MatCard, MatCardContent} from "@angular/material/card";
+import {Component, inject, ViewChild} from '@angular/core';
+import {MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} from "@angular/material/card";
 import {OrdersService} from "../../../core/services/orders.service";
 import {Order} from "../../../core/interfaces/orders/order";
 import {
@@ -9,17 +9,30 @@ import {
   MatHeaderCell,
   MatHeaderCellDef,
   MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef,
-  MatTable
+  MatTable, MatTableDataSource
 } from "@angular/material/table";
 import {literal} from "@angular/compiler";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {ClientService} from "../../../core/services/client.service";
 import {Client} from "../../../core/interfaces/client/client";
-import {DatePipe} from "@angular/common";
-import {MatButton} from "@angular/material/button";
+import {CurrencyPipe, DatePipe} from "@angular/common";
+import {MatButton, MatMiniFabButton} from "@angular/material/button";
 import {routes} from "../../../app.routes";
-import {Router} from "@angular/router";
-
+import {Router, RouterLink} from "@angular/router";
+import {MatIcon} from "@angular/material/icon";
+import {MatSort, MatSortHeader} from "@angular/material/sort";
+import {MatTooltip} from "@angular/material/tooltip";
+import {MatDivider} from "@angular/material/divider";
+import {Extras} from "../../../core/interfaces/extras";
+const FAQ: Extras = {
+  Headline: "FAQ",
+  info: [
+    {
+      title: 'Placeholder question?',
+      message: 'placeholder answer',
+    },
+  ]
+}
 @Component({
   selector: 'app-order-list',
   standalone: true,
@@ -38,7 +51,18 @@ import {Router} from "@angular/router";
     MatRowDef,
     MatPaginator,
     DatePipe,
-    MatButton
+    MatButton,
+    MatCardHeader,
+    MatCardTitle,
+    MatIcon,
+    RouterLink,
+    MatSortHeader,
+    MatSort,
+    MatCardSubtitle,
+    MatMiniFabButton,
+    MatTooltip,
+    MatDivider,
+    CurrencyPipe
   ],
   templateUrl: './order-list.component.html',
   styleUrl: './order-list.component.css'
@@ -49,13 +73,20 @@ export class OrderListComponent {
   clientService = inject(ClientService)
   router= inject(Router)
   //variables
-  columnsToDisplay:string[] = ['N','client','deliverDate','state']
-  orderList:Order[]=[];
+  columnsToDisplay:string[] = ['id','clientId','orderDate','totalPrice','state']
+  // orderList:Order[]=[];
+  dataSource = new MatTableDataSource<Order>([])
   clientList:Client[]=[];
   totalOrders: number = 0;
   pageSize:number = 5;
   currentPage:number = 0;
   //methods
+  @ViewChild(MatSort) sort!: MatSort
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+  }
+
   ngOnInit() {
     this.loadOrders()
     this.loadClients()
@@ -75,8 +106,7 @@ export class OrderListComponent {
   private loadOrders() {
     this.ordersService.getAllOrders(this.currentPage, this.pageSize).subscribe({
       next: data => {
-        console.log('we recive this: ', data);
-        this.orderList = data.content
+        this.dataSource.data = data.content
         this.totalOrders = data.totalElements
       },
       error: err => {
@@ -98,7 +128,7 @@ export class OrderListComponent {
       return client.name
     }
 
-    return "-"
+    return "Cliente Borrado"
   }
 
   examine(id:number) {

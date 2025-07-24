@@ -1,5 +1,5 @@
-import {Component, inject} from '@angular/core';
-import {MatCard, MatCardContent, MatCardTitle} from "@angular/material/card";
+import {Component, inject, ViewChild} from '@angular/core';
+import {MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} from "@angular/material/card";
 import {
   MatCell,
   MatCellDef,
@@ -7,10 +7,10 @@ import {
   MatHeaderCell,
   MatHeaderCellDef,
   MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef,
-  MatTable
+  MatTable, MatTableDataSource
 } from "@angular/material/table";
 import {Tank} from "../../../core/interfaces/tanks/tank";
-import {MatIconButton} from "@angular/material/button";
+import {MatButton, MatIconButton, MatMiniFabButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {TankServiceService} from "../../../core/services/tank-service.service";
@@ -18,6 +18,11 @@ import {User} from "../../../core/interfaces/users/user";
 import {TankType} from "../../../core/interfaces/tanks/tank-type";
 import {UserService} from "../../../core/services/user.service";
 import {DatePipe} from "@angular/common";
+import {DialogService} from "../../../core/services/dialog.service";
+import {RouterLink} from "@angular/router";
+import {MatSort, MatSortHeader} from "@angular/material/sort";
+import {MatDivider} from "@angular/material/divider";
+import {MatTooltip} from "@angular/material/tooltip";
 
 @Component({
   selector: 'app-production-history',
@@ -39,7 +44,16 @@ import {DatePipe} from "@angular/common";
     MatRow,
     MatRowDef,
     MatPaginator,
-    DatePipe
+    DatePipe,
+    MatButton,
+    RouterLink,
+    MatSort,
+    MatSortHeader,
+    MatCardHeader,
+    MatCardSubtitle,
+    MatDivider,
+    MatTooltip,
+    MatMiniFabButton
   ],
   templateUrl: './production-history.component.html',
   styleUrl: './production-history.component.css'
@@ -48,11 +62,13 @@ export class ProductionHistoryComponent {
   //services
   tankService = inject(TankServiceService)
   userService = inject(UserService)
+  dialogService = inject(DialogService)
 
 
   //variables
-  columnsToDisplay:string[]=['nombre', 'operario', 'fecha', 'acciones']
+  columnsToDisplay:string[]=['typeId', 'userId', 'createdDate', 'acciones']
   tankHistory:Tank[]=[]
+  dataSource = new MatTableDataSource<Tank>([])
   totalTanks: number=0;
   pageSize:number=5
   currentPage:number = 0
@@ -62,6 +78,13 @@ export class ProductionHistoryComponent {
 
 
   //methods
+
+  @ViewChild(MatSort) sort!: MatSort;
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+  }
+
   ngOnInit() {
     this.loadHistory()
     this.loadUsersAndTypes()
@@ -89,9 +112,8 @@ export class ProductionHistoryComponent {
   private loadHistory() {
     this.tankService.getAllTanksPaginated(this.currentPage, this.pageSize).subscribe({
       next: response => {
-        console.log('we recive this: ', response)
 
-        this.tankHistory = response.content
+        this.dataSource.data = response.content
         this.totalTanks = response.totalElements
       },
       error: error => {
@@ -101,17 +123,20 @@ export class ProductionHistoryComponent {
   }
 
   deleteTank(id:number) {
-    if (confirm("esto borrara el tanque en el registro pero no devolvera los insumos consumidos a la base de datos. es algo que debera hacer manualmente")){
-      this.tankService.deleteTank(id).subscribe({
-        next: result => {
-          console.log('the tank was deleted')
-          this.loadHistory()
-        },
-        error: err => {
-          console.log(err);
+    this.dialogService.confirm('Borrar Registro','Esto Borrara el tanque en el registro \n pero no devolvera los insumos consumidos a la base de tados \n eso es algo que se debera hacer manualmente')
+      .subscribe(ok=>{
+        if (ok){
+          this.tankService.deleteTank(id).subscribe({
+            next: data => {
+              this.dialogService.alert('Borrado Existoso','El registro del tanque fue borrado exitosamente, acuerdece de los insumos').subscribe()
+              this.loadHistory()
+            },
+            error: err => {
+              console.log(err)
+            }
+          })
         }
       })
-    }
   }
 
   changePAge(event: PageEvent) {

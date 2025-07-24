@@ -1,24 +1,69 @@
-<mat-toolbar class="nav">
+<mat-toolbar color="primary" class="nav">
   <button mat-icon-button (click)="sidenav.toggle()">
     <mat-icon>menu</mat-icon>
   </button>
-  <span>Sekacor.</span>
+  <a class="logo-text" routerLink="/">Sekacor</a>
+
+
+  <span class="spacer"></span>
+
+  @if (authService.isLoggedIn()) {
+    <span>{{ userName }}</span>
+    <button mat-icon-button (click)="openChangePassword()">
+      <mat-icon>lock_reset</mat-icon>
+    </button>
+    <button mat-icon-button (click)="logOut()">
+      <mat-icon>logout</mat-icon>
+    </button>
+  } @else {
+    <button mat-icon-button (click)="logIn()">
+      <mat-icon>login</mat-icon>
+    </button>
+  }
 </mat-toolbar>
 
 <mat-sidenav-container>
+  <mat-sidenav mode="over" #sidenav [autoFocus]="false">
 
-  <mat-sidenav mode="over" #sidenav>
-    <p><a href="#">Inicio</a></p>
-    <p><a routerLink="/tanktypes">Tanques</a></p>
-    <p><a href="/prices">Precios</a></p>
-    <p><a href="/clients">Clientes</a></p>
-    <p><a href="/consumables/primary">Insumos Primarios</a></p>
-    <p><a href="/consumables/secondary">Insumos Secundarios</a></p>
-    <p><a href="/production">Produccion</a></p>
-    <p><a href="/production/history">Historial de tanques</a></p>
-    <p><a href="/users/lists">Usuarios</a></p>
-    <p><a href="/orders/new">nueva orden</a></p>
-    <p><a href="/orders/all">Orders</a></p>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/tanktypes">
+        <mat-icon matListItemIcon>inventory_2</mat-icon>
+        Tanques
+      </a>
+      <a mat-list-item routerLink="/orders/all">
+        <mat-icon matListItemIcon>assignment</mat-icon>
+        Pedidos
+      </a>
+      <a mat-list-item routerLink="/consumables/primary">
+        <mat-icon matListItemIcon>category</mat-icon>
+        Insumos Primarios
+      </a>
+      <a mat-list-item routerLink="/consumables/secondary">
+        <mat-icon matListItemIcon>science</mat-icon>
+        Insumos Secundarios
+      </a>
+      <a mat-list-item routerLink="/production/history">
+        <mat-icon matListItemIcon>history</mat-icon>
+        Historial de tanques hechos
+      </a>
+      <a mat-list-item routerLink="/clients">
+        <mat-icon matListItemIcon>person</mat-icon>
+        Clientes
+      </a>
+      <a mat-list-item routerLink="/prices">
+        <mat-icon matListItemIcon>attach_money</mat-icon>
+        Lista de precios
+      </a>
+      <a mat-list-item routerLink="/users/lists">
+        <mat-icon matListItemIcon>admin_panel_settings</mat-icon>
+        Usuarios Sekacor
+      </a>
+
+      <a mat-list-item (click)="openTermsAndCondition()">
+        <mat-icon matListItemIcon>gavel</mat-icon>
+        Terminos y Condiciones
+      </a>
+    </mat-nav-list>
   </mat-sidenav>
 
   <mat-sidenav-content>

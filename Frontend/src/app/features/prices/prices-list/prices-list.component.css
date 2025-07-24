@@ -1,3 +1,72 @@
-.example-spacer {
+.user-list-card {
+  margin: 2rem auto;
+  max-width: 1200px;
+  padding: 1rem;
+}
+.table-wrapper{
+  overflow-x: auto;
+}
+.spacer {
   flex: 1 1 auto;
+}
+
+.custom-card-header{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.custom-card-header .title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.custom-card-header .subtitle {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.header-actions{
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+mat-form-field {
+  min-width: 200px;
+  max-width: 300px;
+}
+
+table {
+  width: 100%;
+  min-width: 800px;
+}
+
+mat-card-headerr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+mat-card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+mat-header-cell {
+  padding: 0.75rem;
+}
+
+button[mat-mini-fab]{
+  margin-left: 0.25rem;
+}
+
+mat-icon {
+  font-size: 20px;
 }

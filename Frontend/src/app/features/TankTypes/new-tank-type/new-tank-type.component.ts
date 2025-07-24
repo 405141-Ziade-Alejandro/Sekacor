@@ -12,6 +12,25 @@ import {TankServiceService} from "../../../core/services/tank-service.service";
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmDialogComponent} from "../../../shared/confirm-dialog/confirm-dialog.component";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {DialogService} from "../../../core/services/dialog.service";
+import {routes} from "../../../app.routes";
+import {MatDivider} from "@angular/material/divider";
+import {FaqComponent} from "../../../shared/faq/faq.component";
+import {Extras} from "../../../core/interfaces/extras";
+
+const FAQ: Extras = {
+  Headline: "FAQ",
+  info: [
+    {
+      title: 'Vol100 que significa?',
+      message: 'vol100 se refiere     al recargo monetario que se  le asigna al    tanque  por    trasladarlo hasta 100km',
+    },
+    {
+      title: 'que es capas?',
+      message: 'se refiere a las capas que componen el tanque, si esta  hecho con    una, dos    o tres    capas',
+    },
+  ]
+}
 
 @Component({
   selector: 'app-new-tank-type',
@@ -30,7 +49,9 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
     MatButton,
     RouterLink,
     MatProgressSpinner,
-    MatHint
+    MatHint,
+    MatDivider,
+    FaqComponent
   ],
   templateUrl: './new-tank-type.component.html',
   styleUrl: './new-tank-type.component.css'
@@ -60,18 +81,15 @@ export class NewTankTypeComponent {
 
   //service
   tankService = inject(TankServiceService)
+  dialogService = inject(DialogService)
   router = inject(Router);
-  dialogue = inject(MatDialog)
 
   //variables
-  // showSticker: boolean = false;
-  // showBigScrews: boolean = false;
   isLoading = false
 
   //methods
   onSubmit() {
     if (this.tankTypeForm.valid) {
-      // console.log('datos del form: ',this.tankTypeForm.value);
 
       this.isLoading = true
 
@@ -86,38 +104,42 @@ export class NewTankTypeComponent {
       delete (tankType as any).showSticker
       delete (tankType as any).showBigScrews
 
-      //this is necesary because the backend doesn't let you add empty strings as valid
-      // if (!this.showSticker) {
-      //   tankType.sticker = "NONE"
-      // }
-
       console.log('enviando datos al backend', tankType);
 
       this.tankService.postTankType(tankType).subscribe({
         next: (response) => {
           console.log('guardado exitosamente', response);
 
-          this.dialogue.open(ConfirmDialogComponent, {
-            data: {
-              title: '¡Guardado exitosamente!',
-              message: '¿Deseás cargar otro tipo de tanque?',
+          this.dialogService.confirm('¡Guardado exitosamente!', '¿Deseás cargar otro tipo de tanque?').subscribe(
+            ok => {
+              if (ok) {
+                this.tankTypeForm.reset({
+                  type: '',
+                  cover: tankType.cover,
+                  quantity: 0,
+                  plasticBlack: 0,
+                  plasticColor: 0,
+                  cost: 0,
+                  screws: 0,
+                  coverType: 'NONE',
+                  stock1: 0,
+                  stock2: 0,
+                  bigScrews: 0,
+                  tee: false,
+                  sticker: 'NONE',
+                  vol100: 0,
+                  vol200: 0,
+                  showSticker: false,
+                  showBigScrews: false
+                });
+                this.tankTypeForm.markAsPristine()
+                this.tankTypeForm.markAsUntouched()
+                this.tankTypeForm.updateValueAndValidity()
+              } else {
+                this.router.navigate(['/tanktypes'])
+              }
             }
-          }).afterClosed().subscribe((confirm: boolean) => {
-            if (confirm) {
-              this.tankTypeForm.reset();
-              this.tankTypeForm.patchValue({
-                tee: false,
-                coverType: "NONE"
-              })
-
-              // this.resetExtraFlags()
-
-              this.tankTypeForm.untouched
-
-            } else {
-              this.router.navigate(['/tanktypes']);
-            }
-          })
+          )
 
           this.isLoading = false;
         },
@@ -134,8 +156,5 @@ export class NewTankTypeComponent {
     }
   }
 
-  // resetExtraFlags() {
-  //   this.showBigScrews = false;
-  //   this.showSticker = false;
-  // }
+  protected readonly FAQ = FAQ;
 }

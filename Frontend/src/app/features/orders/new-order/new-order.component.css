@@ -1,0 +1,50 @@
+.order-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 1000px;
+  margin: auto;
+  padding: 2rem;
+  /*background-color: white;*/
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+mat-form-field {
+  flex: 1 1 300px;
+  min-width: 250px;
+}
+
+mat-list-item {
+  padding: 0.5rem 0;
+}
+
+table {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.form-sumary {
+  text-align: right;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}

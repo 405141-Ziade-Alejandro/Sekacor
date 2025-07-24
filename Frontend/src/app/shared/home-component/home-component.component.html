@@ -1,0 +1,23 @@
+<div class="home-grid">
+<!--Titulo-->
+  <div class="grid-header">
+    <h1>Sekacor.</h1>
+    <p>Bienvenido al sistema de gestion de tanques.</p>
+  </div>
+<!--Accesos rapidos-->
+  <div class="grid-actions">
+    <button mat-raised-button color="primary" routerLink="/orders/new">
+      <mat-icon>add_shopping_cart</mat-icon> Nueva orden
+    </button>
+    <button mat-raised-button color="primary" routerLink="/production">
+      <mat-icon>build</mat-icon> Registrar Nuevo tanque
+    </button>
+  </div>
+
+  <div class="grid-report">
+    <app-report-sold-to-clients></app-report-sold-to-clients>
+  </div>
+  <div class="grid-report">
+    <app-report-tanks-made></app-report-tanks-made>
+  </div>
+</div>

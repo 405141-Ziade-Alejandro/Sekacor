@@ -1,0 +1,44 @@
+<div class="report-card">
+  <h6>Reporte de Ventas por Cliente</h6>
+  <div class="report-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Cliente</mat-label>
+      <mat-select [(ngModel)]="clientSelectedId">
+        @for (client of clientList;track $index){
+          <mat-option [value]="client.id">{{client.name}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>desde</mat-label>
+      <input matInput [matDatepicker]="startPicker" [(ngModel)]="startDate">
+      <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+      <mat-datepicker #startPicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Hasta</mat-label>
+      <input matInput [matDatepicker]="endPicker" [(ngModel)]="endDate">
+      <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+      <mat-datepicker #endPicker></mat-datepicker>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="loadReport()" [disabled]="clientSelectedId===0">
+      Ver Reporte
+    </button>
+  </div>
+
+  @if (showReport){
+    <div class="chart">
+      <ngx-charts-pie-chart
+        [results]="charData"
+        [labels]="true"
+        [legend]="true"
+        [gradient]="true"
+        [scheme]="'cool'"
+      >
+      </ngx-charts-pie-chart>
+    </div>
+  }
+</div>

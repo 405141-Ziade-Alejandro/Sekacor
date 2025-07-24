@@ -1,0 +1,36 @@
+<div class="report-card">
+  <h6>Tanques Producidos por Empleado</h6>
+  <div class="report-form">
+    <mat-form-field appearance="outline">
+      <mat-label>desde</mat-label>
+      <input matInput [matDatepicker]="startPicker" [(ngModel)]="startDate" [max]="endDate">
+      <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+      <mat-datepicker #startPicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Hasta</mat-label>
+      <input matInput [matDatepicker]="endPicker" [(ngModel)]="endDate" [min]="startDate">
+      <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+      <mat-datepicker #endPicker></mat-datepicker>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="loadReport()">Ver Reporte</button>
+  </div>
+
+  @if (showReport) {
+    <ngx-charts-bar-vertical
+      [results]="chartData"
+      [xAxis]="true"
+      [yAxis]="true"
+      [legend]="false"
+      [showYAxisLabel]="true"
+      [showXAxisLabel]="true"
+      [scheme]="'cool'"
+      xAxisLabel="Empleado"
+      yAxisLabel="Cantidad"
+    ></ngx-charts-bar-vertical>
+
+  }
+
+</div>
