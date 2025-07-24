@@ -13,9 +13,9 @@ VALUES
 
 INSERT INTO USUARIO ( NOMBRE, CONTRASEÑA, ROLE, CREATED_DATE, LAST_UPDATED_AT)
 VALUES
-    ('oso', 'adminpass', 'ADMIN', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    ( 'wally', 'empleadopass', 'EMPLEADO', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    ( 'gavi', 'transpass', 'TRANSPORTISTA', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+    ('Luciano', 'adminpass', 'ADMIN', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ( 'Lucas', 'empleadopass', 'EMPLEADO', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ( 'Gabriel', 'transpass', 'TRANSPORTISTA', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 
 INSERT INTO TIPO_TANQUE (
@@ -106,27 +106,27 @@ INSERT INTO TANQUE (TANK_TYPE_ID, USER_ID, QUALITY, CREATED_DATE, LAST_UPDATED_A
                                                                                        (1, 1, 'PRIMERA', '2025-07-15 12:00:00', '2025-07-15 12:00:00'),
                                                                                        (2, 2, 'SEGUNDA', '2025-07-15 12:30:00', '2025-07-15 12:30:00');
 
-INSERT INTO PRICE_LIST (ID, NOMBRE, GANANCIA, COMISION, CORRALON, VOL_KM, CREATED_DATE, LAST_UPDATED_AT)
+INSERT INTO PRICE_LIST ( NOMBRE, GANANCIA, COMISION, CORRALON, VOL_KM, CREATED_DATE, LAST_UPDATED_AT)
 VALUES
-    (1, 'Minorista Local',           1.00, 0.05, 0.00, 'ZERO',      CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (2, 'Mayorista Ciudad',          0.90, 0.03, 0.00, 'CIEN',      CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (3, 'Distribuidor Regional',     0.85, 0.02, 0.00, 'DOSCIENTOS',CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (4, 'Cliente Especial',          0.80, 0.01, 0.00, 'CIEN',      CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (5, 'Promoción Temporada Alta',  0.75, 0.00, 0.00, 'ZERO',      CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+    ( 'Minorista Local',           1.00, 0.05, 0.00, 'ZERO',      CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ( 'Mayorista Ciudad',          0.90, 0.03, 0.00, 'CIEN',      CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ( 'Distribuidor Regional',     0.85, 0.02, 0.00, 'DOSCIENTOS',CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ( 'Cliente Especial',          0.80, 0.01, 0.00, 'CIEN',      CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ( 'Promoción Temporada Alta',  0.75, 0.00, 0.00, 'ZERO',      CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 
-INSERT INTO CLIENTE (ID, NOMBRE, TELEFONO, LISTA_PRECIO_ID, DIRECCION, CREATED_DATE, LAST_UPDATED_AT)
+INSERT INTO CLIENTE ( NOMBRE, TELEFONO, LISTA_PRECIO_ID, DIRECCION, CREATED_DATE, LAST_UPDATED_AT)
 VALUES
-    (1, 'Ferretería El Tornillo',       '1123456789', 1, 'Av. Siempreviva 123',        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (2, 'Materiales El Roble',          '1134567890', 2, 'Calle Falsa 456',            CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (3, 'Corralón El Ladrillo',         '1145678901', 3, 'Ruta 8 Km 45',               CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (4, 'Obras SRL',                    '1156789012', 2, 'Juan B. Justo 500',          CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (5, 'ConstruMarket',                '1167890123', 1, 'Mitre 1050',                 CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (6, 'VIP Cliente Juan Perez',       '1178901234', 4, 'Belgrano 2250',              CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (7, 'Distribuidora El Aguatero',    '1189012345', 3, 'San Martín 700',             CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (8, 'Obrador del Norte',            '1190123456', 5, 'Panamericana Km 33',         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (9, 'Corralón Zona Sur',            '1111234567', 1, 'Av. Calchaquí 1000',         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (10, 'Ferretería 3 Hermanos',       '1112345678', 4, 'Sarmiento 999',              CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+    ( 'Ferretería El Tornillo',       '1123456789', 1, 'Av. Siempreviva 123',        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ( 'Materiales El Roble',          '1134567890', 2, 'Calle Falsa 456',            CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ( 'Corralón El Ladrillo',         '1145678901', 3, 'Ruta 8 Km 45',               CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ( 'Obras SRL',                    '1156789012', 2, 'Juan B. Justo 500',          CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ( 'ConstruMarket',                '1167890123', 1, 'Mitre 1050',                 CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ( 'VIP Cliente Juan Perez',       '1178901234', 4, 'Belgrano 2250',              CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ( 'Distribuidora El Aguatero',    '1189012345', 3, 'San Martín 700',             CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ( 'Obrador del Norte',            '1190123456', 5, 'Panamericana Km 33',         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ( 'Corralón Zona Sur',            '1111234567', 1, 'Av. Calchaquí 1000',         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ( 'Ferretería 3 Hermanos',       '1112345678', 4, 'Sarmiento 999',              CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 
 -- 🔹 JUNIO 2025 - 10 Pedidos
