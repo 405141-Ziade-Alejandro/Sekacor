@@ -26,6 +26,7 @@ import {MatSort, MatSortHeader} from "@angular/material/sort";
 import {MatDivider} from "@angular/material/divider";
 import {FaqComponent} from "../../../shared/faq/faq.component";
 import {Extras} from "../../../core/interfaces/extras";
+import {MatTooltip} from "@angular/material/tooltip";
 const FAQ: Extras = {
   Headline: "FAQ",
   info: [
@@ -63,7 +64,8 @@ const FAQ: Extras = {
     MatSort,
     MatSortHeader,
     MatDivider,
-    FaqComponent
+    MatTooltip,
+
   ],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.css'
@@ -220,7 +222,7 @@ export class ClientsComponent {
     if (priceList) {
       return priceList.name
     } else {
-      return 'error'
+      return 'LISTA DE PRECIOS BORRADA'
     }
   }
 

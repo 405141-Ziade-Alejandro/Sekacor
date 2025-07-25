@@ -116,6 +116,7 @@ public class TankServiceImpl implements TankService {
         for (TankEntity tank : tankEntities) {
             tank.setType(null);
         }
+        //todo: change this so that it can be deleted even if there are this types in orders
         tankRepository.saveAll(tankEntities);
 
         tankTypeRepository.delete(check.get());

@@ -22,6 +22,7 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {MatDivider} from "@angular/material/divider";
 import {Extras} from "../../../core/interfaces/extras";
 import {FaqComponent} from "../../../shared/faq/faq.component";
+import {MatTooltip} from "@angular/material/tooltip";
 
 const FAQ: Extras = {
   Headline: "FAQ",
@@ -61,7 +62,8 @@ const FAQ: Extras = {
     FormsModule,
     MatProgressSpinner,
     MatDivider,
-    FaqComponent
+    FaqComponent,
+    MatTooltip
   ],
   templateUrl: './primary-consumables.component.html',
   styleUrl: './primary-consumables.component.css'

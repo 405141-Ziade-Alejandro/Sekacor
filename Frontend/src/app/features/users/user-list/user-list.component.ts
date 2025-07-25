@@ -24,6 +24,7 @@ import {MatCard, MatCardContent} from "@angular/material/card";
 import {MatDivider} from "@angular/material/divider";
 import {Extras} from "../../../core/interfaces/extras";
 import {FaqComponent} from "../../../shared/faq/faq.component";
+import {MatTooltip} from "@angular/material/tooltip";
 
 const FAQ: Extras = {
   Headline: "FAQ",
@@ -63,7 +64,8 @@ const FAQ: Extras = {
     MatCard,
     MatDivider,
     MatCardContent,
-    FaqComponent
+    FaqComponent,
+    MatTooltip
   ],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.css'

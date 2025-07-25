@@ -19,7 +19,7 @@
         <mat-option value="TRANSPORTISTA">Transportista</mat-option>
       </mat-select>
     </mat-form-field>
-    <button mat-mini-fab color="primary" [disabled]="formUser.invalid||isLoading" (click)="submit()">
+    <button mat-mini-fab color="primary" [disabled]="formUser.invalid||isLoading" (click)="submit()" matTooltip="Agregar nuevo usuario">
       @if (isLoading){
         <mat-spinner diameter="20"></mat-spinner>
       } @else {
@@ -57,7 +57,7 @@
           @if (isLoading) {
             <mat-spinner diameter="20"></mat-spinner>
           } @else {
-            <button mat-mini-fab (click)="delete(element.id)">
+            <button mat-mini-fab (click)="delete(element.id)" matTooltip="Borrar usuario">
               <mat-icon>delete_forever</mat-icon>
             </button>
           }

@@ -83,14 +83,18 @@
                    (input)="inputValues[consumable.id] = $any($event.target).valueAsNumber"
                    step="0.01">
           </mat-form-field>
-          <button mat-mini-fab (click)="add(consumable.id)" color="primary" [disabled]="isLoading">
-            @if (override) {
-              <mat-icon>content_copy</mat-icon>
+          <button mat-mini-fab (click)="add(consumable.id)" color="primary" [disabled]="isLoading" matTooltip="Actualizar valor">
+            @if (isLoading) {
+              <mat-spinner diameter="20"></mat-spinner>
             } @else {
-              <mat-icon>add</mat-icon>
+              @if (override) {
+                <mat-icon>content_copy</mat-icon>
+              } @else {
+                <mat-icon>add</mat-icon>
+              }
             }
           </button>
-          <button mat-mini-fab (click)="delete(consumable.id)">
+          <button mat-mini-fab (click)="delete(consumable.id)" matTooltip="Borrar">
             <mat-icon>delete_forever</mat-icon>
           </button>
         </td>

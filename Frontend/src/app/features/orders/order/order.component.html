@@ -42,7 +42,7 @@
         <!-- Precio -->
         <ng-container matColumnDef="price">
           <th mat-header-cell *matHeaderCellDef>Precio</th>
-          <td mat-cell *matCellDef="let detail">{{ detail.price | currency:'ARS' }}</td>
+          <td mat-cell *matCellDef="let detail">{{ detail.price | currency:'USD' }}</td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="['product','stock', 'quantity', 'price']"></tr>
@@ -51,7 +51,7 @@
     </div>
 
 
-    <h3 class="order-total">Total: {{ order.totalPrice | currency:'ARS' }}</h3>
+    <h3 class="order-total">Total: {{ order.totalPrice | currency:'USD' }}</h3>
   </mat-card-content>
 
   <mat-card-actions align="end" class="order-actions">
