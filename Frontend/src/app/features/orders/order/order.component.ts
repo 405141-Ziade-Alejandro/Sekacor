@@ -166,7 +166,11 @@ export class OrderComponent {
               this.order = data
             },
             error: err => {
-              console.error(err)
+              if (err.status === 409){
+                this.dialogService.alert('Error en el stock','no hay suficiente stock para completar este pedido')
+              } else {
+                console.error(err)
+              }
             }
           })
         }

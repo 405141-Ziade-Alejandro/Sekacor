@@ -136,7 +136,7 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     @Transactional
-    public OrderDto cancelarOrder(long id) {
+    public OrderDto cancelOrder(long id) {
         Optional<OrderEntity> optionalOrderEntity = orderRepository.findById(id);
         if (optionalOrderEntity.isEmpty()) {
             throw new EntityNotFoundException("Order not found");
@@ -219,6 +219,11 @@ public class OrderServiceImpl implements OrderService {
 
         for (OrderDetailsEntity detail : details) {
             detail.getTankType().setStock1(detail.getTankType().getStock1() - detail.getQuantity());
+
+            if(detail.getTankType().getStock1()<0){
+                throw new IllegalStateException("Not enough stock for tank type: " + detail.getTankType().getType());
+            }
+
             tankTypeEntityList.add(detail.getTankType());
         }
         tankTypeRepository.saveAll(tankTypeEntityList);

@@ -13,7 +13,7 @@ public interface OrderService {
 
     OrderDto updateOrder(OrderDto dto);
 
-    OrderDto cancelarOrder(long id);
+    OrderDto cancelOrder(long id);
 
     Page<OrderDto> getAllOrders(Pageable pageable);
 
