@@ -134,7 +134,7 @@ export class ReportSoldToClientsComponent {
 
   private getTankName(id:number):string {
     const tankType = this.tankTypeList.find(t=>t.id === id)
-    return tankType ? tankType.type+' '+tankType.cover+' '+ tankType.quantity: 'Tanque Borrado'
+    return tankType ? tankType.type+' '+tankType.cover+' '+ tankType.quantity+'Lts': 'Tanque Borrado'
   }
 
   colorScheme = {

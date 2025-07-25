@@ -21,8 +21,10 @@ import {MatCard, MatCardHeader} from "@angular/material/card";
 const FAQ:Extras = {
   Headline: "FAQ",
   info: [
-    {title:'¿Vol100 que significa?',message:'vol100 se refiere     al recargo monetario que se  le asigna al    tanque  por    trasladarlo hasta 100km',},
-    {title:'¿que es capas?',message:'se refiere a las capas que componen el tanque, si esta  hecho con    una, dos    o tres    capas',},
+    {
+      title: '¿Qué es "Vol. 100km" y "Vol. 200km"?',
+      message: 'Se trata de cargos adicionales por distancia de entrega. Si el cliente se encuentra a más de 100 km, se aplica el cargo Vol. 100km. Si supera los 200 km, se aplica Vol. 200km.',
+    }
   ]
 
 }

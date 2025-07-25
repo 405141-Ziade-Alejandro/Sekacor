@@ -1,5 +1,5 @@
 export interface OrderDetail {
-  typeTankId:number
-  quantity:number
-  price:number
+  typeTankId: number
+  quantity: number
+  price: number
 }

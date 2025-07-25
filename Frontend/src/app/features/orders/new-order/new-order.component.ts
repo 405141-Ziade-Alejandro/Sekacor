@@ -40,9 +40,9 @@ const FAQ: Extras = {
   Headline: "FAQ",
   info: [
     {
-      title: 'Placeholder question?',
-      message: 'placeholder answer',
-    },
+      title: '¿Qué significa "fecha estimada"?',
+      message: 'La fecha estimada indica cuándo se espera que el pedido esté completo y entregado al cliente. Esta fecha es tentativa y puede cambiar por diversos motivos. Una vez entregado el pedido, esta fecha se considera como la de entrega real, sin importar cambios anteriores.',
+    }
   ]
 }
 
@@ -96,7 +96,7 @@ export class NewOrderComponent {
   dialogService = inject(DialogService)
   priceService = inject(PricesService)
   //variables
-  columnToDisplay: string[] = ['product', 'quantity', 'price', 'action'];
+  columnToDisplay: string[] = ['product','stock', 'quantity', 'price'];
   clientList: Client[] = [];
   typeTankList: TankType[] = [];
   detailList: OrderDetail[] = [];
@@ -256,6 +256,17 @@ export class NewOrderComponent {
       }
     }
     return 0
+  }
+
+  getStock(typeTankId: number):number {
+    const tankType = this.typeTankList.find(tt => tt.id === typeTankId)
+
+    if (tankType) {
+      return tankType.stock1
+    }
+
+
+    return 0;
   }
 
   protected readonly FAQ = FAQ;

@@ -26,6 +26,7 @@ import {MatSort, MatSortHeader} from "@angular/material/sort";
 import {MatTooltip} from "@angular/material/tooltip";
 import {RouterLink} from "@angular/router";
 import {MatDivider} from "@angular/material/divider";
+import {ExamineTankDialogComponent} from "../../TankTypes/examine-tank-dialog/examine-tank-dialog.component";
 
 @Component({
   selector: 'app-prices-list',
@@ -195,4 +196,18 @@ export class PricesListComponent {
     }
     this.dialogService.alert("composicion de la lista de precios: " + this.priceListSelected.name, message+' = Precio Final')
   }
+
+  openDialog(id:number){
+    const tank = this.dataSource.data.find(tt=>tt.id==id)
+
+    if (tank) {
+      this.dialog.open(ExamineTankDialogComponent,{
+        data: tank,
+        width: '90vw',
+        maxWidth: '600px',
+        autoFocus: false
+      })
+    }
+  }
+
 }

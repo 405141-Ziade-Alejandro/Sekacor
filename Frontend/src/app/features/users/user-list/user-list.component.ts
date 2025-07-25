@@ -29,9 +29,9 @@ const FAQ: Extras = {
   Headline: "FAQ",
   info: [
     {
-      title: 'como creo un usuario con rol de administrador?',
-      message: 'dado el gran control que un usuario de administrador tiene, es recomendado que se contacte con el programador para ingresarlo en la base de datos directamente',
-    },
+      title: '¿Cómo creo un usuario con rol de administrador?',
+      message: 'Debido al alto nivel de permisos que tiene un usuario con rol de administrador, se recomienda contactar al desarrollador del sistema para que lo registre directamente en la base de datos.',
+    }
   ]
 }
 

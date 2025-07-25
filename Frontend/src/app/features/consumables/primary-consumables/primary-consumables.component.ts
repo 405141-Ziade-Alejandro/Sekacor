@@ -27,9 +27,12 @@ const FAQ: Extras = {
   Headline: "FAQ",
   info: [
     {
-      title: 'puedo agregar un nuevo insumo primario?',
-      message: 'no, estos insumos estan calculados por tanque, y requeriria una reestructuracion del sistema, es posible si contactas al encargado del sistema para que lo agrege, pero no seria algo posible para el usuario',
-    },
+      title: '¿Puedo agregar un nuevo insumo primario?',
+      message: 'No. Los insumos primarios están calculados por tipo de tanque y su modificación requeriría una reestructuración del sistema. Es posible agregarlos si se contacta con el encargado del sistema, pero no es una acción disponible para el usuario común.',
+    }, {
+      title: 'Hice un tanque recién y me indicó que faltaban insumos, ¿qué pasó?',
+      message: 'Lo más probable es que el administrador haya olvidado cargar alguno de los insumos. De lo contrario, el sistema no habría permitido crear el tanque. Contacte al administrador para que complete la carga de los insumos faltantes.',
+    }
   ]
 }
 

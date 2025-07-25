@@ -24,15 +24,15 @@ import {Extras} from "../../../core/interfaces/extras";
 import {MatDialog} from "@angular/material/dialog";
 import {ExamineTankDialogComponent} from "../examine-tank-dialog/examine-tank-dialog.component";
 
-const FAQ: Extras = {
-  Headline: "FAQ",
-  info: [
-    {
-      title: 'como creo un usuario con rol de administrador?',
-      message: 'responce',
-    },
-  ]
-}
+// const FAQ: Extras = {
+//   Headline: "FAQ",
+//   info: [
+//     {
+//       title: 'como creo un usuario con rol de administrador?',
+//       message: 'responce',
+//     },
+//   ]
+// }
 @Component({
   selector: 'app-tank-type-list',
   standalone: true,
@@ -73,7 +73,7 @@ export class TankTypeListComponent {
   //variables
   dataSource = new MatTableDataSource<TankType>([]);
 
-  columsToDisplay: string[] = ['type','cover','quantity', 'cost', 'stock1','stock2','actions']
+  columsToDisplay: string[] = ['type', 'cost', 'stock1','stock2','actions']
 
   //methods
   @ViewChild(MatSort)  sort!: MatSort
@@ -134,5 +134,4 @@ export class TankTypeListComponent {
   }
 
   protected readonly FaqComponent = FaqComponent;
-  protected readonly FAQ = FAQ;
 }

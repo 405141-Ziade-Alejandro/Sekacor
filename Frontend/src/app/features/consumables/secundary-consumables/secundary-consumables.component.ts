@@ -30,9 +30,13 @@ const FAQ: Extras = {
   Headline: "FAQ",
   info: [
     {
-      title: 'Quiero editar un insumo que registre, como lo hago?',
-      message: 'la edicion de un insumo solo esta habilitado para el stock, si quisiera modificar el nombre o subtipo, lo mejor seria borrar el insumo equivocado y cargarlo de nuevo correctamente',
+      title: '¿Quiero editar un insumo que registré, cómo lo hago?',
+      message: 'La edición de un insumo está habilitada únicamente para actualizar su stock. Si desea modificar el nombre o subtipo, se recomienda eliminar el insumo incorrecto y cargar uno nuevo con los datos actualizados.',
     },
+    {
+      title: '¿Estos insumos se descuentan automáticamente al hacer tanques?',
+      message: 'No. Los insumos secundarios deben actualizarse manualmente de forma periódica. Esto se debe a que no es posible contabilizar su consumo de forma automática por tanque fabricado.',
+    }
   ]
 }
 @Component({
