@@ -1,0 +1,50 @@
+<h2 matDialogTitle>
+  Tipo de Tanque: {{tankType.type}} | {{tankType.cover}} | {{tankType.quantity}}
+</h2>
+<mat-dialog-content>
+  <mat-card class="tank-info-card">
+    <mat-card-content>
+      <div class="tank-info-grid">
+        <div ><strong>Nombre:</strong> {{ tankType.type }}</div>
+        <div ><strong>Capa:</strong> {{ tankType.cover }}</div>
+        <div ><strong>Capacidad:</strong> {{ tankType.quantity }} Lts</div>
+        <div ><strong>Stock Primera:</strong> {{ tankType.stock1 }}</div>
+        <div ><strong>Stock Segunda:</strong> {{ tankType.stock2 }}</div>
+        <div ><strong>Costo:</strong> ${{ tankType.cost }}</div>
+        <div ><strong>Volumen 100 Km:</strong> ${{ tankType.vol100 }}</div>
+        <div ><strong>Volumen 200 Km:</strong> ${{ tankType.vol200 }}</div>
+        <div ><strong>Plástico Negro:</strong> {{ tankType.plasticBlack }} Kg</div>
+        <div ><strong>Plástico Color:</strong> {{ tankType.plasticColor }} Kg</div>
+        <div ><strong>Tipo de Tapa:</strong> {{ tankType.coverType }}</div>
+
+
+        @if (tankType.coverType !== "NONE") {
+          <div ><strong>Tornillos:</strong> {{ tankType.screws }} Unidades</div>
+        }
+        @if (tankType.tee) {
+          <div ><strong>Tee:</strong> 2 Unidades</div>
+        }
+        @if (tankType.bigScrews > 0) {
+          <div ><strong>Tornillos Grandes:</strong> {{ tankType.bigScrews }} Unidades</div>
+        }
+
+        @if (tankType.sticker !== "NONE") {
+          <div >
+            <strong>Sticker:</strong>
+            @if (tankType.sticker === "CAMARA_SEPTICA") {
+              Cámara Séptica
+            } @else {
+              Tanque
+            }
+          </div>
+        }
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+</mat-dialog-content>
+
+<mat-card-footer class="date-footer">
+  <small>Creado: {{ tankType.createdDate | date }}</small>
+  <small>Última modificación: {{ tankType.lastUpdatedAt | date }}</small>
+</mat-card-footer>

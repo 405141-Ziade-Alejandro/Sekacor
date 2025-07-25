@@ -180,7 +180,7 @@ export class EditOrderComponent {
 
     } else {
       const newDetail: OrderDetail = {
-        price: this.calculatePrice(tankType), //todo fix this, is not the cose
+        price: this.calculatePrice(tankType),
         quantity: 1,
         typeTankId: tankType.id
       }

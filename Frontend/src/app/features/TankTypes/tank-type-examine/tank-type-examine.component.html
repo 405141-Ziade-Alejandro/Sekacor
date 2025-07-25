@@ -1,5 +1,5 @@
-<!--Todo: make the examine part a dialog and leave this as editing only-->
-@if (updating && tankType !== undefined) {
+
+@if (tankType !== undefined) {
   <div class="tank-form">
     <div class="form-section">
       <h2>Datos del Tipo de Tanque</h2>
@@ -125,61 +125,18 @@
             <mat-spinner diameter="20"></mat-spinner>
           }
         </button>
-        <button mat-raised-button type="button" (click)="switch()">Cancelar</button>
+        <button mat-raised-button type="button" (click)="back()">Cancelar</button>
         <app-faq [faq]="FAQ"></app-faq>
       </div>
     </div>
   </div>
-
 } @else {
   <mat-card>
     <mat-card-header>
-      <mat-toolbar>
-        <button mat-icon-button (click)="back()">
-          <mat-icon>arrow_back</mat-icon>
-        </button>
-        <span>Detalle del Tanque</span>
-        <span class="example-spacer"></span>
-        <button mat-icon-button (click)="switch()">
-          <mat-icon>edit</mat-icon>
-        </button>
-      </mat-toolbar>
+      <div>
+        Hay un error, no hay tanque elegido
+      </div>
     </mat-card-header>
 
-    <mat-card-content>
-      <div class="details-grid">
-        <div class="detail-item"><strong>Nombre:</strong> {{ tankType?.type }}</div>
-        <div class="detail-item"><strong>Capa:</strong> {{ tankType?.cover }}</div>
-        <div class="detail-item"><strong>Capacidad:</strong> {{ tankType?.quantity }} Lts</div>
-        <div class="detail-item"><strong>Stock Primera:</strong> {{ tankType?.stock1 }}</div>
-        <div class="detail-item"><strong>Stock Segunda:</strong> {{ tankType?.stock2 }}</div>
-        <div class="detail-item"><strong>Costo:</strong> ${{ tankType?.cost }}</div>
-        <div class="detail-item"><strong>Volumen 100 Km:</strong> ${{ tankType?.vol100 }}</div>
-        <div class="detail-item"><strong>Volumen 200 Km:</strong> ${{ tankType?.vol200 }}</div>
-        <div class="detail-item"><strong>Plástico Negro:</strong> {{ tankType?.plasticBlack }} Kg</div>
-        <div class="detail-item"><strong>Plástico Color:</strong> {{ tankType?.plasticColor }} Kg</div>
-        <div class="detail-item"><strong>Tipo de Tapa:</strong> {{ tankType?.coverType }}</div>
-        @if (tankType?.coverType !== "NONE") {
-          <div class="detail-item"><strong>Tornillos:</strong> {{ tankType?.screws }} Unidades</div>
-        }
-        @if (tankType?.tee) {
-          <div class="detail-item"><strong>Tee:</strong> 2 Unidades</div>
-        }
-        @if (tankType !== undefined && tankType.bigScrews > 0) {
-          <div class="detail-item"><strong>Tornillos Grandes:</strong> {{ tankType.bigScrews }} Unidades</div>
-        }
-
-        @if (tankType?.sticker !== "NONE") {
-          <div class="detail-item">
-            <strong>Sticker:</strong>
-            @if (tankType?.sticker === "CAMARA_SEPTICA") {
-              Cámara Séptica
-            } @else {
-              Tanque
-            }
-          </div>
-        }
-      </div>
-    </mat-card-content>
   </mat-card>
 }

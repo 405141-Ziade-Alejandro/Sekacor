@@ -21,6 +21,8 @@ import {MatSort, MatSortHeader} from "@angular/material/sort";
 import {MatDivider} from "@angular/material/divider";
 import {FaqComponent} from "../../../shared/faq/faq.component";
 import {Extras} from "../../../core/interfaces/extras";
+import {MatDialog} from "@angular/material/dialog";
+import {ExamineTankDialogComponent} from "../examine-tank-dialog/examine-tank-dialog.component";
 
 const FAQ: Extras = {
   Headline: "FAQ",
@@ -58,7 +60,6 @@ const FAQ: Extras = {
     MatCardTitle,
     MatCardSubtitle,
     MatDivider,
-    FaqComponent
   ],
   templateUrl: './tank-type-list.component.html',
   styleUrl: './tank-type-list.component.css'
@@ -68,6 +69,7 @@ export class TankTypeListComponent {
   tankService = inject(TankServiceService)
   router = inject(Router)
   dialogService = inject(DialogService)
+  private dialog = inject(MatDialog)
   //variables
   dataSource = new MatTableDataSource<TankType>([]);
 
@@ -115,8 +117,20 @@ export class TankTypeListComponent {
   }
 
   edit(id:number) {
-    this.tankService.setUpdating(true);
     this.router.navigate([`tanktypes/${id}`])
+  }
+
+  openDialog(id:number){
+    const tank = this.dataSource.data.find(tt=>tt.id==id)
+
+    if (tank) {
+      this.dialog.open(ExamineTankDialogComponent,{
+        data: tank,
+        width: '90vw',
+        maxWidth: '600px',
+        autoFocus: false
+      })
+    }
   }
 
   protected readonly FaqComponent = FaqComponent;

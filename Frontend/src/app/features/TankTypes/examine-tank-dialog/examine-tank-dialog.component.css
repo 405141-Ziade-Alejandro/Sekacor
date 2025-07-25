@@ -1,0 +1,33 @@
+.tank-info-card{
+  padding: 1rem;
+}
+.tank-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  font-size: 0.95rem;
+}
+
+.tank-info-grid div{
+  padding: 0.2rem;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.date-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+
+/*esto hace que sea una sola columna en pantallas chicas*/
+@media (max-width: 600px) {
+  .tank-info-grid {
+    grid-template-columns: 1fr;
+  }
+}
