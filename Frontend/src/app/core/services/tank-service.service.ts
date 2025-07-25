@@ -45,13 +45,6 @@ export class TankServiceService {
     return this.httpClient.delete<void>(this.apiTankTypes + '/' + id)
   }
 
-  getUpdate(): boolean {
-    return this.updating
-  }
-
-  setUpdating(updating: boolean) {
-    this.updating = updating;
-  }
 
   deleteTank(id: number): Observable<void> {
     return this.httpClient.delete<void>(this.apiTank + '/' + id)

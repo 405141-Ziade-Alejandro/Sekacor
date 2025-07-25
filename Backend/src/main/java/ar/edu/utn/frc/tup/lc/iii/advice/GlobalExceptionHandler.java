@@ -30,6 +30,13 @@ public class GlobalExceptionHandler {
         ApiError error = ApiError.of(HttpStatus.NOT_FOUND, exception.getMessage(), request.getRequestURI());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
+    
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ApiError> handleIllegalState(IllegalStateException exception,
+                                                       HttpServletRequest request) {
+        ApiError error = ApiError.of(HttpStatus.CONFLICT, exception.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
 
     @ExceptionHandler(NotEnoughConsumablesException.class)
     public ResponseEntity<List<MissingConsumableDto>> handleNotEnoughConsumables(

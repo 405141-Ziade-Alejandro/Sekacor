@@ -151,6 +151,6 @@ export class ProductionHistoryComponent {
 
   getTankType(id:number) {
     const type = this.tankTypeList.find(tt => tt.id === id)
-    return type?.type  + " | " + type?.cover + " | " + type?.quantity
+    return type?.type  + " | " + type?.cover + " | " + type?.quantity+'Lts'
   }
 }

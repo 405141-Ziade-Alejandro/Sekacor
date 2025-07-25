@@ -19,7 +19,7 @@ import {
   MatTable
 } from "@angular/material/table";
 import {CurrencyPipe, DatePipe, TitleCasePipe} from "@angular/common";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {MatButton} from "@angular/material/button";
 import {Client} from "../../../core/interfaces/client/client";
 import {ClientService} from "../../../core/services/client.service";
@@ -50,7 +50,8 @@ import {DialogService} from "../../../core/services/dialog.service";
     CurrencyPipe,
     MatButton,
     MatCardTitle,
-    MatCardSubtitle
+    MatCardSubtitle,
+    RouterLink
   ],
   templateUrl: './order.component.html',
   styleUrl: './order.component.css'
@@ -128,12 +129,12 @@ export class OrderComponent {
   }
 
   cancelOrder() {
-    this.dialogService.confirm('cancelar order','esta por cancelar la orden, seguro?')
-      .subscribe(ok=> {
-        if (ok){
+    this.dialogService.confirm('cancelar order', 'esta por cancelar la orden, seguro?')
+      .subscribe(ok => {
+        if (ok) {
           this.orderService.cancelOrder(this.id).subscribe({
             next: data => {
-              this.dialogService.alert('Exito','la orden N#'+data.id+' fue cancelada correctamente').subscribe()
+              this.dialogService.alert('Exito', 'la orden N#' + data.id + ' fue cancelada correctamente').subscribe()
               this.loadOrder()
             },
             error: err => {
@@ -145,7 +146,13 @@ export class OrderComponent {
   }
 
   getTankTypeName(id: number): string | undefined {
-    return this.tankTypeList.find(tt => tt.id === id)?.type
+    const tankType =this.tankTypeList.find(tt => tt.id === id)
+
+    if (tankType) {
+     return  tankType.type+' | '+tankType.cover+' | '+ tankType.quantity+'Lts'
+    }
+
+    return ''
   }
 
   edit() {
@@ -157,19 +164,43 @@ export class OrderComponent {
   }
 
   complete() {
-    this.dialogService.confirm('Finalizar pedido','desea marcar esta orden como completada?')
-      .subscribe(ok=>{
-        if (ok){
+    this.dialogService.confirm('Finalizar pedido', 'desea marcar esta orden como completada?')
+      .subscribe(ok => {
+        if (ok) {
           this.orderService.completeORder(this.id).subscribe({
             next: data => {
-              this.dialogService.alert('Exito','Esta orden fue completada exitosamente').subscribe()
+              this.dialogService.alert('Exito', 'Esta orden fue completada exitosamente').subscribe()
               this.order = data
+
+              this.tankService.getAllTankTypes().subscribe({
+                next: data => {
+                  this.tankTypeList = data
+                },
+                error: err => {
+                  console.log(err)
+                }
+              })
             },
             error: err => {
-              console.error(err)
+              if (err.status === 409) {
+                this.dialogService.alert('Error en el stock', 'no hay suficiente stock para completar este pedido')
+              } else {
+                console.error(err)
+              }
             }
           })
         }
       })
+  }
+
+  getStock(typeTankId: number):number {
+    const tankType = this.tankTypeList.find(tt => tt.id === typeTankId)
+
+    if (tankType) {
+      return tankType.stock1
+    }
+
+
+    return 0;
   }
 }

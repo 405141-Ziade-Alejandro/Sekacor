@@ -37,9 +37,9 @@ const FAQ: Extras = {
   Headline: "FAQ",
   info: [
     {
-      title: 'Placeholder question?',
-      message: 'placeholder answer',
-    },
+      title: '¿Qué significa "fecha estimada"?',
+      message: 'La fecha estimada indica cuándo se espera que el pedido esté completo y entregado al cliente. Esta fecha es tentativa y puede cambiar por diversos motivos. Una vez entregado el pedido, esta fecha se considera como la de entrega real, sin importar cambios anteriores.',
+    }
   ]
 }
 @Component({
@@ -102,7 +102,7 @@ export class EditOrderComponent {
   private dialogService= inject(DialogService)
   private activatedRoute = inject(ActivatedRoute)
   //variables
-  columnsToDisplay: string[] = ['product', 'quantity', 'price', 'action']
+  columnsToDisplay: string[] = ['product','stock', 'quantity', 'price']
   detailList:OrderDetail[]=[]
   clientList: Client[]= [];
   typeTankList: TankType[]=[];
@@ -180,7 +180,7 @@ export class EditOrderComponent {
 
     } else {
       const newDetail: OrderDetail = {
-        price: this.calculatePrice(tankType), //todo fix this, is not the cose
+        price: this.calculatePrice(tankType),
         quantity: 1,
         typeTankId: tankType.id
       }
@@ -277,5 +277,16 @@ export class EditOrderComponent {
       }
     }
     return processedList;
+  }
+
+  getStock(typeTankId: number):number {
+    const tankType = this.typeTankList.find(tt => tt.id === typeTankId)
+
+    if (tankType) {
+      return tankType.stock1
+    }
+
+
+    return 0;
   }
 }

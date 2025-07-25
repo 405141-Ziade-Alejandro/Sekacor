@@ -1,13 +1,7 @@
 import {Component, inject} from '@angular/core';
 import {TankServiceService} from "../../../core/services/tank-service.service";
 import {TankType} from "../../../core/interfaces/tanks/tank-type";
-import {ActivatedRoute, Router, RouterLink} from "@angular/router";
-import {MatList, MatListItem} from "@angular/material/list";
-import {MatCard, MatCardContent, MatCardHeader} from "@angular/material/card";
-import {MatToolbar} from "@angular/material/toolbar";
-import {MatIcon} from "@angular/material/icon";
-import {MatGridList, MatGridTile} from "@angular/material/grid-list";
-import {MatDialog} from "@angular/material/dialog";
+import {ActivatedRoute, Router} from "@angular/router";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatButton} from "@angular/material/button";
 import {MatCheckbox} from "@angular/material/checkbox";
@@ -16,17 +10,21 @@ import {MatInput} from "@angular/material/input";
 import {MatOption} from "@angular/material/core";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {MatSelect} from "@angular/material/select";
-import {ConfirmDialogComponent} from "../../../shared/confirm-dialog/confirm-dialog.component";
 import {NewTankType} from "../../../core/interfaces/tanks/new-tank-type";
 import {DialogService} from "../../../core/services/dialog.service";
 import {MatDivider} from "@angular/material/divider";
 import {FaqComponent} from "../../../shared/faq/faq.component";
 import {Extras} from "../../../core/interfaces/extras";
+import {MatDialog} from "@angular/material/dialog";
+import {ExamineTankDialogComponent} from "../examine-tank-dialog/examine-tank-dialog.component";
+import {MatCard, MatCardHeader} from "@angular/material/card";
 const FAQ:Extras = {
   Headline: "FAQ",
   info: [
-    {title:'Vol100 que significa?',message:'vol100 se refiere     al recargo monetario que se  le asigna al    tanque  por    trasladarlo hasta 100km',},
-    {title:'que es capas?',message:'se refiere a las capas que componen el tanque, si esta  hecho con    una, dos    o tres    capas',},
+    {
+      title: '¿Qué es "Vol. 100km" y "Vol. 200km"?',
+      message: 'Se trata de cargos adicionales por distancia de entrega. Si el cliente se encuentra a más de 100 km, se aplica el cargo Vol. 100km. Si supera los 200 km, se aplica Vol. 200km.',
+    }
   ]
 
 }
@@ -34,11 +32,6 @@ const FAQ:Extras = {
   selector: 'app-tank-type-examine',
   standalone: true,
   imports: [
-    MatCard,
-    MatCardContent,
-    MatCardHeader,
-    MatToolbar,
-    MatIcon,
     FormsModule,
     MatButton,
     MatCheckbox,
@@ -54,6 +47,8 @@ const FAQ:Extras = {
     ReactiveFormsModule,
     MatDivider,
     FaqComponent,
+    MatCard,
+    MatCardHeader,
   ],
   templateUrl: './tank-type-examine.component.html',
   styleUrl: './tank-type-examine.component.css'
@@ -78,7 +73,6 @@ export class TankTypeExamineComponent {
     if (this.id) {
       this.getTank(this.id)
     }
-    this.updating = this.tankService.getUpdate()
   }
 
   private getTank(id: number) {
@@ -95,14 +89,7 @@ export class TankTypeExamineComponent {
   }
 
   back() {
-    this.tankService.setUpdating(false)
     this.router.navigate(['/tanktypes']);
-  }
-
-  switch() {
-    this.updating = !this.updating;
-
-    this.tankService.setUpdating(!this.tankService.getUpdate())
   }
 
 
@@ -150,7 +137,6 @@ export class TankTypeExamineComponent {
               this.tankService.putTankType(this.tankType.id, newTank).subscribe({
                 next: (response) => {
                   this.dialogService.alert('Exito', 'El tanque se actualizo correctamente')
-                  this.tankService.setUpdating(false)
                   this.router.navigate(['/tanktypes']);
                 },
                 error: (error) => {
@@ -168,5 +154,9 @@ export class TankTypeExamineComponent {
     return newTank;
   }
 
+
+
   protected readonly FAQ = FAQ;
+
+
 }
